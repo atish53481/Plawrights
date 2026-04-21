@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "rootDir": "./Test",
+    "outDir": "./dist",
+    "target": "ES6",
+    "module": "commonjs"
+  },
+  "include": ["Test/**/*.ts"]
+}
