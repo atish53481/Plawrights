@@ -387,6 +387,11 @@ test('Recorded session - 2024-01-15', async ({ page }) => {
 | PUT | /api/user/profile | 200 |`
 };
 
+const MOCK_WARNING = `> ⚠️ **MOCK MODE — this is canned sample output. Your input was NOT used.**
+> To generate real code from your requirements, open **Settings** → select **Claude / OpenAI / Gemini** → paste your API key → Save.
+
+`;
+
 export class MockProvider extends AIProvider {
   constructor() {
     super({ apiKey: 'mock', model: 'mock-gpt-playwright' });
@@ -398,6 +403,10 @@ export class MockProvider extends AIProvider {
 
     const p = (prompt || '').toLowerCase();
     const s = (system || '').toLowerCase();
+    return MOCK_WARNING + this._route(p, s);
+  }
+
+  _route(p, s) {
 
     if (s.includes('planner') || p.includes('test plan') || p.includes('test strategy') || p.includes('test cases')) {
       return MOCK_RESPONSES.planner;

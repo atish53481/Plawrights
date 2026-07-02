@@ -133,6 +133,7 @@
           </div>
           <div class="btn-row">
             <button class="btn btn-primary" id="gen-run">⚡ Generate Code</button>
+            <button class="btn btn-secondary" id="gen-run-live">▶ Run on Page</button>
             <button class="btn btn-secondary" id="gen-export">⬇ Download</button>
             <button class="btn btn-secondary btn-sm" id="gen-clear">Clear</button>
           </div>
@@ -141,6 +142,12 @@
               <div class="output-header-btns"><button class="btn btn-icon" id="gen-copy">📋 Copy</button></div>
             </div>
             <div class="output-content" id="gen-output"><span class="output-placeholder">Playwright code will appear here...</span></div>
+          </div>
+          <div class="output-section" id="gen-run-section" style="display:none">
+            <div class="output-header"><span>Live Run Results</span>
+              <div class="output-header-btns"><span id="gen-run-summary" style="font-size:11px;color:var(--text2)"></span></div>
+            </div>
+            <div class="output-content" id="gen-run-results" style="max-height:220px;overflow-y:auto"></div>
           </div>
         </div>
       </div>

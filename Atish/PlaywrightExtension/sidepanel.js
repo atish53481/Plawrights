@@ -5,6 +5,7 @@ import { OpenAIProvider } from './providers/openai-provider.js';
 import { GeminiProvider } from './providers/gemini-provider.js';
 import { Storage } from './utils/storage.js';
 import { PlaywrightCodegen } from './utils/playwright-codegen.js';
+import { TestRunner } from './utils/test-runner.js';
 
 // ---- State ----
 let orchestrator = new Orchestrator(new MockProvider());
@@ -210,6 +211,55 @@ function setupGenerator() {
   document.getElementById('gen-clear')?.addEventListener('click', () => {
     document.getElementById('gen-input').value = '';
     document.getElementById('gen-output').innerHTML = '<span class="output-placeholder">Playwright code will appear here...</span>';
+    const runSection = document.getElementById('gen-run-section');
+    if (runSection) runSection.style.display = 'none';
+  });
+
+  // ---- Run generated code live on the active page ----
+  const liveBtn = document.getElementById('gen-run-live');
+  liveBtn?.addEventListener('click', async () => {
+    const code = document.getElementById('gen-output')?.textContent || '';
+    if (!code || code.includes('will appear here')) { showToast('Generate code first'); return; }
+
+    const steps = TestRunner.parse(code);
+    if (steps.length === 0) { showToast('No runnable Playwright steps found in code'); return; }
+
+    const section = document.getElementById('gen-run-section');
+    const results = document.getElementById('gen-run-results');
+    const summaryEl = document.getElementById('gen-run-summary');
+    section.style.display = 'block';
+    summaryEl.textContent = `0/${steps.length}`;
+
+    const icons = { pending: '⏳', running: '▶️', passed: '✅', failed: '❌', skipped: '⏭️' };
+    results.innerHTML = steps.map((s, i) =>
+      `<div class="run-step" id="run-step-${i}" style="padding:3px 6px;font-size:11px;font-family:monospace;border-bottom:1px solid var(--border,#333)">
+        <span id="run-step-icon-${i}">${icons.pending}</span> ${s.label.replace(/</g, '&lt;')}
+        <div id="run-step-detail-${i}" style="color:#ff6b6b;padding-left:20px"></div>
+      </div>`).join('');
+
+    liveBtn.disabled = true;
+    let done = 0;
+    try {
+      const summary = await TestRunner.run(steps, (i, status, detail) => {
+        const icon = document.getElementById(`run-step-icon-${i}`);
+        if (icon) icon.textContent = icons[status] || '';
+        if (status !== 'running') {
+          done++;
+          summaryEl.textContent = `${done}/${steps.length}`;
+        }
+        if (status === 'failed' && detail) {
+          const d = document.getElementById(`run-step-detail-${i}`);
+          if (d) d.textContent = detail;
+        }
+        document.getElementById(`run-step-${i}`)?.scrollIntoView({ block: 'nearest' });
+      });
+      summaryEl.textContent = `✅ ${summary.passed} passed · ❌ ${summary.failed} failed · ⏭️ ${summary.skipped} skipped`;
+      showToast(summary.failed === 0 ? 'All runnable steps passed!' : `${summary.failed} step(s) failed`);
+    } catch (e) {
+      summaryEl.textContent = `Error: ${e.message}`;
+    } finally {
+      liveBtn.disabled = false;
+    }
   });
 }
 
