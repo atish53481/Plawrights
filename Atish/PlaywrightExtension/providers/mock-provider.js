@@ -407,13 +407,24 @@ export class MockProvider extends AIProvider {
   }
 
   _route(p, s) {
+    // Route on the exact agent role declared in the SYSTEM prompt first — prompts
+    // cross-reference other agents ("generator agent", "TODO(healer)") and the user
+    // prompt contains phrases like "test plan", so loose keyword matching misroutes.
+    const role = (s.match(/"(planner|generator|healer)" test agent/) || [])[1];
+    if (role === 'generator') {
+      const wantsPage = p.includes('page object') || p.includes('pom');
+      return wantsPage ? `${MOCK_RESPONSES.generator_pom}\n\n${MOCK_RESPONSES.generator_ts}` : MOCK_RESPONSES.generator_ts;
+    }
+    if (role === 'planner') return MOCK_RESPONSES.planner;
+    if (role === 'healer') return MOCK_RESPONSES.healer;
+    if (s.includes('playwrightbot')) return MOCK_RESPONSES.chat; // chat agent — its prompt mentions "framework", would misroute below
 
-    if (s.includes('planner') || p.includes('test plan') || p.includes('test strategy') || p.includes('test cases')) {
+    if (p.includes('test plan') || p.includes('test strategy') || p.includes('test cases')) {
       return MOCK_RESPONSES.planner;
     }
-    if (s.includes('generator') || p.includes('generate') || p.includes('playwright code') || p.includes('automation code')) {
+    if (p.includes('generate') || p.includes('playwright code') || p.includes('automation code')) {
       const wantsPage = p.includes('page object') || p.includes('pom');
-      return wantsPage ? MOCK_RESPONSES.generator_pom : MOCK_RESPONSES.generator_ts;
+      return wantsPage ? `${MOCK_RESPONSES.generator_pom}\n\n${MOCK_RESPONSES.generator_ts}` : MOCK_RESPONSES.generator_ts;
     }
     if (s.includes('healer') || p.includes('fix') || p.includes('broken') || p.includes('repair') || p.includes('failing test')) {
       return MOCK_RESPONSES.healer;
