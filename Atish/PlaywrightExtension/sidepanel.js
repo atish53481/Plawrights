@@ -3,6 +3,8 @@ import { MockProvider } from './providers/mock-provider.js';
 import { ClaudeProvider } from './providers/claude-provider.js';
 import { OpenAIProvider } from './providers/openai-provider.js';
 import { GeminiProvider } from './providers/gemini-provider.js';
+import { BridgeProvider } from './providers/bridge-provider.js';
+import { BridgeClient } from './utils/bridge-client.js';
 import { Storage } from './utils/storage.js';
 import { PlaywrightCodegen } from './utils/playwright-codegen.js';
 import { TestRunner } from './utils/test-runner.js';
@@ -108,7 +110,7 @@ async function loadSettings() {
   const modelInput = document.getElementById('settings-model');
   if (apiKeyInput) apiKeyInput.value = settings.apiKey || '';
   if (modelInput) modelInput.value = settings.model || '';
-  if (apiSection) apiSection.style.display = currentProvider !== 'mock' ? 'block' : 'none';
+  if (apiSection) apiSection.style.display = (currentProvider !== 'mock' && currentProvider !== 'bridge') ? 'block' : 'none';
 
   document.querySelectorAll('.provider-card').forEach(card => {
     card.classList.toggle('selected', card.getAttribute('data-provider') === currentProvider);
@@ -121,6 +123,7 @@ function updateProvider(providerName, apiKey = '', model = '') {
     claude: () => new ClaudeProvider({ apiKey, model }),
     openai: () => new OpenAIProvider({ apiKey, model }),
     gemini: () => new GeminiProvider({ apiKey, model }),
+    bridge: () => new BridgeProvider(),
   };
   const factory = providers[providerName] || providers.mock;
   const provider = factory();
@@ -128,7 +131,7 @@ function updateProvider(providerName, apiKey = '', model = '') {
 
   const badge = document.getElementById('provider-badge');
   const label = document.getElementById('provider-label');
-  const names = { mock: 'Mock Provider', claude: 'Claude', openai: 'OpenAI', gemini: 'Gemini' };
+  const names = { mock: 'Mock Provider', claude: 'Claude', openai: 'OpenAI', gemini: 'Gemini', bridge: 'Bridge (Claude Code)' };
   if (badge) badge.textContent = providerName.toUpperCase();
   if (label) label.textContent = names[providerName] || providerName;
 
@@ -225,6 +228,39 @@ function setupGenerator() {
     document.getElementById('gen-output').innerHTML = '<span class="output-placeholder">Playwright code will appear here...</span>';
     const runSection = document.getElementById('gen-run-section');
     if (runSection) runSection.style.display = 'none';
+  });
+
+  // ---- Run generated code with the REAL Playwright runner via the local bridge ----
+  const bridgeBtn = document.getElementById('gen-run-bridge');
+  bridgeBtn?.addEventListener('click', async () => {
+    const code = document.getElementById('gen-output')?.textContent || '';
+    if (!code || code.includes('will appear here')) { showToast('Generate code first'); return; }
+
+    const section = document.getElementById('gen-run-section');
+    const results = document.getElementById('gen-run-results');
+    const summaryEl = document.getElementById('gen-run-summary');
+    section.style.display = 'block';
+    results.innerHTML = '<pre id="bridge-log" style="margin:0;font-size:11px;white-space:pre-wrap;word-break:break-all"></pre>';
+    const log = document.getElementById('bridge-log');
+    summaryEl.textContent = '🌉 connecting to bridge...';
+    bridgeBtn.disabled = true;
+
+    try {
+      const res = await BridgeClient.runCode(code, (msg) => {
+        if (msg.type === 'status' || msg.type === 'output') {
+          log.textContent += msg.message || msg.line || '';
+          results.scrollTop = results.scrollHeight;
+          summaryEl.textContent = '🏃 Playwright running (headed)...';
+        }
+      });
+      summaryEl.textContent = res.passed ? '✅ Playwright run PASSED' : `❌ Playwright run FAILED (exit ${res.exitCode})`;
+      showToast(res.passed ? 'Real Playwright run passed!' : 'Run failed — see output');
+    } catch (e) {
+      summaryEl.textContent = '🌉 bridge unavailable';
+      log.textContent = `${e.message}\n\nSetup (once):\n  cd Atish/PlaywrightBridge\n  npm run setup\n\nThen keep running:\n  npm start`;
+    } finally {
+      bridgeBtn.disabled = false;
+    }
   });
 
   // ---- Run generated code live on the active page ----
@@ -689,7 +725,7 @@ function setupSettings() {
       document.querySelectorAll('.provider-card').forEach(c => c.classList.remove('selected'));
       card.classList.add('selected');
       const apiSection = document.getElementById('api-key-section');
-      if (apiSection) apiSection.style.display = provider !== 'mock' ? 'block' : 'none';
+      if (apiSection) apiSection.style.display = (provider !== 'mock' && provider !== 'bridge') ? 'block' : 'none';
     });
   });
 
