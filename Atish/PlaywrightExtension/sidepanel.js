@@ -143,9 +143,14 @@ function setupPlanner() {
     if (!text) { showToast('Enter requirements first'); return; }
     const inputType = document.getElementById('planner-input-type')?.value;
     runBtn.disabled = true;
-    showLoading(output, 'Test Planner Agent analyzing requirements...');
+    showLoading(output, '🎭 planner agent exploring requirements...');
     try {
-      const result = await orchestrator.dispatch('planner', { text, inputType });
+      // Seed context from the live page (maps to the official seed.spec.ts concept)
+      const pageContext = await new Promise(resolve => {
+        chrome.runtime.sendMessage({ type: 'GET_ACTIVE_TAB' }, tab =>
+          resolve(tab?.url ? { url: tab.url, title: tab.title || '' } : null));
+      });
+      const result = await orchestrator.dispatch('planner', { text, inputType, pageContext });
       setOutput(output, result);
     } catch(e) {
       output.textContent = `Error: ${e.message}`;
@@ -238,6 +243,9 @@ function setupGenerator() {
       </div>`).join('');
 
     liveBtn.disabled = true;
+    const healBtn = document.getElementById('gen-heal');
+    if (healBtn) healBtn.style.display = 'none';
+    const failedSteps = [];
     let done = 0;
     try {
       const summary = await TestRunner.run(steps, (i, status, detail) => {
@@ -248,6 +256,7 @@ function setupGenerator() {
           summaryEl.textContent = `${done}/${steps.length}`;
         }
         if (status === 'failed' && detail) {
+          failedSteps.push({ label: steps[i].label, error: detail });
           const d = document.getElementById(`run-step-detail-${i}`);
           if (d) d.textContent = detail;
         }
@@ -255,6 +264,19 @@ function setupGenerator() {
       });
       summaryEl.textContent = `✅ ${summary.passed} passed · ❌ ${summary.failed} failed · ⏭️ ${summary.skipped} skipped`;
       showToast(summary.failed === 0 ? 'All runnable steps passed!' : `${summary.failed} step(s) failed`);
+
+      // 🎭 healer stage (official test-agents workflow): route failures to the healer agent
+      if (summary.failed > 0 && healBtn) {
+        healBtn.style.display = 'inline-block';
+        healBtn.onclick = () => {
+          const healerCode = document.getElementById('healer-code');
+          const healerError = document.getElementById('healer-error');
+          if (healerCode) healerCode.value = code;
+          if (healerError) healerError.value = failedSteps.map(f => `${f.label} → ${f.error}`).join('\n');
+          document.querySelector('.nav-btn[data-panel="healer"]')?.click();
+          document.getElementById('healer-run')?.click();
+        };
+      }
     } catch (e) {
       summaryEl.textContent = `Error: ${e.message}`;
     } finally {

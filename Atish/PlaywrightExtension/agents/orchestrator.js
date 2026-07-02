@@ -56,18 +56,29 @@ export class Orchestrator {
     }
   }
 
-  // Collaborative workflow: Requirements → Plan → Code
-  async runFullPipeline(requirement) {
+  // Official Playwright test-agents workflow (playwright.dev/docs/test-agents):
+  // planner (specs/*.md) → generator (tests/*.spec.ts) → healer (on failures)
+  async runFullPipeline(requirement, { pageContext = null, language = 'typescript' } = {}) {
     const log = [];
-    log.push('🔍 Test Planner analyzing requirements...');
-    const plan = await this.dispatch('planner', { text: requirement, inputType: 'feature' });
-    log.push('✅ Test plan generated');
+    log.push('🎭 planner: exploring requirements → specs/*.md ...');
+    const plan = await this.dispatch('planner', { text: requirement, inputType: 'feature', pageContext });
+    log.push('✅ planner: test plan ready');
 
-    log.push('⚡ Test Generator creating automation code...');
-    const code = await this.dispatch('generator', { testPlan: plan, language: 'typescript', framework: 'pom' });
-    log.push('✅ Playwright tests generated');
+    log.push('🎭 generator: specs/*.md → tests/*.spec.ts ...');
+    const code = await this.dispatch('generator', { testPlan: plan, language, framework: 'pom' });
+    log.push('✅ generator: test suite ready');
 
     return { plan, code, log };
+  }
+
+  // healer stage: feed live-run failures back into the healer agent
+  async healFailures({ code, failedSteps, context = '' }) {
+    return this.dispatch('healer', {
+      brokenCode: code,
+      errorMessage: failedSteps.map(f => f.error).join('; '),
+      context,
+      failedSteps
+    });
   }
 
   getAgent(name) { return this.agents[name]; }
