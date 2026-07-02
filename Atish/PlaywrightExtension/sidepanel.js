@@ -131,6 +131,13 @@ function updateProvider(providerName, apiKey = '', model = '') {
   const names = { mock: 'Mock Provider', claude: 'Claude', openai: 'OpenAI', gemini: 'Gemini' };
   if (badge) badge.textContent = providerName.toUpperCase();
   if (label) label.textContent = names[providerName] || providerName;
+
+  // Warn immediately when a real provider is selected but its key is unusable —
+  // otherwise every agent call fails and it looks like "generator not working"
+  if (providerName !== 'mock' && !provider.isConfigured()) {
+    if (badge) badge.textContent = `${providerName.toUpperCase()} ⚠ NO KEY`;
+    if (label) label.textContent = `${names[providerName]} — API key missing/invalid`;
+  }
 }
 
 // ---- 1. TEST PLANNER ----
@@ -351,9 +358,20 @@ function setupRecorder() {
 
   startBtn?.addEventListener('click', () => {
     isRecording = true; recorderActions = [];
-    chrome.runtime.sendMessage({ type: 'RELAY_TO_CONTENT', payload: { type: 'START_RECORDING' } });
-    dot.className = 'rec-dot recording';
-    statusTxt.textContent = 'Recording...';
+    chrome.runtime.sendMessage({ type: 'RELAY_TO_CONTENT', payload: { type: 'START_RECORDING' } }, (resp) => {
+      if (resp?.error || !resp?.ok) {
+        // Recording never started on the page — show why instead of a fake state
+        isRecording = false;
+        clearInterval(recorderInterval);
+        dot.className = 'rec-dot';
+        statusTxt.textContent = `❌ ${resp?.error || 'Page did not respond — refresh the tab and retry'}`;
+        startBtn.disabled = false; pauseBtn.disabled = true; stopBtn.disabled = true;
+        showToast('Recording failed to start');
+        return;
+      }
+      dot.className = 'rec-dot recording';
+      statusTxt.textContent = 'Recording...';
+    });
     startBtn.disabled = true; pauseBtn.disabled = false; stopBtn.disabled = false;
     renderActionList();
     recorderInterval = setInterval(() => { updateRecOutput(); }, 2000);
