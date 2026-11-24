@@ -1,0 +1,722 @@
+{
+  "config": {
+    "configFile": "/Users/promode/Documents/LearningPlaywrightBatch/Lecture_Playwright_AI_Agents/playwright.config.js",
+    "rootDir": "/Users/promode/Documents/LearningPlaywrightBatch/Lecture_Playwright_AI_Agents/agents_project/tests",
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/Users/promode/Documents/LearningPlaywrightBatch/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "/Users/promode/Documents/LearningPlaywrightBatch/Lecture_Playwright_AI_Agents/agents_project/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "html",
+        {
+          "outputFolder": "/Users/promode/Documents/LearningPlaywrightBatch/Lecture_Playwright_AI_Agents/agents_project/reports/html-report",
+          "open": "never"
+        }
+      ],
+      [
+        "json",
+        {
+          "outputFile": "/Users/promode/Documents/LearningPlaywrightBatch/Lecture_Playwright_AI_Agents/agents_project/reports/results.json"
+        }
+      ],
+      [
+        "/Users/promode/Documents/LearningPlaywrightBatch/Lecture_Playwright_AI_Agents/agents_project/reporters/CustomTTAReporter.js",
+        null
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "runAgents": "none",
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.58.2",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "01_homepage_load.spec.js",
+      "file": "01_homepage_load.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "TC-001: Homepage Load Verification",
+          "file": "01_homepage_load.spec.js",
+          "line": 3,
+          "column": 6,
+          "specs": [
+            {
+              "title": "Verify homepage loads with correct title and heading",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4309,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ TC-001: Homepage Load Verification - Passed\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-19T11:55:23.565Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "ffa8a1bda74f88b28929-28ddcb937303738b7b89",
+              "file": "01_homepage_load.spec.js",
+              "line": 4,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "02_login_form.spec.js",
+      "file": "02_login_form.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "TC-002: Login Form Authentication",
+          "file": "02_login_form.spec.js",
+          "line": 3,
+          "column": 6,
+          "specs": [
+            {
+              "title": "Verify successful login with valid credentials",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 5024,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ TC-002: Login Form Authentication - Passed\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-19T11:55:28.413Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d40a4a7f722f88fe9bf5-405d065edc5220e4b66c",
+              "file": "02_login_form.spec.js",
+              "line": 4,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "03_dropdown_select.spec.js",
+      "file": "03_dropdown_select.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "TC-003: Dropdown Selection",
+          "file": "03_dropdown_select.spec.js",
+          "line": 3,
+          "column": 6,
+          "specs": [
+            {
+              "title": "Verify dropdown option can be selected",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4017,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ TC-003: Dropdown Selection - Passed\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-19T11:55:33.444Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "c9aa6a842a7190729b07-203c866874c6ae44bed4",
+              "file": "03_dropdown_select.spec.js",
+              "line": 4,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "04_checkbox_toggle.spec.js",
+      "file": "04_checkbox_toggle.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "TC-004: Checkbox Toggle",
+          "file": "04_checkbox_toggle.spec.js",
+          "line": 3,
+          "column": 6,
+          "specs": [
+            {
+              "title": "Verify checkbox can be toggled on",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 6885,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ TC-004: Checkbox Toggle - Passed\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-19T11:55:37.469Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "1d8df386f68fedec8a24-1026d5b2bb66496d9fad",
+              "file": "04_checkbox_toggle.spec.js",
+              "line": 4,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "05_dynamic_content.spec.js",
+      "file": "05_dynamic_content.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "TC-005: Dynamic Content Verification",
+          "file": "05_dynamic_content.spec.js",
+          "line": 3,
+          "column": 6,
+          "specs": [
+            {
+              "title": "Verify dynamic content area loads with rows",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4039,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ TC-005: Dynamic Content Verification - Passed\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-19T11:55:44.362Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "365ea9e3610aba8e0c12-44291c6ab4cbadb21881",
+              "file": "05_dynamic_content.spec.js",
+              "line": 4,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "06_file_upload_page.spec.js",
+      "file": "06_file_upload_page.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "TC-006: File Upload Page Structure",
+          "file": "06_file_upload_page.spec.js",
+          "line": 3,
+          "column": 6,
+          "specs": [
+            {
+              "title": "Verify file upload page has required elements",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 3954,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ TC-006: File Upload Page Structure - Passed\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-19T11:55:48.410Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "6d145b296504bff4f9db-1b02412d375e53ccc44a",
+              "file": "06_file_upload_page.spec.js",
+              "line": 4,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "07_broken_selector.spec.js",
+      "file": "07_broken_selector.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "TC-007: Broken Selector (Intentional Failure)",
+          "file": "07_broken_selector.spec.js",
+          "line": 13,
+          "column": 6,
+          "specs": [
+            {
+              "title": "Attempt to find a non-existent element with hallucinated selector",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 9002,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('#ai-generated-element')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#ai-generated-element')\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('#ai-generated-element')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#ai-generated-element')\u001b[22m\n\n    at /Users/promode/Documents/LearningPlaywrightBatch/Lecture_Playwright_AI_Agents/agents_project/tests/07_broken_selector.spec.js:22:33",
+                        "location": {
+                          "file": "/Users/promode/Documents/LearningPlaywrightBatch/Lecture_Playwright_AI_Agents/agents_project/tests/07_broken_selector.spec.js",
+                          "column": 33,
+                          "line": 22
+                        },
+                        "snippet": "  20 |\n  21 |     // 3. This assertion WILL FAIL - the element does not exist\n> 22 |     await expect(brokenElement).toBeVisible({ timeout: 5000 });\n     |                                 ^\n  23 |\n  24 |     console.log('❌ TC-007: Broken Selector - This line should not be reached');\n  25 |   });"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/promode/Documents/LearningPlaywrightBatch/Lecture_Playwright_AI_Agents/agents_project/tests/07_broken_selector.spec.js",
+                            "column": 33,
+                            "line": 22
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('#ai-generated-element')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#ai-generated-element')\u001b[22m\n\n\n  20 |\n  21 |     // 3. This assertion WILL FAIL - the element does not exist\n> 22 |     await expect(brokenElement).toBeVisible({ timeout: 5000 });\n     |                                 ^\n  23 |\n  24 |     console.log('❌ TC-007: Broken Selector - This line should not be reached');\n  25 |   });\n    at /Users/promode/Documents/LearningPlaywrightBatch/Lecture_Playwright_AI_Agents/agents_project/tests/07_broken_selector.spec.js:22:33"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-19T11:55:52.372Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/promode/Documents/LearningPlaywrightBatch/test-results/07_broken_selector-TC-007--bb793--with-hallucinated-selector/test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/promode/Documents/LearningPlaywrightBatch/test-results/07_broken_selector-TC-007--bb793--with-hallucinated-selector/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/promode/Documents/LearningPlaywrightBatch/Lecture_Playwright_AI_Agents/agents_project/tests/07_broken_selector.spec.js",
+                        "column": 33,
+                        "line": 22
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "c93ed7df36df2742c85e-c2eb2848eb5b6a3bb011",
+              "file": "07_broken_selector.spec.js",
+              "line": 14,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "08_stale_element.spec.js",
+      "file": "08_stale_element.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "TC-008: Stale Element Text (Intentional Failure)",
+          "file": "08_stale_element.spec.js",
+          "line": 13,
+          "column": 6,
+          "specs": [
+            {
+              "title": "Expect h1 to have hallucinated text content",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 9103,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('h1')\nExpected: \u001b[32m\"AI Agent Dashboard\"\u001b[39m\nReceived: \u001b[31m\"Welcome to the-internet\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('h1')\u001b[22m\n\u001b[2m    9 × locator resolved to <h1 class=\"heading\">Welcome to the-internet</h1>\u001b[22m\n\u001b[2m      - unexpected value \"Welcome to the-internet\"\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('h1')\nExpected: \u001b[32m\"AI Agent Dashboard\"\u001b[39m\nReceived: \u001b[31m\"Welcome to the-internet\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('h1')\u001b[22m\n\u001b[2m    9 × locator resolved to <h1 class=\"heading\">Welcome to the-internet</h1>\u001b[22m\n\u001b[2m      - unexpected value \"Welcome to the-internet\"\u001b[22m\n\n    at /Users/promode/Documents/LearningPlaywrightBatch/Lecture_Playwright_AI_Agents/agents_project/tests/08_stale_element.spec.js:22:27",
+                        "location": {
+                          "file": "/Users/promode/Documents/LearningPlaywrightBatch/Lecture_Playwright_AI_Agents/agents_project/tests/08_stale_element.spec.js",
+                          "column": 27,
+                          "line": 22
+                        },
+                        "snippet": "  20 |\n  21 |     // 3. This assertion WILL FAIL - the actual text is \"Welcome to the-internet\"\n> 22 |     await expect(heading).toHaveText('AI Agent Dashboard', { timeout: 5000 });\n     |                           ^\n  23 |\n  24 |     console.log('❌ TC-008: Stale Element Text - This line should not be reached');\n  25 |   });"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/promode/Documents/LearningPlaywrightBatch/Lecture_Playwright_AI_Agents/agents_project/tests/08_stale_element.spec.js",
+                            "column": 27,
+                            "line": 22
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('h1')\nExpected: \u001b[32m\"AI Agent Dashboard\"\u001b[39m\nReceived: \u001b[31m\"Welcome to the-internet\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('h1')\u001b[22m\n\u001b[2m    9 × locator resolved to <h1 class=\"heading\">Welcome to the-internet</h1>\u001b[22m\n\u001b[2m      - unexpected value \"Welcome to the-internet\"\u001b[22m\n\n\n  20 |\n  21 |     // 3. This assertion WILL FAIL - the actual text is \"Welcome to the-internet\"\n> 22 |     await expect(heading).toHaveText('AI Agent Dashboard', { timeout: 5000 });\n     |                           ^\n  23 |\n  24 |     console.log('❌ TC-008: Stale Element Text - This line should not be reached');\n  25 |   });\n    at /Users/promode/Documents/LearningPlaywrightBatch/Lecture_Playwright_AI_Agents/agents_project/tests/08_stale_element.spec.js:22:27"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-19T11:56:01.927Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/promode/Documents/LearningPlaywrightBatch/test-results/08_stale_element-TC-008-St-3343a-e-hallucinated-text-content/test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/promode/Documents/LearningPlaywrightBatch/test-results/08_stale_element-TC-008-St-3343a-e-hallucinated-text-content/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/promode/Documents/LearningPlaywrightBatch/Lecture_Playwright_AI_Agents/agents_project/tests/08_stale_element.spec.js",
+                        "column": 27,
+                        "line": 22
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "64ffd7a5fe4f1288e862-470f7a14794e7832a8c9",
+              "file": "08_stale_element.spec.js",
+              "line": 14,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "09_wrong_assertion.spec.js",
+      "file": "09_wrong_assertion.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "TC-009: Wrong Assertion After Login (Intentional Failure)",
+          "file": "09_wrong_assertion.spec.js",
+          "line": 14,
+          "column": 6,
+          "specs": [
+            {
+              "title": "Click login without credentials and expect wrong URL",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 10247,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/\\/dashboard/\u001b[39m\nReceived string:  \u001b[31m\"https://the-internet.herokuapp.com/login\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 5000ms\u001b[22m\n\u001b[2m    9 × unexpected value \"https://the-internet.herokuapp.com/login\"\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/\\/dashboard/\u001b[39m\nReceived string:  \u001b[31m\"https://the-internet.herokuapp.com/login\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 5000ms\u001b[22m\n\u001b[2m    9 × unexpected value \"https://the-internet.herokuapp.com/login\"\u001b[22m\n\n    at /Users/promode/Documents/LearningPlaywrightBatch/Lecture_Playwright_AI_Agents/agents_project/tests/09_wrong_assertion.spec.js:23:24",
+                        "location": {
+                          "file": "/Users/promode/Documents/LearningPlaywrightBatch/Lecture_Playwright_AI_Agents/agents_project/tests/09_wrong_assertion.spec.js",
+                          "column": 24,
+                          "line": 23
+                        },
+                        "snippet": "  21 |\n  22 |     // 3. This assertion WILL FAIL - URL will not be /dashboard\n> 23 |     await expect(page).toHaveURL(/\\/dashboard/, { timeout: 5000 });\n     |                        ^\n  24 |\n  25 |     console.log('❌ TC-009: Wrong Assertion - This line should not be reached');\n  26 |   });"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/promode/Documents/LearningPlaywrightBatch/Lecture_Playwright_AI_Agents/agents_project/tests/09_wrong_assertion.spec.js",
+                            "column": 24,
+                            "line": 23
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/\\/dashboard/\u001b[39m\nReceived string:  \u001b[31m\"https://the-internet.herokuapp.com/login\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 5000ms\u001b[22m\n\u001b[2m    9 × unexpected value \"https://the-internet.herokuapp.com/login\"\u001b[22m\n\n\n  21 |\n  22 |     // 3. This assertion WILL FAIL - URL will not be /dashboard\n> 23 |     await expect(page).toHaveURL(/\\/dashboard/, { timeout: 5000 });\n     |                        ^\n  24 |\n  25 |     console.log('❌ TC-009: Wrong Assertion - This line should not be reached');\n  26 |   });\n    at /Users/promode/Documents/LearningPlaywrightBatch/Lecture_Playwright_AI_Agents/agents_project/tests/09_wrong_assertion.spec.js:23:24"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-19T11:56:12.089Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/promode/Documents/LearningPlaywrightBatch/test-results/09_wrong_assertion-TC-009--4559d-ntials-and-expect-wrong-URL/test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/promode/Documents/LearningPlaywrightBatch/test-results/09_wrong_assertion-TC-009--4559d-ntials-and-expect-wrong-URL/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/promode/Documents/LearningPlaywrightBatch/Lecture_Playwright_AI_Agents/agents_project/tests/09_wrong_assertion.spec.js",
+                        "column": 24,
+                        "line": 23
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "cbb0355e814f64b6d76b-2d0a359d6d1832a8ec17",
+              "file": "09_wrong_assertion.spec.js",
+              "line": 15,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "10_drag_and_drop.spec.js",
+      "file": "10_drag_and_drop.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "TC-010: Drag and Drop Elements",
+          "file": "10_drag_and_drop.spec.js",
+          "line": 3,
+          "column": 6,
+          "specs": [
+            {
+              "title": "Verify drag and drop page has both columns with headers",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 5376,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ TC-010: Drag and Drop Elements - Passed\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-19T11:56:23.252Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "cd055492e621bc90910d-bdb309f9fac9ff914edf",
+              "file": "10_drag_and_drop.spec.js",
+              "line": 4,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-03-19T11:55:23.087Z",
+    "duration": 65909.715,
+    "expected": 7,
+    "skipped": 0,
+    "unexpected": 3,
+    "flaky": 0
+  }
+}

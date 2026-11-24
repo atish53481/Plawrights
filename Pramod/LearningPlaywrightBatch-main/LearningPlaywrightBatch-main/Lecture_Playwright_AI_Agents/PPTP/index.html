@@ -1,0 +1,3835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Playwright AI Agents - PPTP Tutorial</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; display: flex; min-height: 100vh; background: #f5f5f5; }
+    .sidebar { width: 280px; background: #1a1a2e; color: #e0e0e0; position: fixed; top: 0; left: 0; height: 100vh; overflow-y: auto; padding: 20px 0; z-index: 10; }
+    .sidebar h2 { padding: 10px 20px 20px; font-size: 18px; color: #fff; border-bottom: 1px solid #333; margin-bottom: 10px; }
+    .sidebar a { display: block; padding: 10px 20px; color: #b0b0c0; text-decoration: none; font-size: 14px; border-left: 3px solid transparent; transition: all 0.2s; }
+    .sidebar a:hover, .sidebar a.active { background: #16213e; color: #64ffda; border-left-color: #64ffda; }
+    .sidebar .section-label { padding: 15px 20px 5px; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #666; }
+    .main { margin-left: 280px; padding: 40px; flex: 1; max-width: 900px; }
+    .main h1 { font-size: 28px; color: #1a1a2e; margin-bottom: 10px; }
+    .main .subtitle { color: #666; margin-bottom: 30px; font-size: 16px; }
+    .topic { background: #fff; border-radius: 8px; padding: 30px; margin-bottom: 30px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    .topic h2 { font-size: 22px; color: #1a1a2e; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #64ffda; }
+    .topic h3 { font-size: 18px; color: #333; margin: 20px 0 10px; }
+    .topic p { line-height: 1.8; color: #444; margin-bottom: 15px; }
+    .topic ul, .topic ol { margin: 10px 0 15px 20px; line-height: 1.8; color: #444; }
+    .topic table { width: 100%; border-collapse: collapse; margin: 15px 0; }
+    .topic th, .topic td { padding: 10px 12px; border: 1px solid #e0e0e0; text-align: left; }
+    .topic th { background: #f0f0f0; font-weight: 600; }
+    .topic tr:nth-child(even) { background: #fafafa; }
+    .topic a { color: #1565c0; text-decoration: none; }
+    .topic a:hover { text-decoration: underline; }
+    pre { background: #1e1e1e; color: #d4d4d4; padding: 20px; border-radius: 6px; overflow-x: auto; margin: 15px 0; font-size: 14px; line-height: 1.6; }
+    code { font-family: 'Fira Code', 'Consolas', monospace; }
+    .inline-code { background: #e8e8e8; padding: 2px 6px; border-radius: 3px; font-size: 13px; color: #d63384; }
+    .badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; margin-right: 5px; }
+    .badge-learning { background: #e8f5e9; color: #2e7d32; }
+    .badge-exercise { background: #fff3e0; color: #e65100; }
+    .badge-interview { background: #fce4ec; color: #c62828; }
+    .badge-note { background: #e3f2fd; color: #1565c0; }
+    .footer { text-align: center; padding: 30px; color: #999; font-size: 13px; }
+    @media (max-width: 768px) {
+      .sidebar { width: 100%; height: auto; position: relative; }
+      .main { margin-left: 0; }
+      body { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="sidebar">
+    <h2>Playwright AI Agents</h2>
+<div class="section-label">Learning</div>
+<a href="#01-what-are-ai-agents">What Are AI Agents</a>
+<a href="#02-agentic-testing-vs-traditional">Agentic Testing vs Traditional</a>
+<a href="#03-playwright-built-in-agents">Playwright Built In Agents</a>
+<a href="#04-test-planner-agent-deep-dive">Test Planner Agent Deep Dive</a>
+<a href="#05-test-generator-agent-deep-dive">Test Generator Agent Deep Dive</a>
+<a href="#06-test-healer-agent-deep-dive">Test Healer Agent Deep Dive</a>
+<a href="#07-agent-workflow-plan-generate-heal">Agent Workflow Plan Generate Heal</a>
+<a href="#08-prompt-engineering-for-testing">Prompt Engineering For Testing</a>
+<a href="#09-using-agents-with-llms">Using Agents With LLMs</a>
+<a href="#10-future-of-ai-in-testing">Future Of AI In Testing</a>
+<div class="section-label">Exercises</div>
+<a href="#01-explore-agent-files-exercise">Explore Agent Files Exercise</a>
+<a href="#02-planner-agent-exercise">Planner Agent Exercise</a>
+<a href="#03-generator-agent-exercise">Generator Agent Exercise</a>
+<a href="#04-healer-agent-exercise">Healer Agent Exercise</a>
+<a href="#05-agent-pipeline-mini-project">Agent Pipeline Mini Project</a>
+<div class="section-label">Notes</div>
+<a href="#agent-quick-reference">Agent Quick Reference</a>
+<a href="#playwright-agent-commands">Playwright Agent Commands</a>
+<a href="#prompt-engineering-cheatsheet">Prompt Engineering Cheatsheet</a>
+<a href="#self-healing-tests-notes">Self Healing Tests Notes</a>
+<div class="section-label">Interview Questions</div>
+<a href="#01-ai-agents-interview-qa">AI Agents Interview QA</a>
+<a href="#02-playwright-agents-interview-qa">Playwright Agents Interview QA</a>
+<a href="#03-agentic-testing-interview-qa">Agentic Testing Interview QA</a>
+
+  </nav>
+  <main class="main">
+    <h1>Playwright AI Agents</h1>
+<div class="subtitle">Built-in AI Agents for Test Planning, Generation, and Self-Healing</div>
+<div class="topic" id="01-what-are-ai-agents">
+<span class="badge badge-learning">Learning</span>
+<h2>What Are AI Agents</h2>
+<h2>What Are AI Agents?</h2>
+<h3>Introduction</h3>
+<p>An <strong>AI Agent</strong> is a software system that uses a large language model (LLM) as its reasoning</p>
+<p>engine to autonomously perform tasks. Unlike simple chatbots that respond to a single prompt,</p>
+<p>agents operate in a loop -- observing their environment, making decisions, taking actions, and</p>
+<p>iterating until a goal is achieved.</p>
+<p>In the context of software testing, AI agents can explore applications, generate test cases,</p>
+<p>execute tests, and even fix failures -- all with minimal human intervention.</p>
+<h3>Chatbot vs Assistant vs Agent</h3>
+<table>
+<tr>
+<th>Dimension</th>
+<th>Chatbot</th>
+<th>Assistant</th>
+<th>Agent</th>
+</tr>
+<tr>
+<td><strong>Interaction</strong></td>
+<td>Single turn Q&A</td>
+<td>Multi-turn conversation</td>
+<td>Autonomous multi-step workflow</td>
+</tr>
+<tr>
+<td><strong>Memory</strong></td>
+<td>None or minimal</td>
+<td>Session-based context</td>
+<td>Persistent task memory</td>
+</tr>
+<tr>
+<td><strong>Tool Use</strong></td>
+<td>None</td>
+<td>Limited (search, calc)</td>
+<td>Extensive (browser, editor, CLI)</td>
+</tr>
+<tr>
+<td><strong>Decision Making</strong></td>
+<td>Template-based</td>
+<td>LLM-guided responses</td>
+<td>LLM-guided actions and planning</td>
+</tr>
+<tr>
+<td><strong>Autonomy</strong></td>
+<td>Fully reactive</td>
+<td>Reactive with suggestions</td>
+<td>Proactive and goal-driven</td>
+</tr>
+<tr>
+<td><strong>Iteration</strong></td>
+<td>One response per prompt</td>
+<td>Follows conversation flow</td>
+<td>Loops until task is complete</td>
+</tr>
+<tr>
+<td><strong>Error Handling</strong></td>
+<td>Returns "I don't know"</td>
+<td>Asks for clarification</td>
+<td>Retries with different approach</td>
+</tr>
+<tr>
+<td><strong>Example</strong></td>
+<td>FAQ bot on a website</td>
+<td>ChatGPT, GitHub Copilot</td>
+<td>Playwright Test Planner Agent</td>
+</tr>
+</table>
+<h3>Key Properties of AI Agents</h3>
+<h3>1. Autonomy</h3>
+<p>Agents operate independently once given a goal. They decide what steps to take, what tools</p>
+<p>to use, and when the task is complete.</p>
+<h3>2. Tool Use</h3>
+<p>Agents interact with external systems through tools -- browsers, file editors, terminals,</p>
+<p>APIs. This is what separates agents from plain LLM prompts.</p>
+<h3>3. Reasoning</h3>
+<p>Agents use the LLM to analyze observations, form hypotheses, and decide on next steps.</p>
+<p>This chain-of-thought reasoning is the "brain" of the agent.</p>
+<h3>4. Iteration</h3>
+<p>Agents do not stop after one action. They loop continuously:</p>
+<ul>
+<li>Take an action</li>
+<li>Observe the result</li>
+<li>Decide the next action</li>
+<li>Repeat until the goal is met or a limit is reached</li>
+</ul>
+<h3>The Agent Loop</h3>
+<pre><code>  ┌─────────────────────────────────────────────┐
+  │                                             │
+  │   ┌───────────┐       ┌───────────┐         │
+  │   │  OBSERVE  │──────▶│   THINK   │         │
+  │   │           │       │ (Reason)  │         │
+  │   └───────────┘       └─────┬─────┘         │
+  │         ▲                   │               │
+  │         │                   ▼               │
+  │   ┌─────┴─────┐       ┌───────────┐         │
+  │   │  REPEAT   │◀──────│    ACT    │         │
+  │   │ (Loop)    │       │ (Use Tool)│         │
+  │   └───────────┘       └───────────┘         │
+  │                                             │
+  │          Until goal is achieved              │
+  └─────────────────────────────────────────────┘</code></pre>
+<p><strong>Observe</strong>: The agent takes a snapshot of the current state (page DOM, console logs, etc.)</p>
+<p><strong>Think</strong>: The LLM reasons about what it sees and what to do next.</p>
+<p><strong>Act</strong>: The agent calls a tool (click a button, fill a form, write code).</p>
+<p><strong>Repeat</strong>: The loop continues until the objective is satisfied.</p>
+<h3>Why Agents Matter for Testing</h3>
+<h3>Repetitive Tasks</h3>
+<p>Agents never get bored. They can run the same exploratory flows across hundreds of pages</p>
+<p>without fatigue or shortcuts.</p>
+<h3>Rule-Based Checks</h3>
+<p>Agents can enforce rules consistently -- "every form must have labels", "every API response</p>
+<p>must return in under 2 seconds" -- across an entire application.</p>
+<h3>Exploratory Testing</h3>
+<p>Traditional automation only tests what you script. Agents can discover flows, edge cases,</p>
+<p>and UI states that humans might miss because they explore dynamically.</p>
+<h3>Self-Healing</h3>
+<p>When selectors change or pages are redesigned, agents can adapt. They use the current page</p>
+<p>snapshot to find elements rather than relying on hardcoded locators.</p>
+<h3>Real-World Analogy</h3>
+<p>Think of an AI agent as a <strong>junior QA engineer that never sleeps</strong>:</p>
+<ul>
+<li>You give them a goal: "Test the login page"</li>
+<li>They open the browser and look at the page (Observe)</li>
+<li>They think about what test scenarios make sense (Think)</li>
+<li>They type credentials, click buttons, check results (Act)</li>
+<li>They move on to the next scenario (Repeat)</li>
+</ul>
+<p>The difference? This junior QA engineer:</p>
+<ul>
+<li>Works 24/7 without breaks</li>
+<li>Never forgets a test case</li>
+<li>Can test across multiple browsers simultaneously</li>
+<li>Costs a fraction of a human tester per hour</li>
+<li>Gets smarter with better prompts (not training)</li>
+</ul>
+<p>But like any junior engineer, they still need:</p>
+<ul>
+<li>Clear instructions (good prompts)</li>
+<li>Supervision (human review of results)</li>
+<li>Guardrails (limits on what they can do)</li>
+</ul>
+<h3>Key Takeaway</h3>
+<p>AI agents are not magic -- they are LLMs in a loop with access to tools. Their power comes</p>
+<p>from combining reasoning with real-world interaction. In testing, this means agents can</p>
+<p>explore, generate, execute, and fix tests in ways that were previously impossible without</p>
+<p>significant human effort.</p>
+<p><em>Next: <a href="02_Agentic_Testing_vs_Traditional.md" target="_blank">02 - Agentic Testing vs Traditional Testing</a></em></p>
+</div>
+<div class="topic" id="02-agentic-testing-vs-traditional">
+<span class="badge badge-learning">Learning</span>
+<h2>Agentic Testing vs Traditional</h2>
+<h2>Agentic Testing vs Traditional Testing</h2>
+<h3>Introduction</h3>
+<p>The testing landscape is shifting. For two decades, automated testing meant writing</p>
+<p>deterministic scripts with fixed selectors, hardcoded data, and linear execution flows.</p>
+<p>Agentic testing introduces a fundamentally different paradigm -- AI-driven agents that</p>
+<p>explore, adapt, and self-heal.</p>
+<p>This document breaks down the differences, trade-offs, and when to use each approach.</p>
+<h3>Traditional Testing</h3>
+<p>Traditional test automation follows a <strong>script-first</strong> model:</p>
+<ol>
+<li>A human writes test scripts manually</li>
+<li>Tests use static selectors (CSS, XPath, data-testid)</li>
+<li>Test data is hardcoded or loaded from fixtures</li>
+<li>Tests break when the UI changes</li>
+<li>Maintenance is a constant, manual effort</li>
+</ol>
+<pre><code>// Traditional Playwright test
+import { test, expect } from &#x27;@playwright/test&#x27;;
+
+test(&#x27;login with valid credentials&#x27;, async ({ page }) =&gt; {
+  await page.goto(&#x27;https://the-internet.herokuapp.com/login&#x27;);
+  await page.locator(&#x27;#username&#x27;).fill(&#x27;tomsmith&#x27;);
+  await page.locator(&#x27;#password&#x27;).fill(&#x27;SuperSecretPassword!&#x27;);
+  await page.locator(&#x27;button[type=&quot;submit&quot;]&#x27;).click();
+  await expect(page.locator(&#x27;#flash&#x27;)).toContainText(&#x27;You logged into a secure area!&#x27;);
+});</code></pre>
+<p><strong>Problems with this approach:</strong></p>
+<ul>
+<li>If <span class="inline-code">#username</span> changes to <span class="inline-code">#user-email</span>, the test breaks</li>
+<li>If the success message text changes, the assertion fails</li>
+<li>No adaptability -- the test does exactly what was scripted, nothing more</li>
+</ul>
+<h3>Agentic Testing</h3>
+<p>Agentic testing follows an <strong>explore-first</strong> model:</p>
+<ol>
+<li>An AI agent receives a goal ("test the login page")</li>
+<li>The agent explores the page by taking snapshots of the DOM</li>
+<li>It identifies interactive elements and user flows</li>
+<li>It generates test scenarios including edge cases</li>
+<li>It writes test code based on real execution, not guessing</li>
+<li>When tests break, a healer agent diagnoses and fixes them</li>
+</ol>
+<p>The same login test, but generated by an agent, might look like:</p>
+<pre><code>// Agent-generated Playwright test
+import { test, expect } from &#x27;@playwright/test&#x27;;
+
+test.describe(&#x27;Login Page Tests&#x27;, () =&gt; {
+  test(&#x27;should login successfully with valid credentials&#x27;, async ({ page }) =&gt; {
+    // Navigate to the login page
+    await page.goto(&#x27;https://the-internet.herokuapp.com/login&#x27;);
+
+    // Fill in the username field
+    await page.getByLabel(&#x27;Username&#x27;).fill(&#x27;tomsmith&#x27;);
+
+    // Fill in the password field
+    await page.getByLabel(&#x27;Password&#x27;).fill(&#x27;SuperSecretPassword!&#x27;);
+
+    // Click the Login button
+    await page.getByRole(&#x27;button&#x27;, { name: &#x27;Login&#x27; }).click();
+
+    // Verify successful login message is displayed
+    await expect(page.getByText(&#x27;You logged into a secure area!&#x27;)).toBeVisible();
+  });
+
+  test(&#x27;should show error for invalid credentials&#x27;, async ({ page }) =&gt; {
+    await page.goto(&#x27;https://the-internet.herokuapp.com/login&#x27;);
+    await page.getByLabel(&#x27;Username&#x27;).fill(&#x27;invaliduser&#x27;);
+    await page.getByLabel(&#x27;Password&#x27;).fill(&#x27;wrongpassword&#x27;);
+    await page.getByRole(&#x27;button&#x27;, { name: &#x27;Login&#x27; }).click();
+    await expect(page.getByText(&#x27;Your username is invalid!&#x27;)).toBeVisible();
+  });
+});</code></pre>
+<p><strong>Key differences in the generated code:</strong></p>
+<ul>
+<li>Uses semantic locators (<span class="inline-code">getByLabel</span>, <span class="inline-code">getByRole</span>) instead of CSS selectors</li>
+<li>Includes both happy path and negative test cases</li>
+<li>Comments describe intent, making tests self-documenting</li>
+<li>Locators are more resilient to UI changes</li>
+</ul>
+<h3>Comprehensive Comparison</h3>
+<table>
+<tr>
+<th>Dimension</th>
+<th>Traditional Testing</th>
+<th>Agentic Testing</th>
+</tr>
+<tr>
+<td><strong>Test Creation Speed</strong></td>
+<td>Hours to days per test suite</td>
+<td>Minutes per test suite</td>
+</tr>
+<tr>
+<td><strong>Maintenance Effort</strong></td>
+<td>High -- manual updates</td>
+<td>Low -- self-healing agents</td>
+</tr>
+<tr>
+<td><strong>Selector Strategy</strong></td>
+<td>Static CSS/XPath/data-testid</td>
+<td>Semantic (role, label, text)</td>
+</tr>
+<tr>
+<td><strong>Adaptability</strong></td>
+<td>None -- breaks on UI changes</td>
+<td>Adapts via page snapshot</td>
+</tr>
+<tr>
+<td><strong>Coverage</strong></td>
+<td>Only what is scripted</td>
+<td>Discovers untested flows</td>
+</tr>
+<tr>
+<td><strong>Edge Case Discovery</strong></td>
+<td>Depends on human creativity</td>
+<td>AI generates edge cases</td>
+</tr>
+<tr>
+<td><strong>Initial Setup Cost</strong></td>
+<td>Low (just write tests)</td>
+<td>Medium (LLM API keys, config)</td>
+</tr>
+<tr>
+<td><strong>Running Cost</strong></td>
+<td>Minimal (CI compute only)</td>
+<td>Higher (LLM API calls)</td>
+</tr>
+<tr>
+<td><strong>Determinism</strong></td>
+<td>Fully deterministic</td>
+<td>Non-deterministic (LLM output)</td>
+</tr>
+<tr>
+<td><strong>Debugging</strong></td>
+<td>Clear stack traces</td>
+<td>Agent reasoning logs</td>
+</tr>
+<tr>
+<td><strong>CI/CD Integration</strong></td>
+<td>Native and mature</td>
+<td>Emerging support</td>
+</tr>
+<tr>
+<td><strong>Expertise Required</strong></td>
+<td>Programming + testing skills</td>
+<td>Prompt engineering + oversight</td>
+</tr>
+<tr>
+<td><strong>Trust Level</strong></td>
+<td>High -- predictable behavior</td>
+<td>Requires validation</td>
+</tr>
+<tr>
+<td><strong>Best For</strong></td>
+<td>Critical path regression</td>
+<td>Exploratory and new feature tests</td>
+</tr>
+</table>
+<h3>When to Use Traditional Testing</h3>
+<ul>
+<li><strong>Critical business flows</strong> that must be 100% deterministic</li>
+<li><strong>Regulatory compliance</strong> where test evidence must be reproducible</li>
+<li><strong>Performance benchmarks</strong> that require exact timing measurements</li>
+<li><strong>Simple CRUD operations</strong> where writing a test is faster than prompting an agent</li>
+<li><strong>Existing mature test suites</strong> that are well-maintained</li>
+</ul>
+<h3>When to Use Agentic Testing</h3>
+<ul>
+<li><strong>New feature exploration</strong> where you need quick coverage</li>
+<li><strong>Large applications</strong> where writing tests manually is impractical</li>
+<li><strong>Frequent UI changes</strong> that break traditional selectors</li>
+<li><strong>Exploratory testing</strong> to discover edge cases</li>
+<li><strong>Test suite bootstrapping</strong> to generate an initial set of tests quickly</li>
+</ul>
+<h3>The Hybrid Approach: AI-Assisted with Human Oversight</h3>
+<p>The most effective strategy combines both:</p>
+<pre><code>  ┌─────────────────────────────────────────────────┐
+  │            HYBRID TESTING STRATEGY              │
+  ├─────────────────────────────────────────────────┤
+  │                                                 │
+  │  Layer 1: CRITICAL TESTS (Traditional)          │
+  │  - Login, checkout, payment                     │
+  │  - Hand-written, fully deterministic            │
+  │  - Human-maintained                             │
+  │                                                 │
+  │  Layer 2: FEATURE TESTS (Agent-Generated)       │
+  │  - New features, UI flows                       │
+  │  - Agent generates, human reviews               │
+  │  - Agent heals when broken                      │
+  │                                                 │
+  │  Layer 3: EXPLORATORY (Fully Agentic)           │
+  │  - Discovers new scenarios                      │
+  │  - Runs periodically, reports findings          │
+  │  - Human triages results                        │
+  │                                                 │
+  └─────────────────────────────────────────────────┘</code></pre>
+<p><strong>Workflow:</strong></p>
+<ol>
+<li>Agent generates initial test suite from a URL</li>
+<li>Human reviews and approves generated tests</li>
+<li>Approved tests run in CI/CD like traditional tests</li>
+<li>When tests fail, healer agent attempts fixes</li>
+<li>Human reviews healer's fixes before merging</li>
+<li>Agent periodically explores for new test opportunities</li>
+</ol>
+<h3>Key Takeaway</h3>
+<p>Agentic testing does not replace traditional testing -- it augments it. The future of QA</p>
+<p>is not "AI vs humans" but "AI with humans." Use agents to handle the tedious, repetitive</p>
+<p>parts of testing while humans focus on strategy, edge cases that require domain knowledge,</p>
+<p>and final validation.</p>
+<p><em>Next: <a href="03_Playwright_Built_In_Agents.md" target="_blank">03 - Playwright's Built-in AI Agents</a></em></p>
+</div>
+<div class="topic" id="03-playwright-built-in-agents">
+<span class="badge badge-learning">Learning</span>
+<h2>Playwright Built In Agents</h2>
+<h2>Playwright's Built-in AI Agents</h2>
+<h3>Introduction</h3>
+<p>Starting with Playwright 1.50+, the framework ships with three built-in AI agents located</p>
+<p>in the <span class="inline-code">node_modules/playwright/lib/agents/</span> directory. These agents are designed to work</p>
+<p>together in a pipeline: <strong>Plan -> Generate -> Heal</strong>.</p>
+<p>Each agent is defined as a <span class="inline-code">.agent.md</span> file -- a markdown document with YAML frontmatter</p>
+<p>that describes the agent's identity, tools, and system prompt.</p>
+<h3>The Three Agents at a Glance</h3>
+<table>
+<tr>
+<th>Agent</th>
+<th>File</th>
+<th>Color</th>
+<th>Model</th>
+<th>Purpose</th>
+</tr>
+<tr>
+<td><strong>Test Planner</strong></td>
+<td><span class="inline-code">test-planner.agent.md</span></td>
+<td>Green</td>
+<td>Sonnet</td>
+<td>Explores apps and creates detailed test plans</td>
+</tr>
+<tr>
+<td><strong>Test Generator</strong></td>
+<td><span class="inline-code">test-generator.agent.md</span></td>
+<td>Blue</td>
+<td>Sonnet</td>
+<td>Generates <span class="inline-code">.spec.ts</span> test code from plans</td>
+</tr>
+<tr>
+<td><strong>Test Healer</strong></td>
+<td><span class="inline-code">test-healer.agent.md</span></td>
+<td>Red</td>
+<td>Sonnet</td>
+<td>Debugs and fixes failing tests</td>
+</tr>
+</table>
+<pre><code>  ┌──────────────────┐   ┌──────────────────┐   ┌──────────────────┐
+  │   TEST PLANNER   │   │  TEST GENERATOR  │   │   TEST HEALER    │
+  │    (Green)       │   │     (Blue)       │   │     (Red)        │
+  │                  │   │                  │   │                  │
+  │  Explores app    │──▶│  Writes tests    │──▶│  Fixes failures  │
+  │  Creates plans   │   │  from plans      │   │  Self-heals      │
+  └──────────────────┘   └──────────────────┘   └──────────────────┘</code></pre>
+<h3>Agent File Format</h3>
+<p>Each <span class="inline-code">.agent.md</span> file follows this structure:</p>
+<pre><code>---
+name: Agent Name
+description: What this agent does
+model: sonnet
+color: green
+tools:
+  - tool_name_1
+  - tool_name_2
+  - tool_name_3
+---
+
+# System Prompt
+
+The rest of the markdown file is the system prompt that tells the LLM
+how to behave, what rules to follow, and what output format to produce.</code></pre>
+<h3>YAML Frontmatter Fields</h3>
+<table>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+<tr>
+<td><span class="inline-code">name</span></td>
+<td>string</td>
+<td>Display name shown in the host UI</td>
+</tr>
+<tr>
+<td><span class="inline-code">description</span></td>
+<td>string</td>
+<td>Brief description of the agent's purpose</td>
+</tr>
+<tr>
+<td><span class="inline-code">model</span></td>
+<td>string</td>
+<td>LLM model to use (sonnet, opus, gpt-4, etc.)</td>
+</tr>
+<tr>
+<td><span class="inline-code">color</span></td>
+<td>string</td>
+<td>UI color coding (green, blue, red)</td>
+</tr>
+<tr>
+<td><span class="inline-code">tools</span></td>
+<td>string[]</td>
+<td>List of tool names the agent can invoke</td>
+</tr>
+</table>
+<h3>How Hosts Load and Execute Agents</h3>
+<p>Agents are not standalone executables. They require a <strong>host</strong> -- an application that:</p>
+<ol>
+<li>Reads the <span class="inline-code">.agent.md</span> file</li>
+<li>Parses the YAML frontmatter for configuration</li>
+<li>Uses the markdown body as the system prompt</li>
+<li>Connects the specified tools to the LLM</li>
+<li>Runs the agent loop (Observe -> Think -> Act -> Repeat)</li>
+</ol>
+<p><strong>Compatible hosts include:</strong></p>
+<ul>
+<li><strong>Claude Code</strong> (Anthropic's CLI) -- primary host for Playwright agents</li>
+<li><strong>VS Code with Claude extension</strong> -- GUI-based agent execution</li>
+<li><strong>Custom hosts</strong> -- any application implementing the agent protocol</li>
+</ul>
+<pre><code>  ┌─────────────────┐      ┌──────────────────┐
+  │   HOST           │      │  .agent.md FILE  │
+  │  (Claude Code)   │◀────│                  │
+  │                  │      │  - YAML config   │
+  │  1. Parse YAML   │      │  - System prompt │
+  │  2. Load tools   │      │  - Tool list     │
+  │  3. Set prompt   │      └──────────────────┘
+  │  4. Run loop     │
+  │                  │      ┌──────────────────┐
+  │  5. Call LLM ────│─────▶│  LLM (Sonnet)    │
+  │  6. Execute tool │      │                  │
+  │  7. Return result│◀─────│  Reasoning +     │
+  │  8. Repeat       │      │  Tool calls      │
+  └─────────────────┘      └──────────────────┘</code></pre>
+<h3>Test Planner Agent Tools</h3>
+<p>The Test Planner has access to <strong>21 tools</strong> for exploring web applications:</p>
+<table>
+<tr>
+<th>Tool</th>
+<th>Category</th>
+<th>Purpose</th>
+</tr>
+<tr>
+<td><span class="inline-code">search</span></td>
+<td>File</td>
+<td>Search codebase for relevant files</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_click</span></td>
+<td>Browser</td>
+<td>Click on elements in the page</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_close</span></td>
+<td>Browser</td>
+<td>Close browser tabs</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_console_messages</span></td>
+<td>Browser</td>
+<td>Read browser console output</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_drag</span></td>
+<td>Browser</td>
+<td>Drag and drop elements</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_evaluate</span></td>
+<td>Browser</td>
+<td>Execute JavaScript in the page</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_file_upload</span></td>
+<td>Browser</td>
+<td>Upload files through file inputs</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_handle_dialog</span></td>
+<td>Browser</td>
+<td>Accept or dismiss browser dialogs</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_hover</span></td>
+<td>Browser</td>
+<td>Hover over elements</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_navigate</span></td>
+<td>Browser</td>
+<td>Navigate to URLs</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_navigate_back</span></td>
+<td>Browser</td>
+<td>Go back in browser history</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_network_requests</span></td>
+<td>Browser</td>
+<td>Inspect network traffic</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_press_key</span></td>
+<td>Browser</td>
+<td>Press keyboard keys</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_run_code</span></td>
+<td>Browser</td>
+<td>Run Playwright code snippets</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_select_option</span></td>
+<td>Browser</td>
+<td>Select dropdown options</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_snapshot</span></td>
+<td>Browser</td>
+<td>Capture accessibility tree snapshot</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_take_screenshot</span></td>
+<td>Browser</td>
+<td>Take visual screenshots</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_type</span></td>
+<td>Browser</td>
+<td>Type text into elements</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_wait_for</span></td>
+<td>Browser</td>
+<td>Wait for conditions</td>
+</tr>
+<tr>
+<td><span class="inline-code">planner_setup_page</span></td>
+<td>Planner</td>
+<td>Initialize browser with target URL</td>
+</tr>
+<tr>
+<td><span class="inline-code">planner_save_plan</span></td>
+<td>Planner</td>
+<td>Save the generated test plan to a file</td>
+</tr>
+</table>
+<h3>Test Generator Agent Tools</h3>
+<p>The Test Generator has access to <strong>20 tools</strong> for generating test code:</p>
+<table>
+<tr>
+<th>Tool</th>
+<th>Category</th>
+<th>Purpose</th>
+</tr>
+<tr>
+<td><span class="inline-code">search</span></td>
+<td>File</td>
+<td>Search codebase for context</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_click</span></td>
+<td>Browser</td>
+<td>Click elements during execution</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_drag</span></td>
+<td>Browser</td>
+<td>Drag and drop during execution</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_evaluate</span></td>
+<td>Browser</td>
+<td>Run JavaScript during execution</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_file_upload</span></td>
+<td>Browser</td>
+<td>Upload files during execution</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_handle_dialog</span></td>
+<td>Browser</td>
+<td>Handle dialogs during execution</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_hover</span></td>
+<td>Browser</td>
+<td>Hover elements during execution</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_navigate</span></td>
+<td>Browser</td>
+<td>Navigate to pages during execution</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_press_key</span></td>
+<td>Browser</td>
+<td>Press keys during execution</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_select_option</span></td>
+<td>Browser</td>
+<td>Select options during execution</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_snapshot</span></td>
+<td>Browser</td>
+<td>Capture page state during execution</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_type</span></td>
+<td>Browser</td>
+<td>Type text during execution</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_verify_element_visible</span></td>
+<td>Verification</td>
+<td>Assert element visibility</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_verify_list_visible</span></td>
+<td>Verification</td>
+<td>Assert list content visibility</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_verify_text_visible</span></td>
+<td>Verification</td>
+<td>Assert text content visibility</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_verify_value</span></td>
+<td>Verification</td>
+<td>Assert input/element values</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_wait_for</span></td>
+<td>Browser</td>
+<td>Wait for conditions during execution</td>
+</tr>
+<tr>
+<td><span class="inline-code">generator_read_log</span></td>
+<td>Generator</td>
+<td>Read execution log for code generation</td>
+</tr>
+<tr>
+<td><span class="inline-code">generator_setup_page</span></td>
+<td>Generator</td>
+<td>Initialize browser for test generation</td>
+</tr>
+<tr>
+<td><span class="inline-code">generator_write_test</span></td>
+<td>Generator</td>
+<td>Write the final .spec.ts test file</td>
+</tr>
+</table>
+<h3>Test Healer Agent Tools</h3>
+<p>The Test Healer has access to <strong>10 tools</strong> for diagnosing and fixing failures:</p>
+<table>
+<tr>
+<th>Tool</th>
+<th>Category</th>
+<th>Purpose</th>
+</tr>
+<tr>
+<td><span class="inline-code">search</span></td>
+<td>File</td>
+<td>Search codebase for relevant code</td>
+</tr>
+<tr>
+<td><span class="inline-code">edit</span></td>
+<td>File</td>
+<td>Edit test files to apply fixes</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_console_messages</span></td>
+<td>Browser</td>
+<td>Check console for errors</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_evaluate</span></td>
+<td>Browser</td>
+<td>Run JavaScript to inspect state</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_generate_locator</span></td>
+<td>Browser</td>
+<td>Generate robust locators for elements</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_network_requests</span></td>
+<td>Browser</td>
+<td>Check API calls and responses</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_snapshot</span></td>
+<td>Browser</td>
+<td>Capture current page state</td>
+</tr>
+<tr>
+<td><span class="inline-code">test_debug</span></td>
+<td>Testing</td>
+<td>Run a specific test in debug mode</td>
+</tr>
+<tr>
+<td><span class="inline-code">test_list</span></td>
+<td>Testing</td>
+<td>List all available tests</td>
+</tr>
+<tr>
+<td><span class="inline-code">test_run</span></td>
+<td>Testing</td>
+<td>Run tests and capture results</td>
+</tr>
+</table>
+<h3>Key Observations</h3>
+<ol>
+<li><strong>Tool overlap</strong>: All three agents share <span class="inline-code">browser_snapshot</span> and <span class="inline-code">search</span> -- observation</li>
+</ol>
+<p>and codebase awareness are fundamental to every agent.</p>
+<ol>
+<li><strong>Specialized tools</strong>: Each agent has unique tools matching its role:</li>
+</ol>
+<ul>
+<li>Planner: <span class="inline-code">planner_setup_page</span>, <span class="inline-code">planner_save_plan</span></li>
+<li>Generator: <span class="inline-code">generator_setup_page</span>, <span class="inline-code">generator_write_test</span>, <span class="inline-code">generator_read_log</span>, <span class="inline-code">browser_verify_*</span></li>
+<li>Healer: <span class="inline-code">test_run</span>, <span class="inline-code">test_debug</span>, <span class="inline-code">test_list</span>, <span class="inline-code">edit</span>, <span class="inline-code">browser_generate_locator</span></li>
+</ul>
+<ol>
+<li><strong>Model choice</strong>: All three use Sonnet by default, balancing speed and capability.</li>
+</ol>
+<ol>
+<li><strong>The healer is the only agent with the <span class="inline-code">edit</span> tool</strong> -- it is the only one that</li>
+</ol>
+<p>modifies existing test files.</p>
+<p><em>Next: <a href="04_Test_Planner_Agent_Deep_Dive.md" target="_blank">04 - Test Planner Agent Deep Dive</a></em></p>
+</div>
+<div class="topic" id="04-test-planner-agent-deep-dive">
+<span class="badge badge-learning">Learning</span>
+<h2>Test Planner Agent Deep Dive</h2>
+<h2>Test Planner Agent - Deep Dive</h2>
+<h3>Introduction</h3>
+<p>The Test Planner agent (green) is the starting point of Playwright's agentic testing</p>
+<p>pipeline. Its job is to explore a web application, understand its user flows, and produce</p>
+<p>a comprehensive test plan in markdown format.</p>
+<p>Think of it as a senior QA engineer who visits the application for the first time, clicks</p>
+<p>around, takes notes, and writes a detailed test plan document.</p>
+<h3>The Planner's System Prompt (Paraphrased)</h3>
+<p>The planner's system prompt establishes it as an <strong>expert web application test planner</strong>.</p>
+<p>Key instructions include:</p>
+<ul>
+<li>You are an expert in testing web applications</li>
+<li>Your goal is to create a comprehensive test plan for the given page</li>
+<li>Explore the page thoroughly using browser tools</li>
+<li>Design tests that cover happy paths, edge cases, and error handling</li>
+<li>Each test must be independent and self-contained</li>
+<li>Include specific steps, not vague descriptions</li>
+<li>Include negative test scenarios (invalid inputs, empty fields)</li>
+<li>Output the plan in a clear markdown format with numbered steps</li>
+</ul>
+<h3>Workflow Steps</h3>
+<h3>Step 1: Setup Page with <span class="inline-code">planner_setup_page</span></h3>
+<p>The agent begins by calling <span class="inline-code">planner_setup_page</span> with the target URL. This tool:</p>
+<ul>
+<li>Launches a browser instance</li>
+<li>Navigates to the specified URL</li>
+<li>Returns confirmation that the page is ready for exploration</li>
+</ul>
+<pre><code>Agent calls: planner_setup_page({ url: &quot;https://the-internet.herokuapp.com/login&quot; })
+Result: &quot;Browser launched and navigated to the login page.&quot;</code></pre>
+<h3>Step 2: Explore via <span class="inline-code">browser_snapshot</span></h3>
+<p>The agent takes an accessibility snapshot of the page to understand its structure:</p>
+<pre><code>Agent calls: browser_snapshot()
+Result:
+  - heading &quot;Login Page&quot; [level=2]
+  - text &quot;This is where you can log into the secure area.&quot;
+  - textbox &quot;Username&quot; [id=username]
+  - textbox &quot;Password&quot; [id=password, type=password]
+  - button &quot;Login&quot;
+  - link &quot;Elemental Selenium&quot;</code></pre>
+<p>This accessibility tree is far more useful than raw HTML because it shows the page</p>
+<p>the way a user (or screen reader) would perceive it.</p>
+<h3>Step 3: Analyze User Flows</h3>
+<p>Based on the snapshot, the agent reasons about possible user interactions:</p>
+<ul>
+<li>What can the user do on this page?</li>
+<li>What inputs are expected?</li>
+<li>What happens on success?</li>
+<li>What happens on failure?</li>
+<li>Are there edge cases (empty fields, special characters)?</li>
+</ul>
+<h3>Step 4: Design Test Scenarios</h3>
+<p>The agent designs scenarios across three categories:</p>
+<p><strong>Happy Path Tests:</strong></p>
+<ul>
+<li>Login with valid username and password</li>
+<li>Verify redirect to secure area</li>
+<li>Verify success message displayed</li>
+</ul>
+<p><strong>Negative Tests:</strong></p>
+<ul>
+<li>Login with invalid username</li>
+<li>Login with invalid password</li>
+<li>Login with both fields empty</li>
+<li>Login with only username filled</li>
+<li>Login with only password filled</li>
+</ul>
+<p><strong>Edge Case Tests:</strong></p>
+<ul>
+<li>Login with username containing spaces</li>
+<li>Login with very long input strings</li>
+<li>Login with special characters in fields</li>
+</ul>
+<h3>Step 5: Save Plan with <span class="inline-code">planner_save_plan</span></h3>
+<p>The agent calls <span class="inline-code">planner_save_plan</span> to write the test plan to a markdown file:</p>
+<pre><code>Agent calls: planner_save_plan({
+  plan: &quot;# Test Plan: Login Page\n\n## Test 1: Successful Login\n...&quot;
+})</code></pre>
+<h3>Output Format</h3>
+<p>The planner produces a markdown document with this structure:</p>
+<pre><code># Test Plan: Login Page
+
+## Test 1: Successful Login with Valid Credentials
+1. Navigate to https://the-internet.herokuapp.com/login
+2. Enter &quot;tomsmith&quot; in the Username field
+3. Enter &quot;SuperSecretPassword!&quot; in the Password field
+4. Click the &quot;Login&quot; button
+5. Verify the page redirects to /secure
+6. Verify the message &quot;You logged into a secure area!&quot; is displayed
+
+## Test 2: Login with Invalid Username
+1. Navigate to https://the-internet.herokuapp.com/login
+2. Enter &quot;invaliduser&quot; in the Username field
+3. Enter &quot;SuperSecretPassword!&quot; in the Password field
+4. Click the &quot;Login&quot; button
+5. Verify the error message &quot;Your username is invalid!&quot; is displayed
+
+## Test 3: Login with Invalid Password
+1. Navigate to https://the-internet.herokuapp.com/login
+2. Enter &quot;tomsmith&quot; in the Username field
+3. Enter &quot;wrongpassword&quot; in the Password field
+4. Click the &quot;Login&quot; button
+5. Verify the error message &quot;Your password is invalid!&quot; is displayed
+
+## Test 4: Login with Empty Fields
+1. Navigate to https://the-internet.herokuapp.com/login
+2. Leave the Username field empty
+3. Leave the Password field empty
+4. Click the &quot;Login&quot; button
+5. Verify an error message is displayed</code></pre>
+<h3>Quality Standards</h3>
+<p>The planner enforces several quality standards in its test plans:</p>
+<h3>Independence</h3>
+<p>Each test must be fully self-contained. No test should depend on the state left by</p>
+<p>a previous test. Every test starts with a fresh navigation to the page.</p>
+<h3>Specificity</h3>
+<p>Steps must be specific and actionable:</p>
+<ul>
+<li><strong>Bad</strong>: "Fill in the login form"</li>
+<li><strong>Good</strong>: "Enter 'tomsmith' in the Username field"</li>
+</ul>
+<h3>Negative Testing</h3>
+<p>The planner always includes negative scenarios -- invalid inputs, empty fields,</p>
+<p>boundary conditions. This is where agents excel over manual test writing, as they</p>
+<p>systematically consider failure modes.</p>
+<h3>Completeness</h3>
+<p>The planner explores all interactive elements on the page. If there is a link,</p>
+<p>it checks where it goes. If there is a dropdown, it tests all options.</p>
+<h3>Exploration Techniques</h3>
+<p>The planner uses multiple browser tools to explore thoroughly:</p>
+<table>
+<tr>
+<th>Technique</th>
+<th>Tool Used</th>
+<th>Purpose</th>
+</tr>
+<tr>
+<td>Page structure analysis</td>
+<td><span class="inline-code">browser_snapshot</span></td>
+<td>Understand DOM and elements</td>
+</tr>
+<tr>
+<td>Navigation discovery</td>
+<td><span class="inline-code">browser_click</span> + links</td>
+<td>Find connected pages</td>
+</tr>
+<tr>
+<td>Form exploration</td>
+<td><span class="inline-code">browser_type</span>, <span class="inline-code">browser_click</span></td>
+<td>Test input fields</td>
+</tr>
+<tr>
+<td>Dynamic content check</td>
+<td><span class="inline-code">browser_evaluate</span></td>
+<td>Check for JavaScript-driven UI</td>
+</tr>
+<tr>
+<td>Network analysis</td>
+<td><span class="inline-code">browser_network_requests</span></td>
+<td>Identify API endpoints</td>
+</tr>
+<tr>
+<td>Console monitoring</td>
+<td><span class="inline-code">browser_console_messages</span></td>
+<td>Detect client-side errors</td>
+</tr>
+<tr>
+<td>Visual inspection</td>
+<td><span class="inline-code">browser_take_screenshot</span></td>
+<td>Capture visual state</td>
+</tr>
+</table>
+<h3>Key Takeaway</h3>
+<p>The Test Planner agent is the foundation of the agentic testing pipeline. Its output</p>
+<p>quality directly impacts the Generator and Healer agents downstream. A well-crafted</p>
+<p>test plan with specific steps, clear assertions, and comprehensive coverage leads to</p>
+<p>better generated tests and fewer failures to heal.</p>
+<p><em>Next: <a href="05_Test_Generator_Agent_Deep_Dive.md" target="_blank">05 - Test Generator Agent Deep Dive</a></em></p>
+</div>
+<div class="topic" id="05-test-generator-agent-deep-dive">
+<span class="badge badge-learning">Learning</span>
+<h2>Test Generator Agent Deep Dive</h2>
+<h2>Test Generator Agent - Deep Dive</h2>
+<h3>Introduction</h3>
+<p>The Test Generator agent (blue) is the second stage of Playwright's agentic testing</p>
+<p>pipeline. It takes a test plan produced by the Planner and converts it into executable</p>
+<p>Playwright <span class="inline-code">.spec.ts</span> test code.</p>
+<p>The critical insight about this agent: **it actually executes each step in a real browser</p>
+<p>before writing the test code.** It does not guess or hallucinate selectors -- it interacts</p>
+<p>with the live application, observes the results, and writes code based on what it sees.</p>
+<h3>The Generator's System Prompt (Paraphrased)</h3>
+<p>The generator is instructed to be an <strong>expert Playwright test code writer</strong>. Key rules:</p>
+<ul>
+<li>Read the test plan carefully</li>
+<li>Execute each step in the real browser to verify it works</li>
+<li>Use the execution log to generate accurate test code</li>
+<li>Use <span class="inline-code">test.describe</span> blocks that match the plan structure</li>
+<li>Add comments before each significant step</li>
+<li>Use semantic locators (<span class="inline-code">getByRole</span>, <span class="inline-code">getByLabel</span>, <span class="inline-code">getByText</span>) over CSS selectors</li>
+<li>Never use <span class="inline-code">networkidle</span> or deprecated Playwright APIs</li>
+<li>Include proper assertions using <span class="inline-code">expect</span></li>
+</ul>
+<h3>Workflow</h3>
+<h3>Step 1: Read the Test Plan</h3>
+<p>The generator receives the test plan (either from the planner output or a file path).</p>
+<p>It parses the plan to understand:</p>
+<ul>
+<li>How many test scenarios exist</li>
+<li>What steps each scenario contains</li>
+<li>What assertions are expected</li>
+</ul>
+<h3>Step 2: Setup Page with <span class="inline-code">generator_setup_page</span></h3>
+<pre><code>Agent calls: generator_setup_page({
+  url: &quot;https://the-internet.herokuapp.com/login&quot;
+})
+Result: &quot;Browser ready. Execution logging enabled.&quot;</code></pre>
+<p>This tool also enables <strong>execution logging</strong> -- every browser action the agent takes</p>
+<p>is recorded so it can later be converted to test code.</p>
+<h3>Step 3: Execute Each Step in Real-Time</h3>
+<p>This is what makes the generator special. For each step in the test plan, the agent:</p>
+<ol>
+<li>Takes a <span class="inline-code">browser_snapshot</span> to see the current page state</li>
+<li>Performs the action (click, type, navigate, etc.)</li>
+<li>Takes another snapshot to verify the result</li>
+<li>Uses verification tools to confirm assertions</li>
+</ol>
+<pre><code>// For Test 1: Successful Login
+Agent calls: browser_snapshot()        // See the login form
+Agent calls: browser_type({           // Type in username field
+  element: &quot;Username textbox&quot;,
+  text: &quot;tomsmith&quot;
+})
+Agent calls: browser_type({           // Type in password field
+  element: &quot;Password textbox&quot;,
+  text: &quot;SuperSecretPassword!&quot;
+})
+Agent calls: browser_click({          // Click login button
+  element: &quot;Login button&quot;
+})
+Agent calls: browser_verify_text_visible({  // Verify success
+  text: &quot;You logged into a secure area!&quot;
+})</code></pre>
+<h3>Step 4: Read Execution Log with <span class="inline-code">generator_read_log</span></h3>
+<p>After executing all steps for a test scenario, the agent reads the execution log:</p>
+<pre><code>Agent calls: generator_read_log()
+Result:
+  Action 1: navigated to &quot;https://the-internet.herokuapp.com/login&quot;
+  Action 2: filled textbox [id=username] with &quot;tomsmith&quot;
+  Action 3: filled textbox [id=password] with &quot;SuperSecretPassword!&quot;
+  Action 4: clicked button &quot;Login&quot;
+  Action 5: verified text &quot;You logged into a secure area!&quot; is visible</code></pre>
+<p>This log contains the <strong>actual locators and actions</strong> that worked, not guesses.</p>
+<h3>Step 5: Write Test with <span class="inline-code">generator_write_test</span></h3>
+<p>The agent converts the execution log into a <span class="inline-code">.spec.ts</span> file:</p>
+<pre><code>Agent calls: generator_write_test({
+  path: &quot;tests/login.spec.ts&quot;,
+  content: &quot;import { test, expect } from &#x27;@playwright/test&#x27;;\n\n...&quot;
+})</code></pre>
+<h3>Verification Tools</h3>
+<p>The generator has four specialized verification tools that map to Playwright assertions:</p>
+<table>
+<tr>
+<th>Tool</th>
+<th>Playwright Equivalent</th>
+<th>Use Case</th>
+</tr>
+<tr>
+<td><span class="inline-code">browser_verify_element_visible</span></td>
+<td><span class="inline-code">expect(locator).toBeVisible()</span></td>
+<td>Element exists on page</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_verify_text_visible</span></td>
+<td><span class="inline-code">expect(page.getByText(...))).toBeVisible()</span></td>
+<td>Text content check</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_verify_value</span></td>
+<td><span class="inline-code">expect(locator).toHaveValue(...)</span></td>
+<td>Input field values</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_verify_list_visible</span></td>
+<td>Multiple <span class="inline-code">toBeVisible()</span> checks</td>
+<td>List/table content</td>
+</tr>
+</table>
+<p>These tools do not just check -- they also record the assertion in the execution log</p>
+<p>so the generated code includes proper <span class="inline-code">expect</span> statements.</p>
+<h3>Output Format</h3>
+<p>The generator produces a complete Playwright test file:</p>
+<pre><code>import { test, expect } from &#x27;@playwright/test&#x27;;
+
+test.describe(&#x27;Login Page Tests&#x27;, () =&gt; {
+
+  test(&#x27;Test 1: Successful Login with Valid Credentials&#x27;, async ({ page }) =&gt; {
+    // Navigate to the login page
+    await page.goto(&#x27;https://the-internet.herokuapp.com/login&#x27;);
+
+    // Enter username
+    await page.getByLabel(&#x27;Username&#x27;).fill(&#x27;tomsmith&#x27;);
+
+    // Enter password
+    await page.getByLabel(&#x27;Password&#x27;).fill(&#x27;SuperSecretPassword!&#x27;);
+
+    // Click the Login button
+    await page.getByRole(&#x27;button&#x27;, { name: &#x27;Login&#x27; }).click();
+
+    // Verify success message is displayed
+    await expect(page.getByText(&#x27;You logged into a secure area!&#x27;)).toBeVisible();
+  });
+
+  test(&#x27;Test 2: Login with Invalid Username&#x27;, async ({ page }) =&gt; {
+    // Navigate to the login page
+    await page.goto(&#x27;https://the-internet.herokuapp.com/login&#x27;);
+
+    // Enter invalid username
+    await page.getByLabel(&#x27;Username&#x27;).fill(&#x27;invaliduser&#x27;);
+
+    // Enter password
+    await page.getByLabel(&#x27;Password&#x27;).fill(&#x27;SuperSecretPassword!&#x27;);
+
+    // Click the Login button
+    await page.getByRole(&#x27;button&#x27;, { name: &#x27;Login&#x27; }).click();
+
+    // Verify error message is displayed
+    await expect(page.getByText(&#x27;Your username is invalid!&#x27;)).toBeVisible();
+  });
+
+});</code></pre>
+<h3>Code Quality Standards</h3>
+<ul>
+<li><span class="inline-code">test.describe</span> block title matches the plan section</li>
+<li>Each <span class="inline-code">test()</span> title matches the plan scenario name</li>
+<li>Comments precede each significant action</li>
+<li>Semantic locators used throughout</li>
+<li>Proper <span class="inline-code">await</span> on all async operations</li>
+<li><span class="inline-code">expect</span> assertions for all verifications</li>
+</ul>
+<h3>The Seed File Concept</h3>
+<p>When generating tests for a large application, the generator can use a <strong>seed file</strong> --</p>
+<p>a shared setup file that contains common configuration:</p>
+<pre><code>// tests/seed.ts (shared setup)
+export const BASE_URL = &#x27;https://the-internet.herokuapp.com&#x27;;
+export const VALID_USER = { username: &#x27;tomsmith&#x27;, password: &#x27;SuperSecretPassword!&#x27; };
+
+export async function loginAsUser(page, user = VALID_USER) {
+  await page.goto(`${BASE_URL}/login`);
+  await page.getByLabel(&#x27;Username&#x27;).fill(user.username);
+  await page.getByLabel(&#x27;Password&#x27;).fill(user.password);
+  await page.getByRole(&#x27;button&#x27;, { name: &#x27;Login&#x27; }).click();
+}</code></pre>
+<p>The generator can reference this seed file to avoid duplicating login logic across</p>
+<p>multiple test files. The host can provide the seed file path as context when invoking</p>
+<p>the generator agent.</p>
+<h3>Key Insight: Execute First, Generate Second</h3>
+<p>The most important thing to understand about the Test Generator is its approach:</p>
+<pre><code>  Traditional code generators:
+  Read spec → Guess code → Hope it works
+
+  Playwright Test Generator Agent:
+  Read plan → Execute in browser → Record what works → Write proven code</code></pre>
+<p>This "execute-first" approach means:</p>
+<ul>
+<li>Locators are verified against the real DOM</li>
+<li>Assertions are tested against actual page state</li>
+<li>Timing and wait conditions are observed, not assumed</li>
+<li>The generated code has a much higher chance of passing on first run</li>
+</ul>
+<p><em>Next: <a href="06_Test_Healer_Agent_Deep_Dive.md" target="_blank">06 - Test Healer Agent Deep Dive</a></em></p>
+</div>
+<div class="topic" id="06-test-healer-agent-deep-dive">
+<span class="badge badge-learning">Learning</span>
+<h2>Test Healer Agent Deep Dive</h2>
+<h2>Test Healer Agent - Deep Dive</h2>
+<h3>Introduction</h3>
+<p>The Test Healer agent (red) is the third and final stage of Playwright's agentic testing</p>
+<p>pipeline. Its purpose is to diagnose and fix failing tests. When the application changes</p>
+<p>and tests break, the healer investigates the root cause, applies fixes, and verifies that</p>
+<p>the repaired tests pass.</p>
+<p>This is arguably the most valuable agent for day-to-day test maintenance, as fixing broken</p>
+<p>tests is one of the most time-consuming tasks in test automation.</p>
+<h3>The Healer's System Prompt (Paraphrased)</h3>
+<p>The healer is instructed to be an <strong>expert Playwright test debugger</strong>. Key rules:</p>
+<ul>
+<li>Run all tests first to identify failures</li>
+<li>Debug each failing test individually</li>
+<li>Investigate root causes using browser tools</li>
+<li>Fix tests using the edit tool</li>
+<li>Verify fixes by re-running tests</li>
+<li>Never use <span class="inline-code">networkidle</span> or deprecated Playwright APIs</li>
+<li>If a fix is not possible, mark the test with <span class="inline-code">test.fixme()</span></li>
+<li>Iterate until all tests pass or are marked as fixme</li>
+</ul>
+<h3>Workflow</h3>
+<h3>Step 1: Run All Tests with <span class="inline-code">test_run</span></h3>
+<p>The healer starts by running the entire test suite to identify which tests are failing:</p>
+<pre><code>Agent calls: test_run()
+Result:
+  Running 5 tests...
+  PASS: Test 1 - Successful Login (1.2s)
+  PASS: Test 2 - Invalid Username (0.9s)
+  FAIL: Test 3 - Invalid Password (timeout)
+  PASS: Test 4 - Empty Fields (0.8s)
+  FAIL: Test 5 - Logout Flow (element not found)
+
+  3 passed, 2 failed</code></pre>
+<h3>Step 2: Debug Failing Tests with <span class="inline-code">test_debug</span></h3>
+<p>For each failing test, the healer runs it in debug mode to get detailed output:</p>
+<pre><code>Agent calls: test_debug({
+  testName: &quot;Test 3 - Invalid Password&quot;
+})
+Result:
+  Error: Timed out waiting for locator(&#x27;#flash-message&#x27;)
+  at login.spec.ts:45:5
+
+  Page URL at failure: https://the-internet.herokuapp.com/login
+  Timeout: 30000ms</code></pre>
+<h3>Step 3: Investigate with Browser Tools</h3>
+<p>The healer uses multiple tools to understand the current state of the application:</p>
+<p><strong>Browser Snapshot</strong> -- see what elements actually exist:</p>
+<pre><code>Agent calls: browser_snapshot()
+Result:
+  - heading &quot;Login Page&quot; [level=2]
+  - textbox &quot;Username&quot;
+  - textbox &quot;Password&quot;
+  - button &quot;Login&quot;
+  - div [id=&quot;flash&quot;] &quot;Your password is invalid!&quot;</code></pre>
+<p><strong>Console Messages</strong> -- check for JavaScript errors:</p>
+<pre><code>Agent calls: browser_console_messages()
+Result:
+  [warning] Form validation updated - using new flash component</code></pre>
+<p><strong>Network Requests</strong> -- check API behavior:</p>
+<pre><code>Agent calls: browser_network_requests()
+Result:
+  POST /authenticate -&gt; 401 (response: {&quot;error&quot;: &quot;invalid password&quot;})</code></pre>
+<h3>Step 4: Root Cause Analysis</h3>
+<p>Based on investigation, the healer identifies the root cause. In this example:</p>
+<ul>
+<li>The test was looking for <span class="inline-code">#flash-message</span> but the element ID is <span class="inline-code">#flash</span></li>
+<li>The selector was incorrect or the application changed the element ID</li>
+</ul>
+<h3>Step 5: Fix with <span class="inline-code">edit</span> Tool</h3>
+<p>The healer applies the fix directly to the test file:</p>
+<pre><code>Agent calls: edit({
+  file: &quot;tests/login.spec.ts&quot;,
+  old_text: &quot;await expect(page.locator(&#x27;#flash-message&#x27;))&quot;,
+  new_text: &quot;await expect(page.locator(&#x27;#flash&#x27;))&quot;
+})</code></pre>
+<h3>Step 6: Verify Fix with <span class="inline-code">test_run</span></h3>
+<p>After applying the fix, the healer re-runs the specific test:</p>
+<pre><code>Agent calls: test_run({ testName: &quot;Test 3 - Invalid Password&quot; })
+Result:
+  PASS: Test 3 - Invalid Password (0.9s)</code></pre>
+<h3>Step 7: Iterate</h3>
+<p>The healer moves to the next failing test and repeats steps 2-6. This loop continues</p>
+<p>until all tests pass or are marked as unfixable.</p>
+<h3>Root Cause Categories</h3>
+<p>The healer encounters several common categories of test failures:</p>
+<table>
+<tr>
+<th>Category</th>
+<th>Symptoms</th>
+<th>Typical Fix</th>
+</tr>
+<tr>
+<td><strong>Selector Changes</strong></td>
+<td>Element not found, timeout</td>
+<td>Update locator to match new DOM</td>
+</tr>
+<tr>
+<td><strong>Timing Issues</strong></td>
+<td>Intermittent timeouts</td>
+<td>Add proper waits or increase timeout</td>
+</tr>
+<tr>
+<td><strong>Data Dependencies</strong></td>
+<td>Assertion mismatches</td>
+<td>Update expected values</td>
+</tr>
+<tr>
+<td><strong>App Changes</strong></td>
+<td>New flows, removed features</td>
+<td>Rewrite test steps</td>
+</tr>
+<tr>
+<td><strong>Network Issues</strong></td>
+<td>API failures, CORS errors</td>
+<td>Add retry logic or mock APIs</td>
+</tr>
+<tr>
+<td><strong>Auth Changes</strong></td>
+<td>Login failures</td>
+<td>Update credentials or auth flow</td>
+</tr>
+</table>
+<h3>The <span class="inline-code">browser_generate_locator</span> Tool</h3>
+<p>This is a unique tool available only to the healer. When a test fails because a locator</p>
+<p>is broken, the healer can ask Playwright to generate a new, robust locator:</p>
+<pre><code>Agent calls: browser_generate_locator({
+  description: &quot;the login button on the page&quot;
+})
+Result:
+  Recommended locators (in order of preference):
+  1. page.getByRole(&#x27;button&#x27;, { name: &#x27;Login&#x27; })
+  2. page.getByText(&#x27;Login&#x27;)
+  3. page.locator(&#x27;button[type=&quot;submit&quot;]&#x27;)</code></pre>
+<p>The tool generates locators ranked by robustness:</p>
+<ol>
+<li><strong>Role-based</strong> (most resilient to UI changes)</li>
+<li><strong>Text-based</strong> (resilient unless copy changes)</li>
+<li><strong>CSS-based</strong> (least resilient, but most specific)</li>
+</ol>
+<h3>The <span class="inline-code">test.fixme()</span> Fallback</h3>
+<p>Sometimes a test failure cannot be fixed by the healer because:</p>
+<ul>
+<li>The feature has been intentionally removed</li>
+<li>The test requires human judgment to update</li>
+<li>The failure is caused by an actual bug in the application</li>
+</ul>
+<p>In these cases, the healer marks the test with <span class="inline-code">test.fixme()</span>:</p>
+<pre><code>// Before
+test(&#x27;should display feature X&#x27;, async ({ page }) =&gt; {
+  // ... test steps that fail because feature was removed
+});
+
+// After healer marks it
+test.fixme(&#x27;should display feature X&#x27;, async ({ page }) =&gt; {
+  // TODO: Feature X was removed in the latest release.
+  // This test needs human review to determine if it should
+  // be deleted or updated for the replacement feature.
+});</code></pre>
+<p><span class="inline-code">test.fixme()</span> is different from <span class="inline-code">test.skip()</span>:</p>
+<ul>
+<li><span class="inline-code">test.skip()</span> means "we know it fails, skip it"</li>
+<li><span class="inline-code">test.fixme()</span> means "this needs to be fixed by a human"</li>
+</ul>
+<h3>Rules the Healer Follows</h3>
+<p>The healer has strict rules to ensure quality fixes:</p>
+<ol>
+<li><strong>Never use <span class="inline-code">networkidle</span></strong> -- it is deprecated and unreliable</li>
+<li><strong>Never use deprecated Playwright APIs</strong> -- always use current API</li>
+<li><strong>Prefer semantic locators</strong> -- <span class="inline-code">getByRole</span>, <span class="inline-code">getByLabel</span>, <span class="inline-code">getByText</span></li>
+<li><strong>Verify every fix</strong> -- re-run the test after each change</li>
+<li><strong>Minimal changes</strong> -- fix only what is broken, do not refactor</li>
+<li><strong>Document changes</strong> -- add comments explaining why the fix was made</li>
+</ol>
+<h3>Complete Healing Session Example</h3>
+<pre><code>Healer Agent Session:
+═══════════════════════════════════════════════
+
+1. test_run()
+   → 2 of 5 tests failing
+
+2. test_debug(&quot;Test 3 - Invalid Password&quot;)
+   → Error: locator(&#x27;#flash-message&#x27;) not found
+
+3. browser_snapshot()
+   → Found: div[id=&quot;flash&quot;] contains error text
+
+4. browser_generate_locator(&quot;flash message div&quot;)
+   → Recommended: page.locator(&#x27;#flash&#x27;)
+
+5. edit(login.spec.ts)
+   → Changed: &#x27;#flash-message&#x27; → &#x27;#flash&#x27;
+
+6. test_run(&quot;Test 3 - Invalid Password&quot;)
+   → PASS
+
+7. test_debug(&quot;Test 5 - Logout Flow&quot;)
+   → Error: button &quot;Sign Out&quot; not found
+
+8. browser_snapshot() on /secure page
+   → Found: button with text &quot;Logout&quot; (was &quot;Sign Out&quot;)
+
+9. edit(login.spec.ts)
+   → Changed: { name: &#x27;Sign Out&#x27; } → { name: &#x27;Logout&#x27; }
+
+10. test_run(&quot;Test 5 - Logout Flow&quot;)
+    → PASS
+
+11. test_run()
+    → 5 of 5 tests passing
+
+═══════════════════════════════════════════════
+Session complete. All tests passing.</code></pre>
+<h3>Key Takeaway</h3>
+<p>The Test Healer agent transforms test maintenance from a manual chore into an automated</p>
+<p>process. It systematically diagnoses failures, applies targeted fixes, and verifies</p>
+<p>results. The <span class="inline-code">browser_generate_locator</span> tool is particularly powerful, generating</p>
+<p>resilient locators that reduce future breakage. When a fix is beyond its capability,</p>
+<p>it gracefully falls back to <span class="inline-code">test.fixme()</span> and flags the issue for human review.</p>
+<p><em>Next: <a href="07_Agent_Workflow_Plan_Generate_Heal.md" target="_blank">07 - Agent Workflow: Plan, Generate, Heal</a></em></p>
+</div>
+<div class="topic" id="07-agent-workflow-plan-generate-heal">
+<span class="badge badge-learning">Learning</span>
+<h2>Agent Workflow Plan Generate Heal</h2>
+<h2>Agent Workflow: Plan -> Generate -> Heal</h2>
+<h3>Introduction</h3>
+<p>Playwright's three built-in agents are designed to work as a pipeline. Each agent's output</p>
+<p>becomes the next agent's input, creating a complete automated testing lifecycle from</p>
+<p>exploration to code generation to maintenance.</p>
+<p>This document covers how the agents hand off work, how feedback loops operate, and how</p>
+<p>to integrate the full pipeline into real-world workflows.</p>
+<h3>The Complete Lifecycle</h3>
+<pre><code>  ┌──────────────────────────────────────────────────────────────┐
+  │                   AGENTIC TESTING PIPELINE                   │
+  ├──────────────────────────────────────────────────────────────┤
+  │                                                              │
+  │  ┌──────────┐       ┌───────────┐       ┌──────────┐        │
+  │  │ PLANNER  │──────▶│ GENERATOR │──────▶│  HEALER  │        │
+  │  │ (Green)  │       │  (Blue)   │       │  (Red)   │        │
+  │  └──────────┘       └───────────┘       └──────────┘        │
+  │       │                  │                   │               │
+  │       ▼                  ▼                   ▼               │
+  │   Test Plan         Test Code           Fixed Tests          │
+  │  (markdown)        (.spec.ts)          (.spec.ts)            │
+  │                                              │               │
+  │                                              ▼               │
+  │                                     ┌──────────────┐         │
+  │                                     │   CI / CD    │         │
+  │                                     │   Pipeline   │         │
+  │                                     └──────────────┘         │
+  │                                                              │
+  └──────────────────────────────────────────────────────────────┘</code></pre>
+<h3>How Agents Hand Off Work</h3>
+<h3>Planner -> Generator</h3>
+<p>The planner produces a <strong>test plan in markdown format</strong>. This plan is the contract</p>
+<p>between the two agents.</p>
+<pre><code>Planner Output (test-plan.md):
+─────────────────────────────
+# Test Plan: Login Page
+
+## Test 1: Successful Login
+1. Navigate to /login
+2. Enter &quot;tomsmith&quot; in Username
+3. Enter &quot;SuperSecretPassword!&quot; in Password
+4. Click Login
+5. Verify success message
+
+## Test 2: Invalid Username
+1. Navigate to /login
+2. Enter &quot;invalid&quot; in Username
+...</code></pre>
+<p>The generator reads this plan and executes each step. It does not need to re-explore</p>
+<p>the application -- the planner already did that work.</p>
+<h3>Generator -> Healer</h3>
+<p>The generator produces a <strong><span class="inline-code">.spec.ts</span> test file</strong>. The healer runs this file using</p>
+<p>Playwright's test runner and processes any failures.</p>
+<pre><code>Generator Output (login.spec.ts):
+──────────────────────────────────
+import { test, expect } from &#x27;@playwright/test&#x27;;
+
+test.describe(&#x27;Login Page Tests&#x27;, () =&gt; {
+  test(&#x27;Test 1: Successful Login&#x27;, async ({ page }) =&gt; {
+    await page.goto(&#x27;/login&#x27;);
+    ...
+  });
+});</code></pre>
+<p>The healer runs <span class="inline-code">npx playwright test login.spec.ts</span> and works with whatever fails.</p>
+<h3>Healer -> CI/CD</h3>
+<p>The healer produces <strong>fixed test files</strong> that pass reliably. These files are ready</p>
+<p>to be committed and run in continuous integration.</p>
+<h3>Feedback Loops</h3>
+<p>The pipeline is not strictly linear. There are feedback loops that improve quality</p>
+<p>over time:</p>
+<pre><code>  ┌──────────────────────────────────────────────────┐
+  │                                                  │
+  │    ┌────────┐     ┌───────────┐     ┌────────┐   │
+  │    │PLANNER │────▶│ GENERATOR │────▶│ HEALER │   │
+  │    └────────┘     └───────────┘     └────────┘   │
+  │         ▲               ▲               │        │
+  │         │               │               │        │
+  │         │               └───────────────┘        │
+  │         │          Healer informs future          │
+  │         │          generation patterns            │
+  │         │                                        │
+  │         └────────────────────────────────┘        │
+  │           Healer findings inform                  │
+  │           future planning                         │
+  └──────────────────────────────────────────────────┘</code></pre>
+<h3>Healer -> Generator Feedback</h3>
+<p>When the healer fixes locator issues, those patterns inform future generation.</p>
+<p>For example, if <span class="inline-code">getByRole</span> locators consistently survive while CSS selectors break,</p>
+<p>the generator learns to prefer role-based locators.</p>
+<h3>Healer -> Planner Feedback</h3>
+<p>When the healer finds that certain test scenarios are consistently problematic</p>
+<p>(e.g., tests that depend on animation timing), this informs future planning to</p>
+<p>avoid or handle those scenarios differently.</p>
+<h3>Practical Example Walkthrough</h3>
+<p>Let us walk through the entire pipeline for testing a to-do application.</p>
+<h3>Phase 1: Planning</h3>
+<pre><code>Human: &quot;Create a test plan for https://demo.playwright.dev/todomvc&quot;
+
+Planner Agent:
+  1. planner_setup_page({ url: &quot;https://demo.playwright.dev/todomvc&quot; })
+  2. browser_snapshot()
+     → Found: text input &quot;What needs to be done?&quot;, empty list
+  3. browser_type({ text: &quot;Buy groceries&quot; })
+  4. browser_press_key({ key: &quot;Enter&quot; })
+  5. browser_snapshot()
+     → Found: todo item &quot;Buy groceries&quot;, checkbox, delete button
+  6. ... explores more features ...
+  7. planner_save_plan({
+       plan: &quot;# TodoMVC Test Plan\n## Test 1: Add a todo item\n...&quot;
+     })</code></pre>
+<h3>Phase 2: Generation</h3>
+<pre><code>Generator Agent:
+  1. Reads test plan (7 test scenarios)
+  2. generator_setup_page({ url: &quot;https://demo.playwright.dev/todomvc&quot; })
+  3. For Test 1 - Add a todo:
+     a. browser_snapshot()
+     b. browser_type({ element: &quot;What needs to be done?&quot;, text: &quot;Buy groceries&quot; })
+     c. browser_press_key({ key: &quot;Enter&quot; })
+     d. browser_verify_text_visible({ text: &quot;Buy groceries&quot; })
+  4. generator_read_log()
+  5. ... repeats for all 7 tests ...
+  6. generator_write_test({ path: &quot;tests/todomvc.spec.ts&quot;, content: &quot;...&quot; })</code></pre>
+<h3>Phase 3: Healing (when tests break later)</h3>
+<pre><code>Healer Agent (after app update changes the input placeholder):
+  1. test_run()
+     → 3 of 7 tests failing: &quot;locator &#x27;What needs to be done?&#x27; not found&quot;
+  2. test_debug(&quot;Test 1 - Add a todo&quot;)
+     → placeholder changed to &quot;Add a new task&quot;
+  3. browser_snapshot()
+     → Confirmed: textbox now says &quot;Add a new task&quot;
+  4. edit(todomvc.spec.ts)
+     → Replace all: &quot;What needs to be done?&quot; → &quot;Add a new task&quot;
+  5. test_run()
+     → 7 of 7 tests passing</code></pre>
+<h3>Continuous Testing with Agents in CI/CD</h3>
+<p>Integrating agents into CI/CD enables continuous test maintenance:</p>
+<pre><code># .github/workflows/agentic-tests.yml
+name: Agentic Test Pipeline
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: &#x27;0 6 * * *&#x27;  # Daily at 6 AM
+
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+      - run: npm ci
+      - run: npx playwright install
+
+      # Run existing tests
+      - run: npx playwright test
+        continue-on-error: true
+
+      # If tests fail, invoke healer agent
+      - name: Heal failing tests
+        if: failure()
+        run: |
+          npx playwright test --reporter=json &gt; results.json
+          # Invoke healer agent with results
+          claude-code run test-healer --input results.json
+
+      # Re-run healed tests
+      - run: npx playwright test</code></pre>
+<h3>Workflow Strategies</h3>
+<table>
+<tr>
+<th>Strategy</th>
+<th>Trigger</th>
+<th>Agents Used</th>
+<th>Use Case</th>
+</tr>
+<tr>
+<td><strong>On-demand plan</strong></td>
+<td>New feature deployed</td>
+<td>Planner + Generator</td>
+<td>Bootstrap tests</td>
+</tr>
+<tr>
+<td><strong>Nightly heal</strong></td>
+<td>Scheduled (cron)</td>
+<td>Healer</td>
+<td>Fix drift</td>
+</tr>
+<tr>
+<td><strong>PR validation</strong></td>
+<td>Pull request opened</td>
+<td>Healer</td>
+<td>Ensure tests pass</td>
+</tr>
+<tr>
+<td><strong>Weekly explore</strong></td>
+<td>Scheduled (weekly)</td>
+<td>Planner</td>
+<td>Discover new scenarios</td>
+</tr>
+</table>
+<h3>Best Practices</h3>
+<ol>
+<li><strong>Version control plans</strong>: Store test plans in your repo alongside test code</li>
+<li><strong>Review generated tests</strong>: Always have a human review agent-generated code before merging</li>
+<li><strong>Set agent limits</strong>: Configure maximum iterations and token budgets</li>
+<li><strong>Monitor costs</strong>: Track LLM API usage per pipeline run</li>
+<li><strong>Start small</strong>: Begin with one page or feature, not the entire application</li>
+<li><strong>Use the hybrid approach</strong>: Keep critical path tests hand-written, use agents for the rest</li>
+</ol>
+<h3>Key Takeaway</h3>
+<p>The Plan -> Generate -> Heal pipeline creates a self-sustaining testing ecosystem.</p>
+<p>The planner explores and designs, the generator builds and verifies, and the healer</p>
+<p>maintains and repairs. Together, they transform test automation from a one-time effort</p>
+<p>into a continuous, adaptive process.</p>
+<p><em>Next: <a href="08_Prompt_Engineering_For_Testing.md" target="_blank">08 - Prompt Engineering for Test Automation</a></em></p>
+</div>
+<div class="topic" id="08-prompt-engineering-for-testing">
+<span class="badge badge-learning">Learning</span>
+<h2>Prompt Engineering For Testing</h2>
+<h2>Prompt Engineering for Test Automation</h2>
+<h3>Introduction</h3>
+<p>In Playwright's agentic testing framework, the <span class="inline-code">.agent.md</span> files ARE the prompts. Every</p>
+<p>agent's behavior is controlled by a combination of YAML frontmatter (configuration) and</p>
+<p>a markdown body (system prompt). Understanding how to write and customize these prompts</p>
+<p>is essential for getting high-quality test output from agents.</p>
+<h3>Agent .md Files ARE Prompts</h3>
+<p>An agent file is not code -- it is a structured prompt:</p>
+<pre><code>---
+name: My Custom Test Agent
+description: Tests checkout flows for e-commerce applications
+model: sonnet
+color: purple
+tools:
+  - browser_navigate
+  - browser_snapshot
+  - browser_click
+  - browser_type
+  - browser_verify_text_visible
+---
+
+# System Prompt
+
+You are an expert QA engineer specializing in e-commerce checkout flows.
+Your job is to thoroughly test the checkout process including...</code></pre>
+<p>The YAML frontmatter tells the <strong>host</strong> (Claude Code, etc.) how to configure the agent.</p>
+<p>The markdown body tells the <strong>LLM</strong> how to behave.</p>
+<h3>Anatomy of the YAML Frontmatter</h3>
+<table>
+<tr>
+<th>Field</th>
+<th>Purpose</th>
+<th>Example Values</th>
+</tr>
+<tr>
+<td><span class="inline-code">name</span></td>
+<td>Display name in host UI</td>
+<td><span class="inline-code">"Test Planner"</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">description</span></td>
+<td>Brief summary for agent selection</td>
+<td><span class="inline-code">"Creates test plans by..."</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">model</span></td>
+<td>LLM model to use</td>
+<td><span class="inline-code">sonnet</span>, <span class="inline-code">opus</span>, <span class="inline-code">gpt-4</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">color</span></td>
+<td>UI color coding</td>
+<td><span class="inline-code">green</span>, <span class="inline-code">blue</span>, <span class="inline-code">red</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">tools</span></td>
+<td>List of tools the agent can invoke</td>
+<td><span class="inline-code">[browser_snapshot, edit]</span></td>
+</tr>
+</table>
+<h3>Tool Selection Matters</h3>
+<p>The tools you list determine what the agent CAN do. Be intentional:</p>
+<ul>
+<li><strong>Read-only agents</strong>: Give only <span class="inline-code">browser_snapshot</span>, <span class="inline-code">search</span> -- cannot modify anything</li>
+<li><strong>Writer agents</strong>: Add <span class="inline-code">edit</span>, <span class="inline-code">generator_write_test</span> -- can create/modify files</li>
+<li><strong>Full access agents</strong>: All browser tools + file tools -- maximum capability</li>
+</ul>
+<p>Restricting tools is a form of <strong>guardrailing</strong> -- it prevents the agent from taking</p>
+<p>actions you do not want.</p>
+<h3>Prompt Structure Best Practices</h3>
+<h3>1. Start with Role Definition</h3>
+<pre><code>You are an expert QA engineer with 10 years of experience in web application testing.
+You specialize in testing [specific domain] applications.</code></pre>
+<h3>2. State the Objective Clearly</h3>
+<pre><code>Your goal is to create a comprehensive test plan for the given web page.
+The test plan should cover happy paths, edge cases, and error handling.</code></pre>
+<h3>3. Define Output Format</h3>
+<pre><code>Output your test plan in the following format:
+
+# Test Plan: [Page Name]
+
+## Test 1: [Scenario Name]
+1. [Step with specific details]
+2. [Step with specific details]
+3. Verify [expected result]</code></pre>
+<h3>4. Include Rules and Constraints</h3>
+<pre><code>Rules:
+- Each test must be independent (no shared state)
+- Always include negative test cases
+- Use specific values, not placeholders
+- Never use networkidle
+- Prefer getByRole and getByLabel over CSS selectors</code></pre>
+<h3>5. Provide Examples</h3>
+<pre><code>Example of a good test step:
+  &quot;Enter &#x27;john@example.com&#x27; in the Email field&quot;
+
+Example of a bad test step:
+  &quot;Fill in the email&quot; (too vague, no specific value)</code></pre>
+<h3>Writing Custom Agent Prompts</h3>
+<h3>Example: E-Commerce Checkout Agent</h3>
+<pre><code>---
+name: Checkout Tester
+description: Tests e-commerce checkout flows end-to-end
+model: sonnet
+color: orange
+tools:
+  - browser_navigate
+  - browser_snapshot
+  - browser_click
+  - browser_type
+  - browser_select_option
+  - browser_verify_text_visible
+  - browser_verify_element_visible
+  - browser_wait_for
+---
+
+# Checkout Flow Test Agent
+
+You are an expert QA engineer specializing in e-commerce checkout processes.
+
+## Objective
+Test the complete checkout flow from cart to order confirmation.
+
+## Test Scenarios to Cover
+1. **Happy path**: Add item, proceed to checkout, fill shipping, fill payment, confirm
+2. **Empty cart**: Try to checkout with no items
+3. **Invalid payment**: Use declined card number 4000000000000002
+4. **Missing required fields**: Submit forms with empty required fields
+5. **Coupon codes**: Test valid and invalid coupon codes
+6. **Shipping options**: Test all available shipping methods
+
+## Rules
+- Always start from the product listing page
+- Use realistic test data (not &quot;test123&quot;)
+- Verify price calculations at each step
+- Check for proper error messages on validation failures
+- Test both guest checkout and registered user checkout
+
+## Output
+Generate Playwright test code in TypeScript with proper assertions.</code></pre>
+<h3>Good vs Bad Prompt Examples</h3>
+<h3>Bad Prompt</h3>
+<pre><code>Test the website. Find bugs. Write tests.</code></pre>
+<p><strong>Problems</strong>: No specific URL, no scope, no format, no constraints. The agent will</p>
+<p>wander aimlessly.</p>
+<h3>Good Prompt</h3>
+<pre><code>You are an expert web application tester. Your task is to test the login page at
+https://the-internet.herokuapp.com/login.
+
+Create tests covering:
+1. Valid login (username: tomsmith, password: SuperSecretPassword!)
+2. Invalid username
+3. Invalid password
+4. Empty fields
+
+For each test, navigate to the page fresh. Use semantic locators (getByRole, getByLabel).
+Output as a Playwright TypeScript test file using test.describe blocks.</code></pre>
+<p><strong>Why it works</strong>: Specific URL, specific credentials, specific scenarios, specific</p>
+<p>output format, specific locator strategy.</p>
+<h3>Parameterizing Prompts with Context</h3>
+<p>Prompts become more powerful when parameterized with runtime context:</p>
+<h3>URL Context</h3>
+<pre><code>Test the page at: {{URL}}</code></pre>
+<h3>Credentials Context</h3>
+<pre><code>Use these test credentials:
+- Admin: username={{ADMIN_USER}}, password={{ADMIN_PASS}}
+- Regular user: username={{USER}}, password={{USER_PASS}}</code></pre>
+<h3>Scope Context</h3>
+<pre><code>Focus only on the {{FEATURE}} feature.
+Do not navigate away from the {{FEATURE}} section.</code></pre>
+<h3>Existing Test Context</h3>
+<pre><code>Here is the existing test file that needs updating:
+
+{{EXISTING_TEST_CODE}}
+
+Update this test to work with the current version of the application.
+Do not change the test structure, only fix broken selectors and assertions.</code></pre>
+<h3>Tips for Better Test Generation Results</h3>
+<h3>1. Be Specific About Locator Strategy</h3>
+<pre><code>Locator priority (use in this order):
+1. page.getByRole(&#x27;button&#x27;, { name: &#x27;Submit&#x27; })
+2. page.getByLabel(&#x27;Email&#x27;)
+3. page.getByText(&#x27;Welcome&#x27;)
+4. page.getByTestId(&#x27;submit-btn&#x27;)  -- only if above fail
+5. page.locator(&#x27;css-selector&#x27;)    -- last resort</code></pre>
+<h3>2. Define Assertion Expectations</h3>
+<pre><code>Every test must include at least one assertion using expect().
+Preferred assertions:
+- toBeVisible() for UI element checks
+- toHaveText() for content verification
+- toHaveURL() for navigation checks
+- toHaveValue() for form field values</code></pre>
+<h3>3. Specify Error Handling</h3>
+<pre><code>If a step fails during exploration:
+1. Take a screenshot
+2. Log the error
+3. Try an alternative approach
+4. If still failing, skip this scenario and note it in the plan</code></pre>
+<h3>4. Set Boundaries</h3>
+<pre><code>Constraints:
+- Maximum 10 test scenarios per page
+- Maximum 8 steps per test scenario
+- Do not test third-party integrations (payment gateways, OAuth)
+- Do not modify any application data permanently</code></pre>
+<h3>5. Request Comments</h3>
+<pre><code>Add a comment above each significant action explaining its purpose.
+This makes generated tests maintainable by human developers.</code></pre>
+<h3>Key Takeaway</h3>
+<p>The quality of agent output is directly proportional to the quality of the prompt.</p>
+<p>Agent <span class="inline-code">.md</span> files are not magic -- they are carefully engineered instructions that</p>
+<p>guide an LLM through a specific task. Master prompt engineering, and you master</p>
+<p>agentic testing.</p>
+<p><em>Next: <a href="09_Using_Agents_With_LLMs.md" target="_blank">09 - Using Agents with LLMs</a></em></p>
+</div>
+<div class="topic" id="09-using-agents-with-llms">
+<span class="badge badge-learning">Learning</span>
+<h2>Using Agents With LLMs</h2>
+<h2>Using Agents with LLMs</h2>
+<h3>Introduction</h3>
+<p>Playwright's built-in agents use the <span class="inline-code">model</span> field in their YAML frontmatter to specify</p>
+<p>which LLM powers their reasoning. The choice of model significantly impacts cost,</p>
+<p>speed, quality, and capability. This document covers model selection, cost management,</p>
+<p>and practical considerations for running agents in real-world scenarios.</p>
+<h3>The Model Field</h3>
+<p>In an agent's <span class="inline-code">.agent.md</span> file, the model is specified as:</p>
+<pre><code>---
+name: Test Planner
+model: sonnet
+---</code></pre>
+<p>The <span class="inline-code">model</span> value is resolved by the host (Claude Code, etc.) to a specific API model.</p>
+<p>Common values and their mappings:</p>
+<table>
+<tr>
+<th>Model Value</th>
+<th>Resolves To</th>
+<th>Provider</th>
+</tr>
+<tr>
+<td><span class="inline-code">sonnet</span></td>
+<td>Claude Sonnet (latest)</td>
+<td>Anthropic</td>
+</tr>
+<tr>
+<td><span class="inline-code">opus</span></td>
+<td>Claude Opus (latest)</td>
+<td>Anthropic</td>
+</tr>
+<tr>
+<td><span class="inline-code">haiku</span></td>
+<td>Claude Haiku (latest)</td>
+<td>Anthropic</td>
+</tr>
+<tr>
+<td><span class="inline-code">gpt-4</span></td>
+<td>GPT-4 (latest)</td>
+<td>OpenAI</td>
+</tr>
+<tr>
+<td><span class="inline-code">gpt-4o</span></td>
+<td>GPT-4o</td>
+<td>OpenAI</td>
+</tr>
+</table>
+<p>Playwright's built-in agents default to <span class="inline-code">sonnet</span> -- a balance of capability and cost.</p>
+<h3>Running Agents with Claude Code</h3>
+<p>Claude Code is the primary host for Playwright agents. Here is how to invoke them:</p>
+<h3>Running the Test Planner</h3>
+<pre><code># Claude Code will detect the agent and run it
+claude &quot;Plan tests for https://the-internet.herokuapp.com/login&quot;
+
+# Or explicitly reference the agent
+claude --agent test-planner &quot;Plan tests for https://example.com/dashboard&quot;</code></pre>
+<h3>Running the Test Generator</h3>
+<pre><code># Generate tests from a plan
+claude &quot;Generate tests from the test plan in test-plan.md&quot;
+
+# Or explicitly
+claude --agent test-generator &quot;Generate tests from test-plan.md&quot;</code></pre>
+<h3>Running the Test Healer</h3>
+<pre><code># Heal failing tests
+claude &quot;Fix the failing tests in tests/login.spec.ts&quot;
+
+# Or explicitly
+claude --agent test-healer &quot;Fix all failing Playwright tests&quot;</code></pre>
+<h3>Running the Full Pipeline</h3>
+<pre><code># Plan, generate, and verify in sequence
+claude &quot;Plan and generate tests for https://example.com/login, then run them&quot;</code></pre>
+<h3>Cost and Performance Considerations</h3>
+<h3>Model Comparison for Testing Tasks</h3>
+<table>
+<tr>
+<th>Model</th>
+<th>Speed</th>
+<th>Quality</th>
+<th>Cost per 1M tokens</th>
+<th>Best For</th>
+</tr>
+<tr>
+<td><strong>Haiku</strong></td>
+<td>Very Fast</td>
+<td>Good</td>
+<td>~$0.25 input / $1.25 output</td>
+<td>Simple healing, quick plans</td>
+</tr>
+<tr>
+<td><strong>Sonnet</strong></td>
+<td>Fast</td>
+<td>Very Good</td>
+<td>~$3 input / $15 output</td>
+<td>Default for all agents</td>
+</tr>
+<tr>
+<td><strong>Opus</strong></td>
+<td>Slower</td>
+<td>Excellent</td>
+<td>~$15 input / $75 output</td>
+<td>Complex test design</td>
+</tr>
+<tr>
+<td><strong>GPT-4o</strong></td>
+<td>Fast</td>
+<td>Very Good</td>
+<td>~$2.50 input / $10 output</td>
+<td>Alternative to Sonnet</td>
+</tr>
+</table>
+<h3>Cost Estimates Per Task</h3>
+<table>
+<tr>
+<th>Task</th>
+<th>Typical Tokens</th>
+<th>Sonnet Cost (est.)</th>
+</tr>
+<tr>
+<td>Plan one page</td>
+<td>~10K-30K total</td>
+<td>$0.10 - $0.50</td>
+</tr>
+<tr>
+<td>Generate 5 tests</td>
+<td>~20K-50K total</td>
+<td>$0.30 - $0.80</td>
+</tr>
+<tr>
+<td>Heal 3 failing tests</td>
+<td>~15K-40K total</td>
+<td>$0.20 - $0.60</td>
+</tr>
+<tr>
+<td>Full pipeline (one feature)</td>
+<td>~50K-120K total</td>
+<td>$0.60 - $2.00</td>
+</tr>
+</table>
+<p><strong>Note</strong>: Costs vary based on page complexity, number of test scenarios, and how many</p>
+<p>agent loop iterations are needed.</p>
+<h3>Token Usage Patterns in Agentic Testing</h3>
+<p>Agents use tokens differently than simple chat interactions:</p>
+<h3>Input Tokens (What the Agent Reads)</h3>
+<ul>
+<li>System prompt from <span class="inline-code">.agent.md</span> file (~500-2000 tokens)</li>
+<li>Browser snapshots (accessibility trees) (~1000-5000 tokens each)</li>
+<li>Tool results (test output, error messages) (~200-2000 tokens each)</li>
+<li>Conversation history (grows with each iteration) (~cumulative)</li>
+</ul>
+<h3>Output Tokens (What the Agent Generates)</h3>
+<ul>
+<li>Reasoning and analysis (~200-500 tokens per step)</li>
+<li>Tool calls (structured JSON) (~50-200 tokens each)</li>
+<li>Final output (test plan, test code) (~500-3000 tokens)</li>
+</ul>
+<h3>The Accumulation Problem</h3>
+<p>Agent conversations grow with each iteration. By the 10th loop, the context window</p>
+<p>contains all previous observations, actions, and results. This means:</p>
+<pre><code>Iteration 1:  ~3K tokens total
+Iteration 5:  ~15K tokens total
+Iteration 10: ~30K tokens total
+Iteration 20: ~60K tokens total</code></pre>
+<p><strong>Mitigation strategies:</strong></p>
+<ul>
+<li>Set maximum iteration limits</li>
+<li>Use models with large context windows</li>
+<li>Summarize previous iterations periodically</li>
+</ul>
+<h3>When to Use Different Models</h3>
+<h3>Use Haiku (Fast/Cheap) When:</h3>
+<ul>
+<li>Running the healer on simple selector updates</li>
+<li>Quick smoke test generation</li>
+<li>Budget-constrained CI/CD pipelines</li>
+<li>The page is simple with few interactive elements</li>
+</ul>
+<h3>Use Sonnet (Balanced) When:</h3>
+<ul>
+<li>Running any agent for the first time on a page</li>
+<li>Generating tests for moderately complex features</li>
+<li>Standard healing of test failures</li>
+<li>Default choice for most use cases</li>
+</ul>
+<h3>Use Opus (Powerful/Expensive) When:</h3>
+<ul>
+<li>Testing complex multi-step workflows (checkout, onboarding)</li>
+<li>The application has complex state management</li>
+<li>You need edge cases that require deep reasoning</li>
+<li>Test plan quality is critical (the plan drives everything downstream)</li>
+<li>Debugging subtle timing or race condition issues</li>
+</ul>
+<h3>Rate Limiting and Batching Strategies</h3>
+<h3>Rate Limiting</h3>
+<p>LLM APIs have rate limits. When running agents at scale:</p>
+<pre><code>Strategy 1: Sequential execution
+  Run agents one at a time, with delays between runs.
+  Simple but slow.
+
+Strategy 2: Parallel with throttling
+  Run up to N agents concurrently, queue the rest.
+  Faster, requires orchestration.
+
+Strategy 3: Batch and schedule
+  Collect all test tasks, run agents during off-peak hours.
+  Most cost-effective for non-urgent work.</code></pre>
+<h3>Batching Test Healing</h3>
+<p>Instead of healing one test at a time, batch failures:</p>
+<pre><code># Run all tests, collect failures
+npx playwright test --reporter=json &gt; results.json
+
+# Invoke healer with all failures at once
+claude --agent test-healer &quot;Fix all failures reported in results.json&quot;</code></pre>
+<p>The healer can fix multiple tests in a single session, which is more token-efficient</p>
+<p>than separate sessions for each failure.</p>
+<h3>Local vs Cloud LLM Considerations</h3>
+<h3>Cloud LLMs (Anthropic API, OpenAI API)</h3>
+<table>
+<tr>
+<th>Pros</th>
+<th>Cons</th>
+</tr>
+<tr>
+<td>Best model quality</td>
+<td>Ongoing API costs</td>
+</tr>
+<tr>
+<td>No hardware requirements</td>
+<td>Data leaves your network</td>
+</tr>
+<tr>
+<td>Always up-to-date models</td>
+<td>Rate limits</td>
+</tr>
+<tr>
+<td>Scales instantly</td>
+<td>Latency depends on network</td>
+</tr>
+</table>
+<h3>Local LLMs (Ollama, llama.cpp)</h3>
+<table>
+<tr>
+<th>Pros</th>
+<th>Cons</th>
+</tr>
+<tr>
+<td>No API costs after setup</td>
+<td>Lower quality than cloud</td>
+</tr>
+<tr>
+<td>Data stays on your machine</td>
+<td>Requires powerful GPU</td>
+</tr>
+<tr>
+<td>No rate limits</td>
+<td>Slower inference</td>
+</tr>
+<tr>
+<td>Works offline</td>
+<td>Model updates are manual</td>
+</tr>
+</table>
+<h3>Recommendation</h3>
+<p>Use <strong>cloud LLMs for planning and generation</strong> (quality matters most) and consider</p>
+<p><strong>local LLMs for healing</strong> (simpler task, more iterations, cost adds up).</p>
+<h3>Key Takeaway</h3>
+<p>Model selection is a trade-off between cost, speed, and quality. Start with Sonnet</p>
+<p>for all agents, then optimize: upgrade to Opus for complex planning tasks, downgrade</p>
+<p>to Haiku for simple healing tasks. Monitor your token usage and costs, and batch</p>
+<p>agent runs when possible to maximize efficiency.</p>
+<p><em>Next: <a href="10_Future_Of_AI_In_Testing.md" target="_blank">10 - The Future of AI in Testing</a></em></p>
+</div>
+<div class="topic" id="10-future-of-ai-in-testing">
+<span class="badge badge-learning">Learning</span>
+<h2>Future Of AI In Testing</h2>
+<h2>The Future of AI in Testing</h2>
+<h3>Introduction</h3>
+<p>AI-powered testing is evolving rapidly. Playwright's built-in agents represent the</p>
+<p>first generation of framework-native AI testing tools, but the landscape is expanding</p>
+<p>in every direction. This document explores where AI testing is heading, what risks</p>
+<p>to watch for, and how QA professionals can prepare for the future.</p>
+<h3>Current State of AI Testing (2025-2026)</h3>
+<h3>What Works Today</h3>
+<ul>
+<li><strong>Test generation from URLs</strong>: Agents can explore pages and generate working tests</li>
+<li><strong>Self-healing selectors</strong>: Agents fix broken locators automatically</li>
+<li><strong>Test plan creation</strong>: Agents produce structured test plans from exploration</li>
+<li><strong>Basic exploratory testing</strong>: Agents discover common user flows and edge cases</li>
+</ul>
+<h3>What Is Still Emerging</h3>
+<ul>
+<li>Multi-page workflow testing across complex applications</li>
+<li>API + UI combined testing in a single agent session</li>
+<li>Visual regression testing with AI-powered diff analysis</li>
+<li>Performance testing integrated with functional agents</li>
+<li>Cross-browser and cross-device agent coordination</li>
+</ul>
+<h3>Visual Testing Agents</h3>
+<p>The next frontier for AI agents is <strong>visual testing</strong> -- comparing screenshots</p>
+<p>to detect unintended UI changes.</p>
+<pre><code>  Current:  Pixel-diff tools (Percy, Chromatic)
+            → High false positive rate
+            → Cannot understand intent
+
+  Future:   Visual AI agents
+            → &quot;Does this page LOOK correct?&quot;
+            → Understands layout, spacing, color intent
+            → Can distinguish bugs from intentional redesigns</code></pre>
+<h3>How Visual Testing Agents Will Work</h3>
+<ol>
+<li>Take screenshot of current page</li>
+<li>Compare with baseline using vision LLM (not pixel diff)</li>
+<li>LLM analyzes: "The button moved 20px right -- is this intentional?"</li>
+<li>Agent checks git history or design specs for context</li>
+<li>Reports only actual visual regressions, not noise</li>
+</ol>
+<h3>API Testing Agents</h3>
+<p>AI agents are expanding from UI testing into <strong>API testing</strong>:</p>
+<h3>Current Capability</h3>
+<ul>
+<li>Agents can observe network requests during UI tests</li>
+<li>They can identify API endpoints from browser traffic</li>
+<li>Basic request/response validation</li>
+</ul>
+<h3>Future Capability</h3>
+<ul>
+<li><strong>API exploration agents</strong>: Given a base URL, discover all endpoints</li>
+<li><strong>Contract testing agents</strong>: Verify API responses match OpenAPI specs</li>
+<li><strong>Load pattern agents</strong>: Analyze production traffic patterns and generate</li>
+</ul>
+<p>realistic load test scenarios</p>
+<ul>
+<li><strong>Security testing agents</strong>: Probe for common API vulnerabilities</li>
+</ul>
+<p>(injection, auth bypass, rate limit abuse)</p>
+<pre><code>  ┌─────────────────────────────────────────┐
+  │         API TESTING AGENT               │
+  │                                         │
+  │  1. Read OpenAPI spec                   │
+  │  2. Generate test cases per endpoint    │
+  │  3. Execute requests                    │
+  │  4. Validate responses                  │
+  │  5. Test edge cases (null, empty, huge) │
+  │  6. Report coverage gaps                │
+  └─────────────────────────────────────────┘</code></pre>
+<h3>Performance Testing with AI</h3>
+<p>Performance testing is ripe for AI augmentation:</p>
+<ul>
+<li><strong>Intelligent load generation</strong>: AI determines realistic user patterns instead</li>
+</ul>
+<p>of uniform load</p>
+<ul>
+<li><strong>Bottleneck detection</strong>: Agents correlate performance metrics with specific</li>
+</ul>
+<p>code paths</p>
+<ul>
+<li><strong>Threshold recommendation</strong>: AI learns what "normal" performance looks like</li>
+</ul>
+<p>and sets dynamic thresholds</p>
+<ul>
+<li><strong>Root cause analysis</strong>: When performance degrades, agents trace the cause</li>
+</ul>
+<p>through logs, metrics, and code changes</p>
+<h3>Autonomous QA Pipelines</h3>
+<p>The ultimate vision: <strong>fully autonomous QA pipelines</strong> where agents handle the</p>
+<p>entire testing lifecycle without human intervention.</p>
+<pre><code>  ┌───────────────────────────────────────────────────────┐
+  │              AUTONOMOUS QA PIPELINE                   │
+  ├───────────────────────────────────────────────────────┤
+  │                                                       │
+  │  Code Push ──▶ Agent Analyzes Changes                 │
+  │                    │                                  │
+  │                    ▼                                  │
+  │            Agent Plans New Tests                      │
+  │                    │                                  │
+  │                    ▼                                  │
+  │            Agent Generates Test Code                  │
+  │                    │                                  │
+  │                    ▼                                  │
+  │            Agent Runs Full Suite                      │
+  │                    │                                  │
+  │               ┌────┴────┐                             │
+  │               │         │                             │
+  │            Pass?     Fail?                            │
+  │               │         │                             │
+  │               ▼         ▼                             │
+  │           Approve   Agent Heals ──▶ Re-run            │
+  │           Deploy        │                             │
+  │                    ┌────┴────┐                        │
+  │                    │         │                        │
+  │                 Fixed?   Cannot Fix?                  │
+  │                    │         │                        │
+  │                    ▼         ▼                        │
+  │                 Deploy   Alert Human                  │
+  │                                                       │
+  └───────────────────────────────────────────────────────┘</code></pre>
+<p><strong>This is not science fiction</strong> -- the individual pieces exist today. The challenge</p>
+<p>is reliability, trust, and integration.</p>
+<h3>Human-AI Collaboration Models</h3>
+<p>The future is not "AI replaces testers" but "AI amplifies testers":</p>
+<table>
+<tr>
+<th>Model</th>
+<th>Human Role</th>
+<th>AI Role</th>
+</tr>
+<tr>
+<td><strong>AI-Assisted</strong></td>
+<td>Writes tests, AI suggests</td>
+<td>Code completion, locator help</td>
+</tr>
+<tr>
+<td><strong>AI-Generated</strong></td>
+<td>Reviews and approves</td>
+<td>Generates tests from plans</td>
+</tr>
+<tr>
+<td><strong>AI-Maintained</strong></td>
+<td>Monitors and triages</td>
+<td>Heals broken tests</td>
+</tr>
+<tr>
+<td><strong>AI-Exploratory</strong></td>
+<td>Sets scope and boundaries</td>
+<td>Discovers edge cases</td>
+</tr>
+<tr>
+<td><strong>AI-Autonomous</strong></td>
+<td>Handles escalations only</td>
+<td>Full pipeline management</td>
+</tr>
+</table>
+<p>Most teams in 2025-2026 are at the <strong>AI-Assisted</strong> and <strong>AI-Generated</strong> stages.</p>
+<p>The shift to AI-Maintained and AI-Exploratory is happening now.</p>
+<h3>Risks and Challenges</h3>
+<h3>Hallucination</h3>
+<p>LLMs can generate tests that look correct but test the wrong thing. An agent might</p>
+<p>assert that a button exists when the real test should verify what happens after</p>
+<p>clicking it.</p>
+<p><strong>Mitigation</strong>: Always review agent-generated tests. Use the "execute first" approach</p>
+<p>(like Playwright's generator) to ground output in reality.</p>
+<h3>False Confidence</h3>
+<p>Passing tests do not mean correct tests. An agent might generate 50 tests that all</p>
+<p>pass but miss critical business logic.</p>
+<p><strong>Mitigation</strong>: Measure coverage (code coverage, requirement coverage), not just</p>
+<p>pass rate. Have domain experts review test plans.</p>
+<h3>Over-Reliance</h3>
+<p>Teams may stop thinking critically about testing strategy if they delegate entirely</p>
+<p>to AI.</p>
+<p><strong>Mitigation</strong>: Use AI for execution, keep humans for strategy. Regular test audits</p>
+<p>by senior QA engineers.</p>
+<h3>Non-Determinism</h3>
+<p>The same prompt can produce different tests on different runs. This makes</p>
+<p>reproducibility challenging.</p>
+<p><strong>Mitigation</strong>: Pin model versions, use temperature=0 where possible, version</p>
+<p>control all generated artifacts.</p>
+<h3>Security Concerns</h3>
+<p>Agents interact with live applications. Misconfigured agents could:</p>
+<ul>
+<li>Modify production data</li>
+<li>Expose sensitive information in logs</li>
+<li>Submit real transactions</li>
+</ul>
+<p><strong>Mitigation</strong>: Always run agents against staging/test environments. Restrict</p>
+<p>agent permissions. Never include real credentials in prompts.</p>
+<h3>Career Implications for QA Engineers</h3>
+<h3>Skills That Become More Valuable</h3>
+<ul>
+<li><strong>Prompt engineering</strong>: Writing effective agent prompts</li>
+<li><strong>Test strategy</strong>: Deciding WHAT to test (AI handles HOW)</li>
+<li><strong>Domain expertise</strong>: Understanding business rules AI cannot infer</li>
+<li><strong>AI oversight</strong>: Reviewing and validating agent output</li>
+<li><strong>Architecture</strong>: Designing testable systems and CI/CD pipelines</li>
+</ul>
+<h3>Skills That Become Less Critical</h3>
+<ul>
+<li>Manual selector writing (agents generate locators)</li>
+<li>Repetitive test script maintenance (agents self-heal)</li>
+<li>Basic test case writing (agents generate from plans)</li>
+</ul>
+<h3>The New QA Engineer Profile</h3>
+<pre><code>  2020 QA Engineer:
+    - Writes test scripts
+    - Maintains selectors
+    - Runs tests manually
+    - Files bug reports
+
+  2026 QA Engineer:
+    - Designs test strategies
+    - Engineers agent prompts
+    - Reviews AI-generated tests
+    - Monitors autonomous pipelines
+    - Handles edge cases AI cannot solve
+    - Ensures test coverage meets business needs</code></pre>
+<h3>What to Learn Next</h3>
+<ol>
+<li><strong>Playwright fundamentals</strong>: Master the framework before adding AI agents</li>
+<li><strong>Prompt engineering</strong>: Learn to write effective system prompts for agents</li>
+<li><strong>LLM basics</strong>: Understand tokens, context windows, temperature, and model selection</li>
+<li><strong>CI/CD integration</strong>: Learn how to incorporate agents into build pipelines</li>
+<li><strong>Agent development</strong>: Build custom agents for your specific testing needs</li>
+<li><strong>Evaluation frameworks</strong>: Learn to measure agent effectiveness (not just pass/fail)</li>
+</ol>
+<h3>Recommended Resources</h3>
+<ul>
+<li>Playwright official documentation: https://playwright.dev</li>
+<li>Anthropic's agent documentation: https://docs.anthropic.com</li>
+<li>"Building Effective Agents" by Anthropic (blog post)</li>
+<li>Playwright GitHub repository: https://github.com/microsoft/playwright</li>
+<li>Claude Code documentation for agent hosting</li>
+</ul>
+<h3>Key Takeaway</h3>
+<p>AI agents are transforming testing from a manual, scripted discipline into an</p>
+<p>adaptive, autonomous process. The technology is real and available today through</p>
+<p>Playwright's built-in agents. The teams that thrive will be those that embrace</p>
+<p>AI as a powerful tool while maintaining human oversight, critical thinking, and</p>
+<p>domain expertise. The future belongs to testers who can direct AI, not those</p>
+<p>who compete with it.</p>
+<p><em>This concludes the Playwright AI Agents learning series.</em></p>
+<p><em>Return to: <a href="01_What_Are_AI_Agents.md" target="_blank">01 - What Are AI Agents?</a></em></p>
+</div>
+<div class="topic" id="01-explore-agent-files-exercise">
+<span class="badge badge-exercise">Exercises</span>
+<h2>Explore Agent Files Exercise</h2>
+<h2>Exercise 1: Explore Playwright Agent Files</h2>
+<h3>Objective</h3>
+<p>Navigate to the Playwright agents directory inside <span class="inline-code">node_modules</span> and understand each agent's role, tools, and configuration. By the end of this exercise you will be able to describe all three built-in agents and compare their capabilities.</p>
+<h3>Prerequisites</h3>
+<ul>
+<li>Node.js and npm installed</li>
+<li>Playwright installed in the project (<span class="inline-code">npm init playwright@latest</span>)</li>
+<li>A code editor (VS Code recommended)</li>
+</ul>
+<h3>Tasks</h3>
+<h3>Task 1: List All Agent Files</h3>
+<ol>
+<li>Open your terminal in the project root.</li>
+<li>Navigate to <span class="inline-code">node_modules/playwright/lib/agents/</span>.</li>
+<li>List every file in the directory.</li>
+<li>You should find three <span class="inline-code">.agent.md</span> files. Write down their exact filenames.</li>
+</ol>
+<h3>Task 2: Inspect the Planner Agent</h3>
+<ol>
+<li>Open <span class="inline-code">playwright-test-planner.agent.md</span> in your editor.</li>
+<li>Look at the YAML frontmatter at the top of the file.</li>
+<li>Answer these questions:</li>
+</ol>
+<ul>
+<li>What value is set for the <span class="inline-code">model</span> field?</li>
+<li>What <span class="inline-code">color</span> is assigned to the planner?</li>
+<li>What is the agent's <span class="inline-code">description</span>?</li>
+</ul>
+<ol>
+<li>Read the prompt body. What is the planner's primary workflow?</li>
+</ol>
+<h3>Task 3: Count the Tools</h3>
+<ol>
+<li>For each of the three agents, count the number of tools listed in the <span class="inline-code">tools</span> array inside the YAML frontmatter.</li>
+<li>Record the count for each agent:</li>
+</ol>
+<ul>
+<li>Planner: _____ tools</li>
+<li>Generator: _____ tools</li>
+<li>Healer: _____ tools</li>
+</ul>
+<ol>
+<li>Which agent has the most tools? Why do you think that is?</li>
+</ol>
+<h3>Task 4: Compare Planner and Generator</h3>
+<ol>
+<li>Create two lists: tools available to the planner and tools available to the generator.</li>
+<li>Identify tools that appear in the planner but NOT in the generator.</li>
+<li>Identify tools that appear in the generator but NOT in the planner.</li>
+<li>Why does each agent have its own unique tools? How does this relate to its purpose?</li>
+</ol>
+<h3>Task 5: Discover the Healer's Unique Tool</h3>
+<ol>
+<li>Open the healer agent file.</li>
+<li>Find the tool that no other agent has: <span class="inline-code">browser_generate_locator</span>.</li>
+<li>Read the prompt to understand what this tool does.</li>
+<li>Why is this tool exclusive to the healer? How does it help the healing process?</li>
+</ol>
+<h3>Task 6: Understand the Healer's Fallback Behavior</h3>
+<ol>
+<li>In the healer agent prompt, find the section that describes what happens when the healer cannot fix a test.</li>
+<li>What annotation does the healer apply to unfixable tests? (Hint: <span class="inline-code">test.fixme()</span>)</li>
+<li>Why is this a better strategy than simply deleting the test or leaving it broken?</li>
+</ol>
+<h3>Deliverable</h3>
+<p>Create a comparison table with the following columns and fill it in for all three agents:</p>
+<table>
+<tr>
+<th>Property</th>
+<th>Planner</th>
+<th>Generator</th>
+<th>Healer</th>
+</tr>
+<tr>
+<td>File Name</td>
+</tr>
+<tr>
+<td>Color</td>
+</tr>
+<tr>
+<td>Model</td>
+</tr>
+<tr>
+<td>Description</td>
+</tr>
+<tr>
+<td>Number of Tools</td>
+</tr>
+<tr>
+<td>Unique Tools</td>
+</tr>
+<tr>
+<td>Primary Output</td>
+</tr>
+</table>
+<h3>Reflection Questions</h3>
+<ol>
+<li>Why did the Playwright team choose to separate planning, generating, and healing into three agents instead of one?</li>
+<li>If you could add a fourth agent, what would it do?</li>
+<li>How does the YAML frontmatter format make agents easy to configure and extend?</li>
+</ol>
+<h3>Estimated Time: 30-40 minutes</h3>
+</div>
+<div class="topic" id="02-planner-agent-exercise">
+<span class="badge badge-exercise">Exercises</span>
+<h2>Planner Agent Exercise</h2>
+<h2>Exercise 2: Using the Planner Agent</h2>
+<h3>Objective</h3>
+<p>Use the Playwright planner agent to automatically create a test plan for a real web page. You will compare the AI-generated plan with one you write yourself to evaluate the agent's strengths and gaps.</p>
+<h3>Prerequisites</h3>
+<ul>
+<li>Claude Code CLI installed and authenticated</li>
+<li>Playwright project initialized</li>
+<li>Internet access (to reach the target page)</li>
+</ul>
+<h3>Target Page</h3>
+<pre><code>https://the-internet.herokuapp.com/dropdown</code></pre>
+<p>This page contains a simple dropdown menu with three options: the default prompt and two selectable values.</p>
+<h3>Tasks</h3>
+<h3>Task 1: Open Claude Code in Your Project</h3>
+<ol>
+<li>Open your terminal.</li>
+<li>Navigate to your Playwright project directory.</li>
+<li>Launch Claude Code by running <span class="inline-code">claude</span> in the terminal.</li>
+<li>Confirm Claude Code is ready and can access your project files.</li>
+</ol>
+<h3>Task 2: Invoke the Planner Agent</h3>
+<ol>
+<li>Ask Claude to use the planner agent to analyze the dropdown page.</li>
+<li>Example prompt:</li>
+</ol>
+<pre><code>   Use the Playwright planner agent to create a test plan for
+   https://the-internet.herokuapp.com/dropdown</code></pre>
+<ol>
+<li>Wait for the agent to navigate the page, take snapshots, and produce its plan.</li>
+<li>Save the generated test plan to a file for review.</li>
+</ol>
+<h3>Task 3: Review the Generated Plan</h3>
+<ol>
+<li>Open the generated test plan.</li>
+<li>Check the following:</li>
+</ol>
+<ul>
+<li>Does it cover the <strong>happy path</strong> (selecting each option successfully)?</li>
+<li>Does it include <strong>edge cases</strong> (default state, switching between options)?</li>
+<li>Does it mention <strong>assertions</strong> (verifying the selected value)?</li>
+<li>Does it identify all interactive elements on the page?</li>
+</ul>
+<ol>
+<li>Rate the plan's completeness on a scale of 1-5.</li>
+</ol>
+<h3>Task 4: Manually Verify Element Coverage</h3>
+<ol>
+<li>Open <span class="inline-code">https://the-internet.herokuapp.com/dropdown</span> in your browser.</li>
+<li>Use browser DevTools to inspect all interactive elements.</li>
+<li>List every element the planner should have identified:</li>
+</ol>
+<ul>
+<li>The <span class="inline-code"><select></span> dropdown element</li>
+<li>Option 1, Option 2, and the default disabled option</li>
+<li>The page heading</li>
+<li>Any other elements present</li>
+</ul>
+<ol>
+<li>Did the planner miss any elements? Note any gaps.</li>
+</ol>
+<h3>Task 5: Write Your Own Test Plan</h3>
+<ol>
+<li>Without looking at the AI-generated plan, write your own test plan for the dropdown page.</li>
+<li>Include at least:</li>
+</ol>
+<ul>
+<li>3 happy path scenarios</li>
+<li>2 edge case scenarios</li>
+<li>Specific assertions for each scenario</li>
+</ul>
+<ol>
+<li>Format it similarly to the AI plan for easy comparison.</li>
+</ol>
+<h3>Task 6: Compare Both Plans</h3>
+<ol>
+<li>Place both plans side by side.</li>
+<li>Answer:</li>
+</ol>
+<ul>
+<li>What did the AI plan include that you missed?</li>
+<li>What did you include that the AI missed?</li>
+<li>Which plan has better scenario descriptions?</li>
+<li>Which plan would be easier to hand to a developer?</li>
+</ul>
+<h3>Deliverable</h3>
+<p>Submit three artifacts:</p>
+<ol>
+<li><strong>AI-generated test plan</strong> (saved from the planner agent)</li>
+<li><strong>Your manual test plan</strong> (written independently)</li>
+<li><strong>Comparison notes</strong> (strengths and weaknesses of each approach)</li>
+</ol>
+<h3>Reflection Questions</h3>
+<ol>
+<li>How much time did the planner agent save compared to writing the plan manually?</li>
+<li>Would you trust the AI plan enough to send it directly to a generator agent?</li>
+<li>What additional context could you provide to the planner to improve its output?</li>
+</ol>
+<h3>Estimated Time: 40-50 minutes</h3>
+</div>
+<div class="topic" id="03-generator-agent-exercise">
+<span class="badge badge-exercise">Exercises</span>
+<h2>Generator Agent Exercise</h2>
+<h2>Exercise 3: Using the Generator Agent</h2>
+<h3>Objective</h3>
+<p>Use the Playwright generator agent to produce executable test code from a test plan. You will evaluate the generated code quality, run it, and make improvements.</p>
+<h3>Prerequisites</h3>
+<ul>
+<li>Completed Exercise 2 (you have a test plan ready)</li>
+<li>Claude Code CLI installed and authenticated</li>
+<li>Playwright project initialized and configured</li>
+</ul>
+<h3>Tasks</h3>
+<h3>Task 1: Feed the Test Plan to the Generator</h3>
+<ol>
+<li>Open Claude Code in your project directory.</li>
+<li>Provide the test plan from Exercise 2 to the generator agent.</li>
+<li>Example prompt:</li>
+</ol>
+<pre><code>   Use the Playwright generator agent to create test code for the dropdown page
+   at https://the-internet.herokuapp.com/dropdown based on this test plan:
+   [paste your test plan here]</code></pre>
+<ol>
+<li>Let the agent navigate the page, take snapshots, and generate the test file.</li>
+<li>Save the generated test file in your <span class="inline-code">tests/</span> directory.</li>
+</ol>
+<h3>Task 2: Review the Generated Code</h3>
+<p>Open the generated test file and evaluate it against these criteria:</p>
+<ol>
+<li><strong>Locators</strong>: Are the locators robust?</li>
+</ol>
+<ul>
+<li>Does it use <span class="inline-code">getByRole</span>, <span class="inline-code">getByText</span>, or <span class="inline-code">getByTestId</span> over raw CSS/XPath?</li>
+<li>Would the locators survive minor UI changes?</li>
+</ul>
+<ol>
+<li><strong>Assertions</strong>: Are the assertions correct and meaningful?</li>
+</ol>
+<ul>
+<li>Does it verify the expected state after each action?</li>
+<li>Are the assertion messages clear?</li>
+</ul>
+<ol>
+<li><strong>Structure</strong>: Is the code well-organized?</li>
+</ol>
+<ul>
+<li>Are <span class="inline-code">test.describe</span> blocks used appropriately?</li>
+<li>Is there a <span class="inline-code">beforeEach</span> for common setup (like navigation)?</li>
+</ul>
+<ol>
+<li><strong>Edge Cases</strong>: Does it handle edge cases from the plan?</li>
+</ol>
+<p>Record your findings for each criterion.</p>
+<h3>Task 3: Run the Generated Test</h3>
+<ol>
+<li>Run the test using Playwright:</li>
+</ol>
+<pre><code>   npx playwright test &lt;generated-test-file&gt; --headed</code></pre>
+<ol>
+<li>Record the results:</li>
+</ol>
+<ul>
+<li>How many tests passed?</li>
+<li>How many tests failed?</li>
+<li>What were the failure reasons (if any)?</li>
+</ul>
+<ol>
+<li>If tests fail, note whether the failure is due to:</li>
+</ol>
+<ul>
+<li>Bad locators</li>
+<li>Incorrect assertions</li>
+<li>Missing waits or timing issues</li>
+<li>Logic errors</li>
+</ul>
+<h3>Task 4: Identify Three Improvements</h3>
+<p>Review the generated code critically and identify at least three improvements. Consider:</p>
+<ol>
+<li><strong>Improvement 1</strong>: Could any locator be more resilient?</li>
+</ol>
+<ul>
+<li>Example: Replace <span class="inline-code">page.locator('#dropdown')</span> with <span class="inline-code">page.getByRole('combobox')</span></li>
+</ul>
+<ol>
+<li><strong>Improvement 2</strong>: Are there missing assertions?</li>
+</ol>
+<ul>
+<li>Example: Add a check for the default selected value on page load</li>
+</ul>
+<ol>
+<li><strong>Improvement 3</strong>: Is the test structure optimal?</li>
+</ol>
+<ul>
+<li>Example: Extract repeated navigation into <span class="inline-code">beforeEach</span></li>
+<li>Example: Add descriptive test names that explain the expected behavior</li>
+</ul>
+<p>Write down each improvement with a brief justification.</p>
+<h3>Task 5: Refactor the Generated Code</h3>
+<ol>
+<li>Create a copy of the generated test file (e.g., <span class="inline-code">dropdown_improved.spec.js</span>).</li>
+<li>Apply all three improvements from Task 4.</li>
+<li>Add any additional improvements you think of while refactoring.</li>
+<li>Run the improved tests to make sure they still pass:</li>
+</ol>
+<pre><code>   npx playwright test dropdown_improved.spec.js --headed</code></pre>
+<h3>Deliverable</h3>
+<p>Submit three artifacts:</p>
+<ol>
+<li><strong>Generated test file</strong> (original output from the generator agent)</li>
+<li><strong>Improved test file</strong> (your refactored version)</li>
+<li><strong>Improvement notes</strong> documenting each change and why you made it</li>
+</ol>
+<h3>Reflection Questions</h3>
+<ol>
+<li>What percentage of the generated code was usable without modification?</li>
+<li>Did the generator make any mistakes a junior QA engineer might also make?</li>
+<li>How does AI-generated test code compare to record-and-playback tools like Playwright Codegen?</li>
+<li>Would you feel comfortable committing the generated code to a production test suite?</li>
+</ol>
+<h3>Estimated Time: 45-60 minutes</h3>
+</div>
+<div class="topic" id="04-healer-agent-exercise">
+<span class="badge badge-exercise">Exercises</span>
+<h2>Healer Agent Exercise</h2>
+<h2>Exercise 4: Using the Healer Agent</h2>
+<h3>Objective</h3>
+<p>Intentionally break a working Playwright test and use the healer agent to diagnose and fix it. You will observe the healing process, evaluate its accuracy, and test the healer with different types of failures.</p>
+<h3>Prerequisites</h3>
+<ul>
+<li>A working test file (e.g., <span class="inline-code">01_homepage_load.spec.js</span> from your project)</li>
+<li>Claude Code CLI installed and authenticated</li>
+<li>Playwright project configured and tests passing</li>
+</ul>
+<h3>Tasks</h3>
+<h3>Task 1: Break a Test with a Wrong Assertion</h3>
+<ol>
+<li>Open <span class="inline-code">01_homepage_load.spec.js</span> (or any working test in your project).</li>
+<li>Find an assertion that checks the page title or heading text.</li>
+<li>Change the expected value to something incorrect:</li>
+</ol>
+<pre><code>   // Original
+   await expect(page).toHaveTitle(&#x27;The Internet&#x27;);
+
+   // Broken
+   await expect(page).toHaveTitle(&#x27;The Internets - Wrong Title&#x27;);</code></pre>
+<ol>
+<li>Save the file.</li>
+</ol>
+<h3>Task 2: Confirm the Test Fails</h3>
+<ol>
+<li>Run the broken test:</li>
+</ol>
+<pre><code>   npx playwright test 01_homepage_load.spec.js</code></pre>
+<ol>
+<li>Verify the test fails with an assertion error.</li>
+<li>Read the error message. Note the expected vs. received values.</li>
+<li>Take a screenshot of the failure output for your records.</li>
+</ol>
+<h3>Task 3: Invoke the Healer Agent</h3>
+<ol>
+<li>Open Claude Code in your project directory.</li>
+<li>Ask Claude to use the healer agent:</li>
+</ol>
+<pre><code>   Use the Playwright healer agent to fix the failing test in
+   01_homepage_load.spec.js</code></pre>
+<ol>
+<li>Watch the healer's process carefully. It will:</li>
+</ol>
+<ul>
+<li>List available tests</li>
+<li>Run the failing test</li>
+<li>Read the error output</li>
+<li>Navigate to the page to verify the actual state</li>
+<li>Apply a fix</li>
+<li>Re-run the test to confirm the fix works</li>
+</ul>
+<h3>Task 4: Observe the Diagnosis Process</h3>
+<p>While the healer works, take notes on:</p>
+<ol>
+<li>Did the healer correctly identify the root cause of the failure?</li>
+<li>What tools did the healer use during diagnosis?</li>
+<li>How did the healer determine the correct expected value?</li>
+<li>Did the healer navigate to the page to verify the actual title?</li>
+<li>How long did the entire healing process take?</li>
+</ol>
+<h3>Task 5: Evaluate the Fix</h3>
+<ol>
+<li>Open the fixed test file.</li>
+<li>Compare it with the original (before you broke it):</li>
+</ol>
+<ul>
+<li>Is the fix identical to the original code?</li>
+<li>Did the healer change anything else in the file?</li>
+<li>Is the fix correct and complete?</li>
+</ul>
+<ol>
+<li>Run the test one more time to confirm it passes:</li>
+</ol>
+<pre><code>   npx playwright test 01_homepage_load.spec.js</code></pre>
+<h3>Task 6: Break a Test with a Wrong Selector</h3>
+<ol>
+<li>Now try a different type of failure. Change a locator to something that does not exist:</li>
+</ol>
+<pre><code>   // Original
+   await page.getByRole(&#x27;heading&#x27;, { name: &#x27;Welcome&#x27; }).isVisible();
+
+   // Broken
+   await page.getByRole(&#x27;heading&#x27;, { name: &#x27;NonExistentHeading123&#x27; }).isVisible();</code></pre>
+<ol>
+<li>Run the test to confirm it fails.</li>
+<li>Invoke the healer agent again.</li>
+<li>Compare the healer's behavior with the previous fix:</li>
+</ol>
+<ul>
+<li>Did it use <span class="inline-code">browser_generate_locator</span> this time?</li>
+<li>Was the selector fix more or less accurate than the assertion fix?</li>
+<li>How did the diagnosis differ?</li>
+</ul>
+<h3>Deliverable</h3>
+<p>Submit the following:</p>
+<ol>
+<li><strong>Broken test file</strong> (with wrong assertion)</li>
+<li><strong>Healer's fix</strong> (the corrected file after healing)</li>
+<li><strong>Observation notes</strong> covering:</li>
+</ol>
+<ul>
+<li>Root cause identification accuracy</li>
+<li>Tools used by the healer</li>
+<li>Time taken for each fix</li>
+<li>Comparison between assertion fix and selector fix</li>
+</ul>
+<h3>Reflection Questions</h3>
+<ol>
+<li>What types of test failures is the healer best at fixing?</li>
+<li>When would the healer fail and mark a test as <span class="inline-code">test.fixme()</span> instead?</li>
+<li>How does the healer's <span class="inline-code">browser_generate_locator</span> tool differ from writing locators manually?</li>
+<li>Would you trust the healer to run automatically in CI/CD without human review?</li>
+</ol>
+<h3>Estimated Time: 40-50 minutes</h3>
+</div>
+<div class="topic" id="05-agent-pipeline-mini-project">
+<span class="badge badge-exercise">Exercises</span>
+<h2>Agent Pipeline Mini Project</h2>
+<h2>Exercise 5: Build Your Own Agent Pipeline</h2>
+<h3>Objective</h3>
+<p>Create a complete end-to-end testing pipeline using all three Playwright AI agents: Plan, Generate, and Heal. This mini-project simulates a real-world workflow where AI agents collaborate to deliver a full test suite.</p>
+<h3>Prerequisites</h3>
+<ul>
+<li>Completed Exercises 1-4</li>
+<li>Claude Code CLI installed and authenticated</li>
+<li>Playwright project configured</li>
+<li>Familiarity with all three agents</li>
+</ul>
+<h3>Choose Your Target Page</h3>
+<p>Pick ONE of the following pages from The Internet:</p>
+<table>
+<tr>
+<th>Page</th>
+<th>URL</th>
+<th>Complexity</th>
+</tr>
+<tr>
+<td>Checkboxes</td>
+<td>https://the-internet.herokuapp.com/checkboxes</td>
+<td>Beginner</td>
+</tr>
+<tr>
+<td>Add/Remove Elements</td>
+<td>https://the-internet.herokuapp.com/add_remove_elements/</td>
+<td>Intermediate</td>
+</tr>
+<tr>
+<td>Key Presses</td>
+<td>https://the-internet.herokuapp.com/key_presses</td>
+<td>Advanced</td>
+</tr>
+</table>
+<h3>Pipeline Steps</h3>
+<h3>Step 1: Plan (Using the Planner Agent)</h3>
+<ol>
+<li>Open Claude Code in your project directory.</li>
+<li>Invoke the planner agent for your chosen page:</li>
+</ol>
+<pre><code>   Use the Playwright planner agent to create a comprehensive test plan
+   for [your chosen URL]. Include at least 5 test scenarios covering
+   happy paths, edge cases, and boundary conditions.</code></pre>
+<ol>
+<li>Review the generated plan. It should have at least 5 scenarios:</li>
+</ol>
+<ul>
+<li>Scenario 1: Default state verification</li>
+<li>Scenario 2: Primary interaction (check/uncheck, add/remove, or key press)</li>
+<li>Scenario 3: Multiple interactions in sequence</li>
+<li>Scenario 4: Edge case (rapid clicks, special keys, empty state)</li>
+<li>Scenario 5: State persistence or reset behavior</li>
+</ul>
+<ol>
+<li>Save the plan to <span class="inline-code">test-plans/[page-name]-plan.md</span>.</li>
+<li>If the plan has fewer than 5 scenarios, ask the planner to expand it.</li>
+</ol>
+<h3>Step 2: Generate (Using the Generator Agent)</h3>
+<ol>
+<li>Feed the test plan to the generator agent:</li>
+</ol>
+<pre><code>   Use the Playwright generator agent to create test code for each
+   scenario in this test plan: [paste plan or reference file]</code></pre>
+<ol>
+<li>The generator should produce a test file with all scenarios implemented.</li>
+<li>Save the generated test file to <span class="inline-code">tests/[page-name].spec.js</span>.</li>
+<li>Quickly review the code. Do NOT fix anything manually yet.</li>
+</ol>
+<h3>Step 3: Run (Execute All Generated Tests)</h3>
+<ol>
+<li>Run the full test suite:</li>
+</ol>
+<pre><code>   npx playwright test tests/[page-name].spec.js --headed</code></pre>
+<ol>
+<li>Record the results in a table:</li>
+</ol>
+<table>
+<tr>
+<th>Test #</th>
+<th>Scenario Description</th>
+<th>Result</th>
+<th>Error (if failed)</th>
+</tr>
+<tr>
+<td>1</td>
+</tr>
+<tr>
+<td>2</td>
+</tr>
+<tr>
+<td>3</td>
+</tr>
+<tr>
+<td>4</td>
+</tr>
+<tr>
+<td>5</td>
+</tr>
+</table>
+<ol>
+<li>Note the pass rate: _____ / 5 tests passed.</li>
+</ol>
+<h3>Step 4: Heal (Using the Healer Agent)</h3>
+<ol>
+<li>If any tests failed, invoke the healer agent:</li>
+</ol>
+<pre><code>   Use the Playwright healer agent to fix the failing tests in
+   tests/[page-name].spec.js</code></pre>
+<ol>
+<li>Let the healer diagnose and fix each failing test.</li>
+<li>For each healed test, record:</li>
+</ol>
+<ul>
+<li>What was the root cause?</li>
+<li>What tool did the healer use to fix it?</li>
+<li>Did the healer fix it correctly on the first attempt?</li>
+</ul>
+<ol>
+<li>If all tests passed in Step 3, intentionally break one test and heal it.</li>
+</ol>
+<h3>Step 5: Create a Pipeline Summary</h3>
+<p>Create a summary document with the following sections:</p>
+<pre><code># Agent Pipeline Summary: [Page Name]
+
+## Target Page
+URL: [your URL]
+
+## Pipeline Metrics
+- Planning time: ___ minutes
+- Generation time: ___ minutes
+- Initial pass rate: ___/5
+- Healing time: ___ minutes
+- Final pass rate: ___/5
+- Total pipeline time: ___ minutes
+
+## Agent Performance
+### Planner
+- Scenarios generated: ___
+- Quality rating (1-5): ___
+- Missed scenarios: ___
+
+### Generator
+- Tests produced: ___
+- Tests passing on first run: ___
+- Code quality rating (1-5): ___
+
+### Healer
+- Tests healed: ___
+- Successful heals: ___
+- Tests marked as fixme: ___
+
+## Lessons Learned
+1. [Your observation about the planning phase]
+2. [Your observation about the generation phase]
+3. [Your observation about the healing phase]
+
+## Recommendations
+- [What you would do differently next time]</code></pre>
+<h3>Bonus Challenge: Create a Custom Agent Prompt</h3>
+<p>Write your own agent prompt file targeting your chosen page. Use this template:</p>
+<pre><code>---
+name: custom-[page-name]-tester
+model: sonnet
+color: &quot;#FF6B35&quot;
+description: &quot;A specialized agent for testing [page name] functionality&quot;
+tools:
+  - browser_navigate
+  - browser_snapshot
+  - browser_click
+  - browser_fill_form
+---
+
+You are a specialized testing agent for [page name].
+
+## Your Workflow
+1. Navigate to the target page
+2. Identify all interactive elements
+3. Execute a predefined set of test actions
+4. Report results with pass/fail status
+
+## Constraints
+- Only test [page name] functionality
+- Use resilient locators (getByRole, getByText)
+- Always verify state after each interaction</code></pre>
+<p>Save the custom agent to <span class="inline-code">agents/custom-[page-name].agent.md</span>.</p>
+<h3>Deliverables</h3>
+<p>Submit the following five artifacts:</p>
+<ol>
+<li><strong>Test plan</strong> (<span class="inline-code">test-plans/[page-name]-plan.md</span>)</li>
+<li><strong>Generated tests</strong> (<span class="inline-code">tests/[page-name].spec.js</span>)</li>
+<li><strong>Healed tests</strong> (if applicable, the fixed version)</li>
+<li><strong>Pipeline summary</strong> (metrics and observations document)</li>
+<li><strong>Custom agent prompt</strong> (bonus)</li>
+</ol>
+<h3>Reflection Questions</h3>
+<ol>
+<li>At which stage of the pipeline did the most value come from AI assistance?</li>
+<li>What was the biggest gap between AI output and production-ready code?</li>
+<li>Could this pipeline replace a junior QA engineer? Why or why not?</li>
+<li>How would you integrate this pipeline into a CI/CD workflow?</li>
+</ol>
+<h3>Estimated Time: 60-90 minutes</h3>
+</div>
+<div class="topic" id="agent-quick-reference">
+<span class="badge badge-note">Notes</span>
+<h2>Agent Quick Reference</h2>
+<h2>AI Agents - Quick Reference</h2>
+<h3>Agent Comparison Table</h3>
+<table>
+<tr>
+<th>Property</th>
+<th>Planner</th>
+<th>Generator</th>
+<th>Healer</th>
+</tr>
+<tr>
+<td>File</td>
+<td>playwright-test-planner.agent.md</td>
+<td>playwright-test-generator.agent.md</td>
+<td>playwright-test-healer.agent.md</td>
+</tr>
+<tr>
+<td>Color</td>
+<td>Blue (#0ea5e9)</td>
+<td>Green (#10b981)</td>
+<td>Amber (#f59e0b)</td>
+</tr>
+<tr>
+<td>Model</td>
+<td>sonnet</td>
+<td>sonnet</td>
+<td>sonnet</td>
+</tr>
+<tr>
+<td>Purpose</td>
+<td>Create test plans by exploring the application</td>
+<td>Generate test code from plans</td>
+<td>Fix failing tests automatically</td>
+</tr>
+<tr>
+<td>Unique Tools</td>
+<td>planner_setup_page, planner_save_plan</td>
+<td>generator_setup_page, generator_read_log, generator_write_test</td>
+<td>test_run, test_debug, test_list, browser_generate_locator, edit</td>
+</tr>
+<tr>
+<td>Output</td>
+<td>Structured test plan document</td>
+<td>Executable .spec.js test file</td>
+<td>Fixed test file or test.fixme()</td>
+</tr>
+</table>
+<h3>One-Liner Invocations</h3>
+<pre><code># Planner
+&quot;Use the Playwright planner agent to create a test plan for [URL]&quot;
+
+# Generator
+&quot;Use the Playwright generator agent to write tests for [URL] based on this plan: [plan]&quot;
+
+# Healer
+&quot;Use the Playwright healer agent to fix failing tests in [test-file]&quot;</code></pre>
+<h3>Agent File Location</h3>
+<pre><code>node_modules/playwright/lib/agents/</code></pre>
+<p>All three agents are Markdown files with YAML frontmatter. They ship with Playwright and are used by Claude Code when you reference them in your prompts.</p>
+<h3>When to Use Which Agent</h3>
+<table>
+<tr>
+<th>Situation</th>
+<th>Agent</th>
+</tr>
+<tr>
+<td>Starting from scratch, need test scenarios</td>
+<td>Planner</td>
+</tr>
+<tr>
+<td>Have a plan, need executable test code</td>
+<td>Generator</td>
+</tr>
+<tr>
+<td>Tests broke after a UI change</td>
+<td>Healer</td>
+</tr>
+<tr>
+<td>Exploring a new page to understand its elements</td>
+<td>Planner</td>
+</tr>
+<tr>
+<td>Need resilient locators for changed elements</td>
+<td>Healer</td>
+</tr>
+<tr>
+<td>Need full pipeline: plan to code</td>
+<td>Planner then Generator</td>
+</tr>
+<tr>
+<td>Maintenance of existing test suite</td>
+<td>Healer</td>
+</tr>
+</table>
+<h3>Pipeline Flow</h3>
+<pre><code>Planner --&gt; Test Plan --&gt; Generator --&gt; Test Code --&gt; Run Tests
+                                                        |
+                                                   Pass? Done!
+                                                   Fail? --&gt; Healer --&gt; Fixed Code --&gt; Re-run</code></pre>
+</div>
+<div class="topic" id="playwright-agent-commands">
+<span class="badge badge-note">Notes</span>
+<h2>Playwright Agent Commands</h2>
+<h2>Playwright Agent Commands & Tools</h2>
+<h3>Overview</h3>
+<p>Each Playwright AI agent has access to a set of tools. Some tools are unique to a specific agent, while others are shared across all agents. This document catalogs every tool organized by agent.</p>
+<h3>Planner Agent Tools</h3>
+<h3>Unique to Planner</h3>
+<table>
+<tr>
+<th>Tool</th>
+<th>Description</th>
+</tr>
+<tr>
+<td><span class="inline-code">planner_setup_page</span></td>
+<td>Opens a browser and navigates to the target URL for exploration</td>
+</tr>
+<tr>
+<td><span class="inline-code">planner_save_plan</span></td>
+<td>Saves the generated test plan to a file in the project</td>
+</tr>
+</table>
+<h3>Usage</h3>
+<ul>
+<li><span class="inline-code">planner_setup_page</span> is called first to load the target page in a browser instance. The planner then uses browser tools to explore the page.</li>
+<li><span class="inline-code">planner_save_plan</span> writes the final test plan to disk after the planner has finished exploring and reasoning about the page.</li>
+</ul>
+<h3>Generator Agent Tools</h3>
+<h3>Unique to Generator</h3>
+<table>
+<tr>
+<th>Tool</th>
+<th>Description</th>
+</tr>
+<tr>
+<td><span class="inline-code">generator_setup_page</span></td>
+<td>Opens a browser and navigates to the target URL for verification</td>
+</tr>
+<tr>
+<td><span class="inline-code">generator_read_log</span></td>
+<td>Reads the test plan or seed files to understand what tests to create</td>
+</tr>
+<tr>
+<td><span class="inline-code">generator_write_test</span></td>
+<td>Writes the generated test code to a .spec.js file in the project</td>
+</tr>
+</table>
+<h3>Usage</h3>
+<ul>
+<li><span class="inline-code">generator_read_log</span> reads the planner's output or any seed test files to understand the testing requirements.</li>
+<li><span class="inline-code">generator_setup_page</span> opens the page so the generator can verify elements exist before writing locators.</li>
+<li><span class="inline-code">generator_write_test</span> outputs the final test file with all scenarios implemented.</li>
+</ul>
+<h3>Healer Agent Tools</h3>
+<h3>Unique to Healer</h3>
+<table>
+<tr>
+<th>Tool</th>
+<th>Description</th>
+</tr>
+<tr>
+<td><span class="inline-code">test_run</span></td>
+<td>Executes a specific test file or test suite and captures output</td>
+</tr>
+<tr>
+<td><span class="inline-code">test_debug</span></td>
+<td>Runs a test in debug mode to get detailed failure information</td>
+</tr>
+<tr>
+<td><span class="inline-code">test_list</span></td>
+<td>Lists all available test files and test names in the project</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_generate_locator</span></td>
+<td>Generates a resilient locator for a target element on the page</td>
+</tr>
+<tr>
+<td><span class="inline-code">edit</span></td>
+<td>Modifies the test source code to apply fixes</td>
+</tr>
+</table>
+<h3>Usage</h3>
+<ul>
+<li><span class="inline-code">test_list</span> identifies which tests exist in the project.</li>
+<li><span class="inline-code">test_run</span> executes the failing test to capture the error message and stack trace.</li>
+<li><span class="inline-code">test_debug</span> provides more detailed diagnostic information when needed.</li>
+<li><span class="inline-code">browser_generate_locator</span> navigates to the page and creates a new, working locator for an element whose selector has broken.</li>
+<li><span class="inline-code">edit</span> applies the fix directly to the test file's source code.</li>
+</ul>
+<h3>Shared Browser Tools</h3>
+<p>These tools are available to all three agents for interacting with web pages:</p>
+<table>
+<tr>
+<th>Tool</th>
+<th>Description</th>
+</tr>
+<tr>
+<td><span class="inline-code">browser_navigate</span></td>
+<td>Navigates the browser to a specified URL</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_snapshot</span></td>
+<td>Takes an accessibility snapshot of the current page state</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_click</span></td>
+<td>Clicks on an element identified by a reference from the snapshot</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_type</span></td>
+<td>Types text into an input field</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_fill_form</span></td>
+<td>Fills a form field with a specified value</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_select_option</span></td>
+<td>Selects an option from a dropdown element</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_hover</span></td>
+<td>Hovers over an element</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_press_key</span></td>
+<td>Presses a keyboard key or key combination</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_take_screenshot</span></td>
+<td>Captures a visual screenshot of the page</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_tabs</span></td>
+<td>Lists and switches between browser tabs</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_navigate_back</span></td>
+<td>Navigates back to the previous page</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_wait_for</span></td>
+<td>Waits for a specific condition or element</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_console_messages</span></td>
+<td>Retrieves console messages from the browser</td>
+</tr>
+<tr>
+<td><span class="inline-code">browser_network_requests</span></td>
+<td>Captures network requests made by the page</td>
+</tr>
+</table>
+<h3>Tool Access Summary</h3>
+<table>
+<tr>
+<th>Tool Category</th>
+<th>Planner</th>
+<th>Generator</th>
+<th>Healer</th>
+</tr>
+<tr>
+<td>Shared browser tools</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>planner_setup_page</td>
+<td>Yes</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td>planner_save_plan</td>
+<td>Yes</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td>generator_setup_page</td>
+<td>No</td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+<tr>
+<td>generator_read_log</td>
+<td>No</td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+<tr>
+<td>generator_write_test</td>
+<td>No</td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+<tr>
+<td>test_run / test_debug</td>
+<td>No</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>test_list</td>
+<td>No</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>browser_generate_locator</td>
+<td>No</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>edit</td>
+<td>No</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+</table>
+</div>
+<div class="topic" id="prompt-engineering-cheatsheet">
+<span class="badge badge-note">Notes</span>
+<h2>Prompt Engineering Cheatsheet</h2>
+<h2>Prompt Engineering for Testing - Cheatsheet</h2>
+<h3>Agent File Structure</h3>
+<p>Playwright agent files are Markdown documents with YAML frontmatter followed by the prompt body.</p>
+<pre><code>---
+name: my-agent-name
+description: &quot;Brief description of what this agent does&quot;
+model: sonnet
+color: &quot;#hexcolor&quot;
+tools:
+  - tool_name_1
+  - tool_name_2
+---
+
+[Prompt body goes here in Markdown]</code></pre>
+<h3>YAML Frontmatter Fields Explained</h3>
+<table>
+<tr>
+<th>Field</th>
+<th>Purpose</th>
+<th>Example</th>
+</tr>
+<tr>
+<td><span class="inline-code">name</span></td>
+<td>Unique identifier for the agent</td>
+<td><span class="inline-code">playwright-test-planner</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">description</span></td>
+<td>Human-readable summary shown in UI</td>
+<td><span class="inline-code">"Plans test scenarios"</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">model</span></td>
+<td>Which LLM model to use (sonnet, opus, haiku)</td>
+<td><span class="inline-code">sonnet</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">color</span></td>
+<td>UI accent color for the agent</td>
+<td><span class="inline-code">"#0ea5e9"</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">tools</span></td>
+<td>List of tools the agent can call during execution</td>
+<td><span class="inline-code">[browser_navigate, ...]</span></td>
+</tr>
+</table>
+<h3>Prompt Structure Best Practices</h3>
+<p>A well-structured agent prompt follows this pattern:</p>
+<pre><code>## Role
+You are a [specific role] that [primary responsibility].
+
+## Workflow
+1. First, do [step 1]
+2. Then, do [step 2]
+3. Finally, do [step 3]
+
+## Constraints
+- Always [requirement]
+- Never [restriction]
+- If [condition], then [action]
+
+## Output Format
+Return your results as:
+- [format specification]</code></pre>
+<h3>Do's</h3>
+<ul>
+<li><strong>Be specific</strong>: "Test the login form with valid credentials and verify redirect to dashboard"</li>
+<li><strong>Include examples</strong>: Provide sample input/output so the agent knows the expected format</li>
+<li><strong>Specify output format</strong>: "Return the plan as a numbered list with assertions for each step"</li>
+<li><strong>Define scope</strong>: "Only test the checkout flow, do not test navigation or footer links"</li>
+<li><strong>Set quality bars</strong>: "Each scenario must include at least one assertion"</li>
+<li><strong>Use numbered workflows</strong>: Sequential steps are easier for agents to follow</li>
+</ul>
+<h3>Don'ts</h3>
+<ul>
+<li><strong>Don't be vague</strong>: Avoid "test the page" without specifying what to test</li>
+<li><strong>Don't skip constraints</strong>: Without guardrails, agents may take unexpected actions</li>
+<li><strong>Don't assume context</strong>: The agent starts fresh each time; provide all necessary information</li>
+<li><strong>Don't overload</strong>: Keep prompts focused on one task; split complex work across agents</li>
+<li><strong>Don't forget edge cases</strong>: If you want edge cases tested, explicitly ask for them</li>
+<li><strong>Don't use ambiguous terms</strong>: "Check" could mean assert, click, or visually inspect</li>
+</ul>
+<h3>Custom Agent Prompt Template</h3>
+<pre><code>---
+name: custom-[feature]-tester
+model: sonnet
+color: &quot;#your-color&quot;
+description: &quot;Tests [feature] on [application]&quot;
+tools:
+  - browser_navigate
+  - browser_snapshot
+  - browser_click
+  - browser_fill_form
+  - browser_take_screenshot
+---
+
+## Role
+You are a QA automation agent specialized in testing [feature].
+
+## Context
+- Application URL: [URL]
+- Key elements: [list of important elements]
+- Business rules: [any domain-specific rules]
+
+## Workflow
+1. Navigate to [URL]
+2. Verify the page loads with [expected initial state]
+3. Perform [primary interaction]
+4. Assert [expected outcome]
+5. Test edge cases: [list specific edge cases]
+
+## Constraints
+- Use resilient locators (getByRole, getByText, getByTestId)
+- Wait for elements before interacting
+- Take a screenshot after each major step
+- Report any unexpected behavior
+
+## Output Format
+Return a structured report:
+- Page: [URL]
+- Tests Run: [count]
+- Passed: [count]
+- Failed: [count]
+- Details: [list of test results]</code></pre>
+<h3>Quick Tips for Better Results</h3>
+<ol>
+<li>Start with the planner to understand the page before writing prompts</li>
+<li>Reference existing test files as "seed" examples for the generator</li>
+<li>Include the exact URL, not just the page name</li>
+<li>Mention the tech stack if relevant (React, Angular, etc.)</li>
+<li>For complex forms, list all field names and valid/invalid values</li>
+<li>Ask the agent to explain its reasoning when debugging unexpected output</li>
+<li>Iterate: refine your prompt based on the agent's output quality</li>
+</ol>
+</div>
+<div class="topic" id="self-healing-tests-notes">
+<span class="badge badge-note">Notes</span>
+<h2>Self Healing Tests Notes</h2>
+<h2>Self-Healing Tests - Quick Notes</h2>
+<h3>What Self-Healing Means in Testing</h3>
+<p>Self-healing tests are automated tests that can detect when they break due to application changes and automatically repair themselves without manual intervention. Instead of failing permanently when a UI element moves or gets renamed, the test adapts to the new state of the application.</p>
+<h3>How Playwright's Healer Agent Implements Self-Healing</h3>
+<p>Playwright's healer is an AI-powered agent that reads test failure output, navigates to the application to observe its current state, diagnoses the root cause of failure, and applies code fixes directly to the test file.</p>
+<p>Unlike simple selector-retry mechanisms, the healer uses an LLM to reason about failures. It understands whether the issue is a wrong assertion value, a broken locator, a missing element, or a logical error in the test.</p>
+<h3>The Healing Process</h3>
+<pre><code>1. RUN       --&gt;  Execute the failing test, capture error output
+2. FAIL      --&gt;  Parse the error message and stack trace
+3. DIAGNOSE  --&gt;  Navigate to the page, take snapshots, compare expected vs actual
+4. FIX       --&gt;  Edit the test source code with the correction
+5. VERIFY    --&gt;  Re-run the test to confirm the fix works
+6. REPEAT    --&gt;  If still failing, iterate with a different fix approach</code></pre>
+<h3>Key Tools Used in Each Phase</h3>
+<table>
+<tr>
+<th>Phase</th>
+<th>Tools Used</th>
+</tr>
+<tr>
+<td>Run</td>
+<td><span class="inline-code">test_run</span>, <span class="inline-code">test_list</span></td>
+</tr>
+<tr>
+<td>Diagnose</td>
+<td><span class="inline-code">browser_navigate</span>, <span class="inline-code">browser_snapshot</span>, <span class="inline-code">test_debug</span></td>
+</tr>
+<tr>
+<td>Fix</td>
+<td><span class="inline-code">browser_generate_locator</span>, <span class="inline-code">edit</span></td>
+</tr>
+<tr>
+<td>Verify</td>
+<td><span class="inline-code">test_run</span></td>
+</tr>
+</table>
+<h3>When the Healer Cannot Fix a Test</h3>
+<p>If the healer exhausts its repair strategies and the test still fails, it marks the test with <span class="inline-code">test.fixme()</span>. This annotation:</p>
+<ul>
+<li>Skips the test in future runs</li>
+<li>Signals to the team that manual attention is needed</li>
+<li>Preserves the test code for future reference</li>
+</ul>
+<h3>Limitations</h3>
+<p>Self-healing has clear boundaries. Manual intervention is required when:</p>
+<ul>
+<li><strong>Business logic changed</strong>: The expected behavior itself is different, not just the UI</li>
+<li><strong>New features added</strong>: Tests for new functionality cannot be healed into existence</li>
+<li><strong>API contract changed</strong>: Backend changes that affect data shape or endpoints</li>
+<li><strong>Authentication flow changed</strong>: Login mechanisms require deliberate test updates</li>
+<li><strong>Test design flaw</strong>: The original test was poorly designed or tested the wrong thing</li>
+<li><strong>Environment issues</strong>: The failure is caused by infrastructure, not the application</li>
+</ul>
+<h3>Comparison with Commercial Self-Healing Tools</h3>
+<table>
+<tr>
+<th>Feature</th>
+<th>Playwright Healer</th>
+<th>Healenium</th>
+<th>Testim</th>
+</tr>
+<tr>
+<td>Approach</td>
+<td>LLM-powered reasoning</td>
+<td>ML-based selector matching</td>
+<td>AI visual matching</td>
+</tr>
+<tr>
+<td>Fix Types</td>
+<td>Locators, assertions, logic</td>
+<td>Selectors only</td>
+<td>Selectors, visual</td>
+</tr>
+<tr>
+<td>Requires Training Data</td>
+<td>No</td>
+<td>Yes (builds selector history)</td>
+<td>Yes (baseline screenshots)</td>
+</tr>
+<tr>
+<td>Cost</td>
+<td>LLM API usage</td>
+<td>Open source / free</td>
+<td>Commercial license</td>
+</tr>
+<tr>
+<td>Framework Integration</td>
+<td>Playwright only</td>
+<td>Selenium</td>
+<td>Proprietary</td>
+</tr>
+<tr>
+<td>Human Review Needed</td>
+<td>Recommended</td>
+<td>Minimal</td>
+<td>Minimal</td>
+</tr>
+<tr>
+<td>Handles Logic Errors</td>
+<td>Yes (to some extent)</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td>CI/CD Integration</td>
+<td>Via Claude Code</td>
+<td>Plugin-based</td>
+<td>Cloud platform</td>
+</tr>
+</table>
+<h3>Best Practices for Writing Healable Tests</h3>
+<ol>
+<li><strong>Use semantic locators</strong>: <span class="inline-code">getByRole</span>, <span class="inline-code">getByText</span>, and <span class="inline-code">getByTestId</span> are easier to heal than raw CSS selectors or XPath</li>
+<li><strong>One assertion per concept</strong>: Tests with focused assertions are easier to diagnose</li>
+<li><strong>Descriptive test names</strong>: Help the healer understand what the test is supposed to verify</li>
+<li><strong>Stable test data</strong>: Use deterministic data so the healer can distinguish data issues from UI issues</li>
+<li><strong>Independent tests</strong>: Tests that do not depend on each other are easier to heal in isolation</li>
+<li><strong>Avoid hard-coded waits</strong>: Use Playwright's built-in auto-waiting; hard-coded sleeps mask timing issues</li>
+<li><strong>Keep tests short</strong>: Smaller tests give the healer a narrower problem space to search</li>
+<li><strong>Comment your intent</strong>: A comment like <span class="inline-code">// Verify user sees success message after checkout</span> helps the AI understand the purpose</li>
+</ol>
+<h3>Key Takeaway</h3>
+<p>Self-healing is a maintenance accelerator, not a replacement for thoughtful test design. The best strategy is to write well-structured tests that are easy to heal, and use the healer agent to handle the routine breakage caused by normal application evolution.</p>
+</div>
+<div class="topic" id="01-ai-agents-interview-qa">
+<span class="badge badge-interview">Interview Questions</span>
+<h2>AI Agents Interview QA</h2>
+<h2>AI Agents - Interview Questions & Answers</h2>
+<p><strong>Q1: What is an AI agent?</strong></p>
+<p>A1: An AI agent is an autonomous software system powered by a large language model (LLM) that can perceive its environment, reason about tasks, and take actions using tools to achieve a specific goal. Unlike simple chatbots that respond to single prompts, agents operate in a loop: they observe, plan, act, and evaluate results before deciding the next step. This iterative cycle allows them to handle multi-step tasks without constant human guidance.</p>
+<p><strong>Q2: What is the difference between an AI agent and a chatbot?</strong></p>
+<p>A2: A chatbot typically handles single-turn or multi-turn conversations within a fixed dialogue flow and produces text responses. An AI agent goes further by having access to tools (file systems, browsers, APIs) and the ability to take autonomous actions in the real world. The key distinction is agency: a chatbot answers questions, while an agent completes tasks by executing multi-step plans and interacting with external systems.</p>
+<p><strong>Q3: What is the agent loop and why is it important?</strong></p>
+<p>A3: The agent loop is the core execution cycle of an AI agent: Observe the current state, Reason about what to do next, Act by calling a tool, and Evaluate the result. This loop repeats until the task is complete or the agent determines it cannot proceed. It is important because it enables the agent to handle dynamic situations, recover from errors, and adapt its strategy based on intermediate results rather than following a rigid script.</p>
+<p><strong>Q4: How do AI agents use tools?</strong></p>
+<p>A4: AI agents use tools by generating structured function calls that the runtime executes on their behalf. The agent receives a list of available tools with their descriptions and parameter schemas. When the agent decides it needs to perform an action (like navigating a browser or reading a file), it outputs a tool call with the appropriate parameters. The runtime executes the tool and returns the result to the agent, which then decides the next step.</p>
+<p><strong>Q5: What is the difference between autonomy and automation in AI agents?</strong></p>
+<p>A5: Automation follows predefined rules and scripts to execute repetitive tasks with no deviation. Autonomy means the agent can make decisions, choose between strategies, and adapt to unexpected situations. An automated script will fail if the environment changes, while an autonomous agent can observe the change, reason about it, and adjust its approach. Most practical AI agents operate on a spectrum between full automation and full autonomy.</p>
+<p><strong>Q6: How do AI agents reason about tasks?</strong></p>
+<p>A6: AI agents reason through chain-of-thought prompting, where the LLM breaks a complex task into smaller steps and thinks through each one before acting. The agent considers the current state, available tools, constraints, and past results to decide the best next action. Some agent frameworks use explicit planning stages where the agent writes out a plan before execution, while others interleave reasoning and action in each loop iteration.</p>
+<p><strong>Q7: What are multi-agent systems and when would you use them?</strong></p>
+<p>A7: Multi-agent systems use multiple specialized agents that collaborate to complete a complex task, with each agent responsible for a specific subtask. You would use them when a single agent's scope would be too broad, or when different parts of the workflow require different tools or expertise. Playwright's three-agent system (planner, generator, healer) is a practical example: each agent focuses on one phase of the testing lifecycle, leading to better results than a single do-everything agent.</p>
+<p><strong>Q8: What are the common architectural patterns for AI agents?</strong></p>
+<p>A8: The most common patterns are: ReAct (Reasoning + Acting in alternating steps), Plan-then-Execute (create a full plan before taking any action), and Hierarchical (a manager agent delegates to specialist agents). There are also patterns like self-reflection, where the agent critiques its own output before finalizing, and tool-augmented retrieval, where the agent searches for relevant information before acting. The choice of pattern depends on the task complexity and reliability requirements.</p>
+<p><strong>Q9: What are the risks of using AI agents in production?</strong></p>
+<p>A9: Key risks include hallucination (the agent confidently takes wrong actions), runaway execution (the agent enters an infinite loop or takes unintended destructive actions), cost overruns (each LLM call costs money), and security vulnerabilities (agents with file system or network access could be exploited). Mitigation strategies include setting execution limits, requiring human approval for destructive actions, implementing cost caps, and sandboxing agent tool access.</p>
+<p><strong>Q10: What is hallucination in the context of AI agents, and how can you mitigate it?</strong></p>
+<p>A10: Hallucination occurs when the LLM generates confidently stated but incorrect information, which for agents means taking actions based on false assumptions. In testing, an agent might assert a value that does not exist or write a locator for a non-existent element. Mitigation strategies include grounding the agent with real page snapshots, having the agent verify its assumptions before acting, requiring tool-based evidence for decisions, and implementing human review checkpoints.</p>
+<p><strong>Q11: When should you use AI agents vs. traditional automation?</strong></p>
+<p>A11: Use AI agents when the task involves exploration, judgment, or adaptation to changing environments, such as testing a frequently changing UI or generating test plans for unfamiliar pages. Use traditional automation when the workflow is well-defined, deterministic, and cost-sensitive, such as running a stable regression suite in CI/CD. Agents excel at creative and exploratory work; traditional automation excels at reliable, repeatable execution.</p>
+<p><strong>Q12: How do you evaluate the performance of an AI agent?</strong></p>
+<p>A12: Agent evaluation considers task completion rate (did it achieve the goal?), accuracy (were the actions and outputs correct?), efficiency (how many steps and tool calls did it take?), cost (total LLM token usage), and robustness (does it handle edge cases gracefully?). For testing agents specifically, you also measure test pass rate of generated code, locator resilience, and the ratio of tests requiring manual intervention after agent processing.</p>
+<p><strong>Q13: What are the cost considerations when using AI agents?</strong></p>
+<p>A13: Every LLM call in the agent loop consumes tokens, and complex tasks can require dozens of iterations. Costs depend on the model used (larger models are more expensive but more capable), the number of tool calls, and the amount of context passed in each call. For testing agents, costs accumulate when the agent takes browser snapshots (large context) or processes long test files. Teams should set token budgets, use smaller models where possible, and cache results to control costs.</p>
+<p><strong>Q14: Name three popular AI agent frameworks.</strong></p>
+<p>A14: LangChain/LangGraph provides a flexible framework for building agents with various LLM backends and tool integrations. CrewAI specializes in multi-agent collaboration with role-based agent definitions. Anthropic's Claude Code SDK enables agents that can interact with codebases, terminals, and browsers. Other notable frameworks include AutoGen (Microsoft), Semantic Kernel, and OpenAI's Assistants API. Each framework offers different tradeoffs between flexibility, ease of use, and built-in capabilities.</p>
+<p><strong>Q15: What is the Model Context Protocol (MCP) and how does it relate to agents?</strong></p>
+<p>A15: MCP is an open protocol that standardizes how AI applications connect to external tools and data sources. Instead of each agent framework implementing custom tool integrations, MCP provides a universal interface that any agent can use to access any MCP-compatible tool server. This means an agent built with one framework can use the same MCP tools as an agent built with another framework, promoting interoperability and reducing integration effort.</p>
+<p><strong>Q16: What is agent orchestration?</strong></p>
+<p>A16: Agent orchestration is the process of coordinating multiple agents to work together on a complex task. This involves defining the order of agent execution, passing outputs from one agent as inputs to the next, handling failures and retries, and managing shared state. In Playwright's agent system, orchestration means running the planner first, feeding its output to the generator, and invoking the healer when tests fail. Orchestration can be manual (human triggers each agent) or automated (a pipeline script runs them sequentially).</p>
+<p><strong>Q17: What is human-in-the-loop and why is it important for AI agents?</strong></p>
+<p>A17: Human-in-the-loop means a human reviews and approves agent actions at critical decision points before they are executed. This is important because AI agents can make mistakes that are costly to reverse, such as deleting files, modifying production data, or committing broken code. By requiring human approval for high-impact actions while letting the agent handle routine steps autonomously, teams get the efficiency benefits of agents with the safety guarantees of human oversight.</p>
+<p><strong>Q18: What are the challenges of testing AI agents themselves?</strong></p>
+<p>A18: Testing AI agents is inherently difficult because their behavior is non-deterministic; the same input can produce different actions due to LLM randomness. Challenges include creating reproducible test scenarios, measuring partial success (the agent got 4 out of 5 steps right), handling external dependencies (live websites, APIs), and defining pass/fail criteria for open-ended tasks. Common approaches include using deterministic seeds, snapshot testing of tool call sequences, and evaluating against rubrics rather than exact outputs.</p>
+<p><strong>Q19: What is the future direction of AI agents?</strong></p>
+<p>A19: The field is moving toward more reliable and specialized agents with better tool use, longer context windows, and multimodal capabilities (understanding screenshots, not just text). Key trends include standardized protocols like MCP for tool integration, fine-tuned models optimized for agent tasks, better safety frameworks, and tighter integration with development workflows. In testing specifically, agents are evolving from assistants that help write tests to autonomous systems that maintain entire test suites.</p>
+<p><strong>Q20: How do you handle an AI agent that gets stuck in a loop?</strong></p>
+<p>A20: Prevention is the first line of defense: set maximum iteration limits, token budgets, and time limits for agent execution. Detection involves monitoring for repeated tool calls with identical parameters or oscillating between two states. Recovery strategies include forcing the agent to summarize its progress and reassess its approach, escalating to a human operator, or terminating the agent and falling back to a simpler strategy. Well-designed agent prompts include explicit instructions for what to do when progress stalls.</p>
+</div>
+<div class="topic" id="02-playwright-agents-interview-qa">
+<span class="badge badge-interview">Interview Questions</span>
+<h2>Playwright Agents Interview QA</h2>
+<h2>Playwright AI Agents - Interview Questions & Answers</h2>
+<p><strong>Q1: What are the three built-in AI agents in Playwright?</strong></p>
+<p>A1: Playwright ships with three AI agents: the Planner, the Generator, and the Healer. The Planner explores a web application and produces a structured test plan. The Generator takes that plan and writes executable Playwright test code. The Healer diagnoses and fixes failing tests automatically. Together they form a complete Plan-Generate-Heal pipeline for AI-assisted test automation.</p>
+<p><strong>Q2: Describe the Planner agent's workflow.</strong></p>
+<p>A2: The Planner navigates to the target URL using <span class="inline-code">planner_setup_page</span>, then systematically explores the page by taking accessibility snapshots, clicking interactive elements, and observing state changes. It identifies all testable elements and user flows, reasons about happy paths and edge cases, and produces a structured test plan. The plan is saved to a file using <span class="inline-code">planner_save_plan</span> and includes scenario descriptions, steps, and expected outcomes.</p>
+<p><strong>Q3: How does the Generator agent create test code?</strong></p>
+<p>A3: The Generator first reads the test plan or seed files using <span class="inline-code">generator_read_log</span> to understand what tests to write. It then opens the target page with <span class="inline-code">generator_setup_page</span> and takes snapshots to verify that elements referenced in the plan actually exist. It writes locators based on the live page state rather than guessing, and outputs complete Playwright test files using <span class="inline-code">generator_write_test</span>. The generated code includes proper test structure, assertions, and page interactions.</p>
+<p><strong>Q4: Explain the Healer agent's workflow when it encounters a failing test.</strong></p>
+<p>A4: The Healer first uses <span class="inline-code">test_list</span> to identify available tests, then runs the failing test with <span class="inline-code">test_run</span> to capture the error output. It analyzes the error message and stack trace to form a hypothesis about the root cause. It then navigates to the application with browser tools to observe the actual page state and compare it with the test's expectations. Finally, it applies a fix using <span class="inline-code">edit</span> and re-runs the test to verify the fix works. If the fix fails, it iterates with a different approach.</p>
+<p><strong>Q5: What is the file format for Playwright agent definitions?</strong></p>
+<p>A5: Playwright agents are defined as Markdown files with YAML frontmatter. The frontmatter contains metadata like <span class="inline-code">name</span>, <span class="inline-code">description</span>, <span class="inline-code">model</span>, <span class="inline-code">color</span>, and a <span class="inline-code">tools</span> array listing the tools the agent can use. The Markdown body below the frontmatter contains the agent's system prompt, which defines its role, workflow, constraints, and output format. These files are stored in <span class="inline-code">node_modules/playwright/lib/agents/</span>.</p>
+<p><strong>Q6: What fields are in the YAML frontmatter of an agent file?</strong></p>
+<p>A6: The YAML frontmatter includes <span class="inline-code">name</span> (unique identifier for the agent), <span class="inline-code">description</span> (human-readable summary of the agent's purpose), <span class="inline-code">model</span> (which LLM model to use, such as sonnet), <span class="inline-code">color</span> (hex color code for UI display), and <span class="inline-code">tools</span> (an array of tool names the agent is allowed to call). These fields configure the agent's identity, capabilities, and appearance without modifying the prompt logic.</p>
+<p><strong>Q7: What tools are available to all three Playwright agents?</strong></p>
+<p>A7: All three agents share a common set of browser interaction tools including <span class="inline-code">browser_navigate</span>, <span class="inline-code">browser_snapshot</span>, <span class="inline-code">browser_click</span>, <span class="inline-code">browser_type</span>, <span class="inline-code">browser_fill_form</span>, <span class="inline-code">browser_select_option</span>, <span class="inline-code">browser_hover</span>, <span class="inline-code">browser_press_key</span>, <span class="inline-code">browser_take_screenshot</span>, <span class="inline-code">browser_tabs</span>, <span class="inline-code">browser_navigate_back</span>, and <span class="inline-code">browser_wait_for</span>. These shared tools allow every agent to navigate and interact with web pages regardless of its specific role.</p>
+<p><strong>Q8: What does the <span class="inline-code">planner_setup_page</span> tool do?</strong></p>
+<p>A8: The <span class="inline-code">planner_setup_page</span> tool opens a browser instance and navigates to the target URL that the planner needs to explore. It initializes the browser context with appropriate settings and loads the page so the planner can begin taking snapshots and interacting with elements. This tool is exclusive to the planner because only the planner needs to explore pages from scratch to create test plans.</p>
+<p><strong>Q9: What is <span class="inline-code">generator_read_log</span> and why is it important?</strong></p>
+<p>A9: <span class="inline-code">generator_read_log</span> allows the generator agent to read test plans, seed test files, or other input documents that define what tests to create. It is important because the generator should not invent test scenarios on its own; it should follow a plan created by the planner or provided by the user. By reading the plan first, the generator ensures its output aligns with the intended test coverage and follows established patterns from seed files.</p>
+<p><strong>Q10: What makes <span class="inline-code">browser_generate_locator</span> unique to the Healer?</strong></p>
+<p>A10: <span class="inline-code">browser_generate_locator</span> navigates to the live application and generates a new, resilient locator for a specific element whose original selector has broken. It is unique to the healer because only the healer deals with broken locators that need replacement. The tool uses the current page state to produce locators using Playwright best practices (getByRole, getByText, getByTestId), ensuring the replacement locator is more resilient than the one that broke.</p>
+<p><strong>Q11: What happens when the Healer cannot fix a test?</strong></p>
+<p>A11: When the healer exhausts its repair strategies and cannot make a test pass, it annotates the test with <span class="inline-code">test.fixme()</span>. This Playwright annotation skips the test in future runs while clearly signaling that it needs manual attention. This approach is preferable to deleting the test (which loses the test logic) or leaving it broken (which creates noise in test reports). The <span class="inline-code">test.fixme()</span> marker preserves the test for future repair while keeping the suite green.</p>
+<p><strong>Q12: What does the <span class="inline-code">model</span> field in the agent YAML frontmatter control?</strong></p>
+<p>A12: The <span class="inline-code">model</span> field specifies which LLM model the agent should use for reasoning and decision-making. Common values include <span class="inline-code">sonnet</span> (balanced speed and quality), <span class="inline-code">opus</span> (highest quality but slower), and <span class="inline-code">haiku</span> (fastest and cheapest). The choice of model affects the agent's reasoning capability, cost, and speed. Complex agents like the healer might benefit from a more capable model, while simpler tasks might use a faster, cheaper model.</p>
+<p><strong>Q13: How do Playwright agents explore web applications?</strong></p>
+<p>A13: Agents explore applications by alternating between <span class="inline-code">browser_snapshot</span> (which takes an accessibility tree snapshot of the page) and interaction tools like <span class="inline-code">browser_click</span> and <span class="inline-code">browser_type</span>. The snapshot provides a structured representation of all elements on the page, including their roles, names, and states. The agent reads this snapshot, identifies interactive elements, clicks or interacts with them, and takes another snapshot to observe the resulting state change. This observe-act cycle continues until the agent has explored all relevant functionality.</p>
+<p><strong>Q14: How does the Generator verify elements before generating test code?</strong></p>
+<p>A14: The generator uses <span class="inline-code">generator_setup_page</span> to open the actual target page in a browser, then takes snapshots to see the real elements present on the page. Before writing a locator in the test code, it checks that the element exists in the snapshot and determines the best locator strategy. This verification step prevents the generator from writing tests with locators for elements that do not exist, which would immediately fail when run.</p>
+<p><strong>Q15: What are seed files and how does the Generator use them?</strong></p>
+<p>A15: Seed files are existing test files in the project that serve as examples of the team's coding style, locator conventions, and test structure. The generator reads these files via <span class="inline-code">generator_read_log</span> and uses them as templates for the new tests it creates. This ensures consistency: the generated code follows the same patterns, naming conventions, and assertion styles used in the existing test suite, making the output feel like a natural extension of the codebase rather than foreign AI-generated code.</p>
+<p><strong>Q16: What quality standards does the Planner enforce in its test plans?</strong></p>
+<p>A16: The planner ensures each test plan includes clearly defined scenarios with descriptive names, step-by-step actions, expected results with specific assertions, coverage of both happy paths and edge cases, and identification of all interactive elements on the page. It structures the plan in a format that the generator can directly consume, with enough detail that each scenario can be unambiguously translated into test code. The planner also considers page state management and test independence.</p>
+<p><strong>Q17: How does the Healer perform root cause analysis?</strong></p>
+<p>A17: The healer performs root cause analysis by first parsing the error message and stack trace to understand what failed and where. It then navigates to the application to observe the current state, comparing it with what the test expected. It distinguishes between several failure categories: wrong assertion values (the page changed), broken locators (elements were renamed or restructured), missing elements (features were removed), and timing issues (elements load asynchronously). This diagnosis determines which fix strategy to apply.</p>
+<p><strong>Q18: What output formats do the three agents produce?</strong></p>
+<p>A18: The planner produces a structured test plan document in Markdown format with numbered scenarios, steps, and expected results. The generator produces executable <span class="inline-code">.spec.js</span> test files with proper Playwright syntax, imports, and test structure. The healer produces modified test files with fixes applied directly to the source code, or tests annotated with <span class="inline-code">test.fixme()</span> when automatic repair is not possible. Each agent's output is designed to be consumable by the next stage in the pipeline.</p>
+<p><strong>Q19: How do you run Playwright agents with Claude Code?</strong></p>
+<p>A19: You run Playwright agents by launching Claude Code in your project directory (by running <span class="inline-code">claude</span> in the terminal) and then asking Claude to use a specific agent in your prompt. For example: "Use the Playwright planner agent to plan tests for [URL]" or "Use the Playwright healer agent to fix failing tests in [file]." Claude Code recognizes these agent references and loads the corresponding agent file from <span class="inline-code">node_modules/playwright/lib/agents/</span>, adopting its role, tools, and workflow.</p>
+<p><strong>Q20: How do Playwright's built-in agents compare to commercial AI testing tools?</strong></p>
+<p>A20: Playwright's agents are open-source, integrated directly into the Playwright framework, and powered by general-purpose LLMs through Claude Code. Commercial tools like Testim, Mabl, or Functionize offer proprietary AI models trained specifically for testing, cloud-based execution, visual testing, and dedicated support. Playwright's agents offer more flexibility and transparency (you can read and modify the agent prompts), while commercial tools offer more polished UX and out-of-the-box CI/CD integration. The cost model also differs: Playwright agents charge per LLM token usage, while commercial tools charge subscription fees.</p>
+</div>
+<div class="topic" id="03-agentic-testing-interview-qa">
+<span class="badge badge-interview">Interview Questions</span>
+<h2>Agentic Testing Interview QA</h2>
+<h2>Agentic Testing - Interview Questions & Answers</h2>
+<p><strong>Q1: What is agentic testing?</strong></p>
+<p>A1: Agentic testing is an approach to software testing where AI agents autonomously plan, create, execute, and maintain automated tests. Unlike traditional automation where humans write every test script, agentic testing uses LLM-powered agents that can explore applications, generate test code, and self-heal broken tests. The human role shifts from writing tests to reviewing agent output, setting quality standards, and handling edge cases the agents cannot resolve.</p>
+<p><strong>Q2: What are self-healing tests and how do they work?</strong></p>
+<p>A2: Self-healing tests automatically detect when they fail due to application changes and repair themselves without manual intervention. They work by analyzing the failure (wrong selector, changed text, moved element), navigating to the live application to observe its current state, generating a corrected locator or assertion, and verifying the fix by re-running the test. The key enabler is AI reasoning: the healer understands why the test broke and what the correct fix should be, rather than blindly retrying.</p>
+<p><strong>Q3: How does AI-generated test maintenance differ from manual test maintenance?</strong></p>
+<p>A3: Manual test maintenance requires a QA engineer to read failure reports, identify root causes, understand the application change, and update test code. This is time-consuming and scales poorly with large test suites. AI-generated maintenance automates the diagnosis and repair cycle, handling routine breakage (selector changes, text updates) in seconds rather than hours. However, AI maintenance struggles with business logic changes and requires human review for correctness, making it a complement to rather than a replacement for human maintenance.</p>
+<p><strong>Q4: How does agentic testing compare to record-and-playback tools?</strong></p>
+<p>A4: Record-and-playback tools capture user interactions and replay them as tests, producing brittle scripts tied to exact element positions and attributes. Agentic testing uses AI reasoning to understand the purpose of interactions and generate more resilient tests with semantic locators and meaningful assertions. Record-and-playback requires manual cleanup of generated code, while agentic testing produces cleaner output by understanding testing best practices. However, record-and-playback is deterministic and free, while agentic testing is non-deterministic and incurs LLM costs.</p>
+<p><strong>Q5: What role does prompt engineering play in agentic testing?</strong></p>
+<p>A5: Prompt engineering is critical because the quality of agent output directly depends on the instructions and context provided. Well-crafted prompts specify the target URL, testing scope, expected locator strategies, assertion types, and output format. Poor prompts lead to vague test plans, brittle locators, and missing edge cases. QA engineers who master prompt engineering can get significantly better results from the same agents, making it an essential skill for agentic testing adoption.</p>
+<p><strong>Q6: What are the cost implications of AI-powered testing?</strong></p>
+<p>A6: AI-powered testing incurs costs for every LLM API call, with costs scaling by model size and context length. A single agent run can make dozens of LLM calls, each processing thousands of tokens (especially when browser snapshots are included). For a large test suite, daily healing runs could cost hundreds of dollars monthly. Teams must balance model capability against cost: use cheaper models for routine tasks and reserve expensive models for complex reasoning. Token budgets and caching strategies help control spending.</p>
+<p><strong>Q7: How reliable are AI-generated tests compared to human-written tests?</strong></p>
+<p>A7: AI-generated tests are generally reliable for straightforward interactions (clicking buttons, filling forms, verifying text) but less reliable for complex business logic, multi-step workflows, and edge cases that require domain knowledge. Studies show AI-generated tests achieve 70-85% first-run pass rates, with most failures due to timing issues or incorrect locators rather than fundamental logic errors. The best approach is to use AI generation as a starting point and apply human review for production readiness.</p>
+<p><strong>Q8: How can agentic testing be integrated into CI/CD pipelines?</strong></p>
+<p>A8: Integration involves several strategies: running the healer agent as a post-failure step that automatically attempts to fix broken tests before notifying the team, using the planner and generator in a nightly job to create tests for newly deployed features, and setting up guardrails (cost limits, time limits, approval gates) to prevent runaway agent execution. The agent output (fixed files, new tests) can be committed to a branch for human review before merging, maintaining quality control while automating the bulk of the work.</p>
+<p><strong>Q9: What is a hybrid human-AI testing approach?</strong></p>
+<p>A9: A hybrid approach divides testing responsibilities between AI agents and human testers based on their strengths. AI handles repetitive, high-volume tasks: generating boilerplate tests, maintaining selectors, running exploratory scans across pages. Humans handle tasks requiring judgment: defining test strategies, reviewing generated code, testing complex business workflows, and making decisions about edge cases. This approach maximizes efficiency while maintaining the critical thinking that pure AI testing lacks.</p>
+<p><strong>Q10: Can AI agents perform visual testing?</strong></p>
+<p>A10: AI agents can perform basic visual testing by taking screenshots and using multimodal LLMs to analyze them for obvious issues (missing elements, broken layouts, overlapping text). However, they are not as precise as dedicated visual testing tools like Percy or Applitools, which use pixel-level comparison with configurable thresholds. AI visual testing is better for exploratory checks ("does this page look right?") while dedicated tools are better for regression detection ("did anything change from the baseline?").</p>
+<p><strong>Q11: How can AI agents be used for API testing?</strong></p>
+<p>A11: AI agents can generate API tests by reading API documentation or OpenAPI/Swagger specifications, then producing test code that covers endpoint validation, request/response schema checks, error handling, and boundary conditions. They can also explore APIs dynamically by making calls and observing responses. However, API testing often requires understanding of business rules, authentication flows, and data dependencies that agents may not fully grasp without extensive context. Agents work best for generating boilerplate API test structure that humans then refine.</p>
+<p><strong>Q12: How does AI assist with test planning and test strategy?</strong></p>
+<p>A12: AI agents can analyze an application's pages, identify testable elements and user flows, and generate comprehensive test plans that a human might take hours to produce. They excel at systematic coverage: listing every interactive element, considering standard edge cases (empty inputs, special characters, boundary values), and organizing scenarios logically. The limitation is strategic thinking: AI plans tend to be thorough but generic, while human-created plans incorporate business priorities, risk assessment, and domain-specific knowledge.</p>
+<p><strong>Q13: What are the common coverage gaps in AI-generated tests?</strong></p>
+<p>A13: AI-generated tests commonly miss: business rule validation (the agent does not know your domain rules), cross-feature interactions (testing checkout requires understanding inventory), non-functional requirements (performance, accessibility beyond basic checks), error recovery flows (what happens after a network timeout?), and stateful scenarios (tests that depend on specific database state). These gaps occur because the agent's knowledge is limited to what it can observe on the page and what is provided in the prompt.</p>
+<p><strong>Q14: How does model selection affect testing agent performance?</strong></p>
+<p>A14: Larger, more capable models (like Opus) produce more accurate test plans, better locators, and more reliable healing, but cost more and run slower. Smaller models (like Haiku) are faster and cheaper but may miss edge cases, produce brittle locators, or fail to diagnose complex test failures. The optimal strategy is to match model size to task complexity: use smaller models for routine generation and maintenance, and reserve larger models for planning complex test suites or healing difficult failures.</p>
+<p><strong>Q15: When should you NOT use AI agents for testing?</strong></p>
+<p>A15: Avoid AI agents for: safety-critical systems where test correctness must be formally verified, compliance testing that requires auditable human sign-off, performance and load testing (agents add overhead and non-determinism), tests involving sensitive data (LLM calls may transmit data to external APIs), and situations where the cost of LLM usage exceeds the time saved. Also avoid agents when your team lacks the expertise to review AI-generated code, as unreviewed agent output can introduce subtle bugs.</p>
+<p><strong>Q16: What regulatory and compliance concerns exist around AI-generated tests?</strong></p>
+<p>A16: Regulated industries (healthcare, finance, aviation) often require documented evidence that tests were created and reviewed by qualified humans. AI-generated tests raise questions about accountability (who is responsible when an AI-generated test misses a defect?), auditability (can you trace the reasoning behind each test?), and data privacy (do browser snapshots sent to LLM APIs contain sensitive user data?). Teams in regulated environments typically use AI agents for drafting tests but require formal human review and approval before the tests are considered valid.</p>
+<p><strong>Q17: How should QA teams be trained to work with AI testing tools?</strong></p>
+<p>A17: Training should cover three areas: prompt engineering (how to communicate effectively with agents), output review (how to evaluate AI-generated tests for correctness and completeness), and tool integration (how to set up and run agents in the development workflow). Teams should start with supervised use where every agent output is reviewed, then gradually increase autonomy as confidence grows. Training should emphasize that AI is a tool to augment their expertise, not replace it, and that human judgment remains essential for test strategy and quality assurance.</p>
+<p><strong>Q18: How do you measure the ROI of AI-powered testing?</strong></p>
+<p>A18: Measure ROI by comparing the cost of AI testing (LLM API fees, setup time, review time) against the cost of manual testing (engineer hours for test creation, maintenance, and debugging). Key metrics include: time saved per test created, time saved per test healed, reduction in test maintenance backlog, test coverage improvement, and defect detection rate. Most teams see the highest ROI in maintenance (healing broken tests) rather than creation, because maintenance is repetitive and scales linearly with suite size.</p>
+<p><strong>Q19: How will AI agents affect the future of QA careers?</strong></p>
+<p>A19: AI agents will shift QA roles from manual test writing toward test strategy, agent supervision, and quality architecture. QA engineers will need skills in prompt engineering, AI output evaluation, and understanding LLM capabilities and limitations. Junior-level tasks (writing simple test scripts, updating selectors) will be increasingly automated, while senior-level tasks (designing test architectures, defining quality standards, handling complex edge cases) will grow in importance. The career path evolves from "test writer" to "test strategist and AI supervisor."</p>
+<p><strong>Q20: What are the challenges of scaling agentic testing across a large organization?</strong></p>
+<p>A20: Scaling challenges include: cost management (hundreds of developers using LLM-powered agents can quickly become expensive), consistency (different teams may get different quality results depending on their prompts), governance (ensuring AI-generated tests meet organizational standards), infrastructure (providing agent access to staging environments, test data, and CI/CD systems), and cultural adoption (convincing experienced QA engineers to trust and supervise AI output rather than writing tests manually). Successful scaling requires centralized prompt templates, cost monitoring, quality gates, and a dedicated team to manage the AI testing platform.</p>
+</div>
+<div class="footer">PPTP Tutorial - Playwright Learning Batch</div>
+  </main>
+  <script>
+    // Highlight active sidebar link on scroll
+    const links = document.querySelectorAll('.sidebar a');
+    const topics = document.querySelectorAll('.topic');
+    window.addEventListener('scroll', () => {
+      let current = '';
+      topics.forEach(topic => {
+        const top = topic.offsetTop - 100;
+        if (window.scrollY >= top) current = topic.id;
+      });
+      links.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === '#' + current) link.classList.add('active');
+      });
+    });
+    // Smooth scroll
+    links.forEach(link => {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        const id = link.getAttribute('href').substring(1);
+        document.getElementById(id).scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+  </script>
+</body>
+</html>

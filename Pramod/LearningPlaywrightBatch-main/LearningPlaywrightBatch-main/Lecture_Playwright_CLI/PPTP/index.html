@@ -1,0 +1,4482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Playwright CLI - PPTP Tutorial</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; display: flex; min-height: 100vh; background: #f5f5f5; }
+    .sidebar { width: 280px; background: #1a1a2e; color: #e0e0e0; position: fixed; top: 0; left: 0; height: 100vh; overflow-y: auto; padding: 20px 0; z-index: 10; }
+    .sidebar h2 { padding: 10px 20px 20px; font-size: 18px; color: #fff; border-bottom: 1px solid #333; margin-bottom: 10px; }
+    .sidebar a { display: block; padding: 10px 20px; color: #b0b0c0; text-decoration: none; font-size: 14px; border-left: 3px solid transparent; transition: all 0.2s; }
+    .sidebar a:hover, .sidebar a.active { background: #16213e; color: #64ffda; border-left-color: #64ffda; }
+    .sidebar .section-label { padding: 15px 20px 5px; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #666; }
+    .main { margin-left: 280px; padding: 40px; flex: 1; max-width: 900px; }
+    .main h1 { font-size: 28px; color: #1a1a2e; margin-bottom: 10px; }
+    .main .subtitle { color: #666; margin-bottom: 30px; font-size: 16px; }
+    .topic { background: #fff; border-radius: 8px; padding: 30px; margin-bottom: 30px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    .topic h2 { font-size: 22px; color: #1a1a2e; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #64ffda; }
+    .topic h3 { font-size: 18px; color: #333; margin: 20px 0 10px; }
+    .topic p { line-height: 1.8; color: #444; margin-bottom: 15px; }
+    .topic ul, .topic ol { margin: 10px 0 15px 20px; line-height: 1.8; color: #444; }
+    .topic table { width: 100%; border-collapse: collapse; margin: 15px 0; }
+    .topic th, .topic td { padding: 10px 12px; border: 1px solid #e0e0e0; text-align: left; }
+    .topic th { background: #f0f0f0; font-weight: 600; }
+    .topic tr:nth-child(even) { background: #fafafa; }
+    .topic a { color: #1565c0; text-decoration: none; }
+    .topic a:hover { text-decoration: underline; }
+    pre { background: #1e1e1e; color: #d4d4d4; padding: 20px; border-radius: 6px; overflow-x: auto; margin: 15px 0; font-size: 14px; line-height: 1.6; }
+    code { font-family: 'Fira Code', 'Consolas', monospace; }
+    .inline-code { background: #e8e8e8; padding: 2px 6px; border-radius: 3px; font-size: 13px; color: #d63384; }
+    .badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; margin-right: 5px; }
+    .badge-learning { background: #e8f5e9; color: #2e7d32; }
+    .badge-exercise { background: #fff3e0; color: #e65100; }
+    .badge-interview { background: #fce4ec; color: #c62828; }
+    .badge-note { background: #e3f2fd; color: #1565c0; }
+    .footer { text-align: center; padding: 30px; color: #999; font-size: 13px; }
+    @media (max-width: 768px) {
+      .sidebar { width: 100%; height: auto; position: relative; }
+      .main { margin-left: 0; }
+      body { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="sidebar">
+    <h2>Playwright CLI</h2>
+<div class="section-label">Learning</div>
+<a href="#01-playwright-cli-overview">Playwright CLI Overview</a>
+<a href="#02-running-tests">Running Tests</a>
+<a href="#03-codegen-recording-tests">Codegen Recording Tests</a>
+<a href="#04-html-reports">HTML Reports</a>
+<a href="#05-ui-mode">UI Mode</a>
+<a href="#06-debug-mode">Debug Mode</a>
+<a href="#07-trace-viewer">Trace Viewer</a>
+<a href="#08-browser-management">Browser Management</a>
+<a href="#09-config-vs-cli-flags">Config vs CLI Flags</a>
+<a href="#10-ci-cd-integration">CI CD Integration</a>
+<div class="section-label">Exercises</div>
+<a href="#01-basic-cli-exercise">Basic CLI Exercise</a>
+<a href="#02-codegen-exercise">Codegen Exercise</a>
+<a href="#03-debug-trace-exercise">Debug Trace Exercise</a>
+<a href="#04-config-flags-exercise">Config Flags Exercise</a>
+<a href="#05-cli-toolkit-mini-project">CLI Toolkit Mini Project</a>
+<div class="section-label">Notes</div>
+<a href="#ci-cd-pipeline-notes">CI CD Pipeline Notes</a>
+<a href="#cli-quick-reference">CLI Quick Reference</a>
+<a href="#config-file-reference">Config File Reference</a>
+<a href="#playwright-cli-flags">Playwright CLI Flags</a>
+<div class="section-label">Interview Questions</div>
+<a href="#01-cli-basics-interview-qa">CLI Basics Interview QA</a>
+<a href="#02-debug-trace-interview-qa">Debug Trace Interview QA</a>
+<a href="#03-ci-cd-interview-qa">CI CD Interview QA</a>
+
+  </nav>
+  <main class="main">
+    <h1>Playwright CLI</h1>
+<div class="subtitle">Command-Line Interface - Testing, Debugging, Reporting, and CI/CD Integration</div>
+<div class="topic" id="01-playwright-cli-overview">
+<span class="badge badge-learning">Learning</span>
+<h2>Playwright CLI Overview</h2>
+<h2>Playwright CLI Overview</h2>
+<h3>What is the Playwright CLI?</h3>
+<p>The Playwright CLI is the command-line interface provided by the <span class="inline-code">@playwright/test</span> package. It is the primary way to run tests, generate test code, view reports, debug, and manage browsers -- all from the terminal.</p>
+<p>The general syntax is:</p>
+<pre><code>npx playwright &lt;command&gt; [options]</code></pre>
+<p><span class="inline-code">npx</span> runs the locally installed Playwright binary from <span class="inline-code">node_modules/.bin/</span>.</p>
+<h3>Complete Playwright CLI Commands</h3>
+<table>
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+<tr>
+<td><span class="inline-code">npx playwright test</span></td>
+<td>Run all tests (or filtered subset)</td>
+</tr>
+<tr>
+<td><span class="inline-code">npx playwright codegen</span></td>
+<td>Open a browser and record actions to generate test code</td>
+</tr>
+<tr>
+<td><span class="inline-code">npx playwright show-report</span></td>
+<td>Open the HTML test report in a browser</td>
+</tr>
+<tr>
+<td><span class="inline-code">npx playwright show-trace</span></td>
+<td>Open the Trace Viewer for a <span class="inline-code">.zip</span> trace file</td>
+</tr>
+<tr>
+<td><span class="inline-code">npx playwright install</span></td>
+<td>Download and install browser binaries</td>
+</tr>
+<tr>
+<td><span class="inline-code">npx playwright test --ui</span></td>
+<td>Launch the interactive UI mode test runner</td>
+</tr>
+<tr>
+<td><span class="inline-code">npx playwright test --debug</span></td>
+<td>Run tests with the Playwright Inspector debugger</td>
+</tr>
+<tr>
+<td><span class="inline-code">npx playwright open</span></td>
+<td>Open a browser window for manual exploration</td>
+</tr>
+<tr>
+<td><span class="inline-code">npx playwright screenshot</span></td>
+<td>Capture a screenshot of a URL</td>
+</tr>
+<tr>
+<td><span class="inline-code">npx playwright pdf</span></td>
+<td>Generate a PDF from a URL (Chromium only)</td>
+</tr>
+</table>
+<h3>How the CLI is Structured</h3>
+<pre><code>npx playwright &lt;command&gt; [subcommand] [options] [arguments]</code></pre>
+<p><strong>Examples:</strong></p>
+<pre><code># command = test, options = --headed --workers 2
+npx playwright test --headed --workers 2
+
+# command = codegen, argument = URL
+npx playwright codegen https://example.com
+
+# command = install, argument = browser name
+npx playwright install chromium</code></pre>
+<h3>Getting Help</h3>
+<p>Every command supports the <span class="inline-code">--help</span> flag to display usage information:</p>
+<pre><code># General help
+npx playwright --help
+
+# Help for the test command
+npx playwright test --help
+
+# Help for codegen
+npx playwright codegen --help
+
+# Help for install
+npx playwright install --help</code></pre>
+<p>The <span class="inline-code">--help</span> output lists every available flag, its default value, and a brief description.</p>
+<h3>CLI vs Programmatic API vs Config File</h3>
+<table>
+<tr>
+<th>Aspect</th>
+<th>CLI Flags</th>
+<th>Config File (<span class="inline-code">playwright.config.js</span>)</th>
+<th>Programmatic API</th>
+</tr>
+<tr>
+<td><strong>Purpose</strong></td>
+<td>One-off overrides, running commands</td>
+<td>Persistent project settings</td>
+<td>Custom scripts, not using test runner</td>
+</tr>
+<tr>
+<td><strong>Syntax</strong></td>
+<td><span class="inline-code">--flag value</span></td>
+<td><span class="inline-code">export default { ... }</span></td>
+<td><span class="inline-code">const browser = await chromium.launch()</span></td>
+</tr>
+<tr>
+<td><strong>Scope</strong></td>
+<td>Current run only</td>
+<td>Every run unless overridden</td>
+<td>Standalone Node.js scripts</td>
+</tr>
+<tr>
+<td><strong>Examples</strong></td>
+<td><span class="inline-code">--workers 1</span>, <span class="inline-code">--headed</span></td>
+<td><span class="inline-code">workers: 4</span>, <span class="inline-code">use: { headless: false }</span></td>
+<td><span class="inline-code">page.goto()</span>, <span class="inline-code">page.click()</span></td>
+</tr>
+<tr>
+<td><strong>Precedence</strong></td>
+<td>Highest (overrides config)</td>
+<td>Base settings</td>
+<td>N/A (different usage)</td>
+</tr>
+<tr>
+<td><strong>Best for</strong></td>
+<td>CI tweaks, quick debugging</td>
+<td>Team-shared defaults</td>
+<td>Scraping, automation outside testing</td>
+</tr>
+</table>
+<h3>Key Takeaways</h3>
+<ul>
+<li>The CLI is the entry point for all Playwright operations: testing, recording, reporting, debugging, and browser management.</li>
+<li>Use <span class="inline-code">--help</span> on any command to discover available options.</li>
+<li>CLI flags always override <span class="inline-code">playwright.config.js</span> settings for the current run.</li>
+<li>The config file is for defaults; the CLI is for overrides.</li>
+</ul>
+<h3>Quick Reference Card</h3>
+<pre><code># Run all tests
+npx playwright test
+
+# Record a new test
+npx playwright codegen https://example.com
+
+# View report
+npx playwright show-report
+
+# Debug a test
+npx playwright test --debug
+
+# Install browsers
+npx playwright install
+
+# Interactive UI
+npx playwright test --ui</code></pre>
+<h3>Next Steps</h3>
+<p>Continue to <a href="./02_Running_Tests.md" target="_blank">02_Running_Tests.md</a> to learn every flag available for <span class="inline-code">npx playwright test</span>.</p>
+</div>
+<div class="topic" id="02-running-tests">
+<span class="badge badge-learning">Learning</span>
+<h2>Running Tests</h2>
+<h2>Running Tests - npx playwright test</h2>
+<h3>Basic Usage</h3>
+<pre><code># Run all tests found by the config&#x27;s testDir
+npx playwright test
+
+# Run a single test file
+npx playwright test tests/01_homepage.spec.js
+
+# Run multiple specific files
+npx playwright test tests/login.spec.js tests/signup.spec.js
+
+# Run all tests in a directory
+npx playwright test tests/smoke/</code></pre>
+<h3>Complete CLI Flags Reference</h3>
+<table>
+<tr>
+<th>Flag</th>
+<th>Example</th>
+<th>Description</th>
+</tr>
+<tr>
+<td><span class="inline-code">--headed</span></td>
+<td><span class="inline-code">npx playwright test --headed</span></td>
+<td>Run browsers in headed (visible) mode</td>
+</tr>
+<tr>
+<td><span class="inline-code">--grep</span></td>
+<td><span class="inline-code">--grep "Login"</span></td>
+<td>Only run tests matching this regex in the title</td>
+</tr>
+<tr>
+<td><span class="inline-code">--grep-invert</span></td>
+<td><span class="inline-code">--grep-invert "SKIP"</span></td>
+<td>Exclude tests matching this regex</td>
+</tr>
+<tr>
+<td><span class="inline-code">--workers</span></td>
+<td><span class="inline-code">--workers 4</span></td>
+<td>Number of parallel worker processes</td>
+</tr>
+<tr>
+<td><span class="inline-code">--retries</span></td>
+<td><span class="inline-code">--retries 2</span></td>
+<td>Retry failed tests up to N times</td>
+</tr>
+<tr>
+<td><span class="inline-code">--repeat-each</span></td>
+<td><span class="inline-code">--repeat-each 3</span></td>
+<td>Run each test N times (useful for flake detection)</td>
+</tr>
+<tr>
+<td><span class="inline-code">--timeout</span></td>
+<td><span class="inline-code">--timeout 60000</span></td>
+<td>Test timeout in milliseconds</td>
+</tr>
+<tr>
+<td><span class="inline-code">--project</span></td>
+<td><span class="inline-code">--project chromium</span></td>
+<td>Run only the specified project(s)</td>
+</tr>
+<tr>
+<td><span class="inline-code">--shard</span></td>
+<td><span class="inline-code">--shard 1/3</span></td>
+<td>Run shard N of M (for CI parallelism)</td>
+</tr>
+<tr>
+<td><span class="inline-code">--reporter</span></td>
+<td><span class="inline-code">--reporter html</span></td>
+<td>Override the reporter</td>
+</tr>
+<tr>
+<td><span class="inline-code">--output</span></td>
+<td><span class="inline-code">--output results/</span></td>
+<td>Directory for test artifacts</td>
+</tr>
+<tr>
+<td><span class="inline-code">--config</span></td>
+<td><span class="inline-code">--config staging.config.js</span></td>
+<td>Use a custom config file</td>
+</tr>
+<tr>
+<td><span class="inline-code">--forbid-only</span></td>
+<td><span class="inline-code">--forbid-only</span></td>
+<td>Fail if <span class="inline-code">test.only</span> is found (CI safety)</td>
+</tr>
+<tr>
+<td><span class="inline-code">--global-timeout</span></td>
+<td><span class="inline-code">--global-timeout 600000</span></td>
+<td>Total timeout for the entire test run</td>
+</tr>
+<tr>
+<td><span class="inline-code">--max-failures</span></td>
+<td><span class="inline-code">--max-failures 5</span></td>
+<td>Stop after N test failures</td>
+</tr>
+<tr>
+<td><span class="inline-code">--list</span></td>
+<td><span class="inline-code">--list</span></td>
+<td>List all tests without running them</td>
+</tr>
+<tr>
+<td><span class="inline-code">--pass-with-no-tests</span></td>
+<td><span class="inline-code">--pass-with-no-tests</span></td>
+<td>Exit 0 even when no tests are found</td>
+</tr>
+<tr>
+<td><span class="inline-code">--update-snapshots</span></td>
+<td><span class="inline-code">--update-snapshots</span></td>
+<td>Update visual comparison baselines</td>
+</tr>
+<tr>
+<td><span class="inline-code">--trace</span></td>
+<td><span class="inline-code">--trace on</span></td>
+<td>Override trace recording setting</td>
+</tr>
+<tr>
+<td><span class="inline-code">--fully-parallel</span></td>
+<td><span class="inline-code">--fully-parallel</span></td>
+<td>Run all tests in parallel (ignore serial)</td>
+</tr>
+<tr>
+<td><span class="inline-code">--quiet</span></td>
+<td><span class="inline-code">--quiet</span></td>
+<td>Suppress stdout from reporters</td>
+</tr>
+<tr>
+<td><span class="inline-code">--last-failed</span></td>
+<td><span class="inline-code">--last-failed</span></td>
+<td>Re-run only previously failed tests</td>
+</tr>
+</table>
+<h3>Filtering Tests</h3>
+<h3>By file name or path</h3>
+<pre><code>npx playwright test login
+npx playwright test tests/smoke/</code></pre>
+<p>Playwright matches the argument as a substring against file paths.</p>
+<h3>By test title (grep)</h3>
+<pre><code># Run tests whose title contains &quot;Login&quot;
+npx playwright test --grep &quot;Login&quot;
+
+# Run tests matching a regex
+npx playwright test --grep &quot;Login|Signup&quot;
+
+# Exclude tests matching a pattern
+npx playwright test --grep-invert &quot;FAIL&quot;</code></pre>
+<h3>By project</h3>
+<pre><code>npx playwright test --project chromium
+npx playwright test --project chromium --project firefox</code></pre>
+<h3>Parallelism and Workers</h3>
+<pre><code># Use 4 parallel workers
+npx playwright test --workers 4
+
+# Run tests sequentially (useful for debugging)
+npx playwright test --workers 1
+
+# Use 50% of available CPU cores
+npx playwright test --workers 50%</code></pre>
+<h3>Retries and Repetition</h3>
+<pre><code># Retry each failed test up to 2 times
+npx playwright test --retries 2
+
+# Run every test 3 times (detect flaky tests)
+npx playwright test --repeat-each 3
+
+# Combine: run each test 5 times, retry failures twice
+npx playwright test --repeat-each 5 --retries 2</code></pre>
+<h3>Reporters</h3>
+<pre><code>npx playwright test --reporter list      # Line-by-line results
+npx playwright test --reporter dot       # Minimal dot output
+npx playwright test --reporter html      # Generate HTML report
+npx playwright test --reporter json      # JSON output
+npx playwright test --reporter junit     # JUnit XML
+npx playwright test --reporter line      # One line per test</code></pre>
+<p>Multiple reporters can be configured in <span class="inline-code">playwright.config.js</span> but not stacked via CLI flags.</p>
+<h3>Timeouts</h3>
+<pre><code># Per-test timeout (30 seconds)
+npx playwright test --timeout 30000
+
+# Global timeout for the entire suite (10 minutes)
+npx playwright test --global-timeout 600000</code></pre>
+<h3>Sharding for CI</h3>
+<pre><code># Split tests into 3 shards and run the first shard
+npx playwright test --shard 1/3
+
+# Second shard
+npx playwright test --shard 2/3
+
+# Third shard
+npx playwright test --shard 3/3</code></pre>
+<h3>Practical Examples</h3>
+<pre><code># Quick smoke test, headed, single worker, chromium only
+npx playwright test tests/smoke/ --project chromium --headed --workers 1
+
+# CI run with retries, HTML report, fail on .only
+npx playwright test --retries 2 --reporter html --forbid-only
+
+# Debug a specific test file
+npx playwright test tests/login.spec.js --debug
+
+# List all tests without executing
+npx playwright test --list
+
+# Stop after first 3 failures
+npx playwright test --max-failures 3</code></pre>
+<h3>Next Steps</h3>
+<p>Continue to <a href="./03_Codegen_Recording_Tests.md" target="_blank">03_Codegen_Recording_Tests.md</a> to learn how to record tests using <span class="inline-code">npx playwright codegen</span>.</p>
+</div>
+<div class="topic" id="03-codegen-recording-tests">
+<span class="badge badge-learning">Learning</span>
+<h2>Codegen Recording Tests</h2>
+<h2>Codegen - Recording Tests</h2>
+<h3>What is Codegen?</h3>
+<p><span class="inline-code">npx playwright codegen</span> opens a browser window and records your interactions (clicks, typing, navigation) to automatically generate Playwright test code. It is the fastest way to scaffold a new test.</p>
+<pre><code>npx playwright codegen https://the-internet.herokuapp.com</code></pre>
+<p>This opens two windows:</p>
+<ol>
+<li><strong>Browser window</strong> -- interact with the site here</li>
+<li><strong>Playwright Inspector</strong> -- see the generated code in real time</li>
+</ol>
+<h3>Codegen CLI Options</h3>
+<table>
+<tr>
+<th>Option</th>
+<th>Example</th>
+<th>Description</th>
+</tr>
+<tr>
+<td>URL argument</td>
+<td><span class="inline-code">codegen https://example.com</span></td>
+<td>Start recording on this URL</td>
+</tr>
+<tr>
+<td><span class="inline-code">--browser</span></td>
+<td><span class="inline-code">--browser firefox</span></td>
+<td>Use a specific browser (chromium, firefox, webkit)</td>
+</tr>
+<tr>
+<td><span class="inline-code">--viewport-size</span></td>
+<td><span class="inline-code">--viewport-size 800x600</span></td>
+<td>Set viewport dimensions</td>
+</tr>
+<tr>
+<td><span class="inline-code">--color-scheme</span></td>
+<td><span class="inline-code">--color-scheme dark</span></td>
+<td>Emulate dark or light mode</td>
+</tr>
+<tr>
+<td><span class="inline-code">--device</span></td>
+<td><span class="inline-code">--device "iPhone 13"</span></td>
+<td>Emulate a device (viewport, user agent, touch)</td>
+</tr>
+<tr>
+<td><span class="inline-code">--lang</span></td>
+<td><span class="inline-code">--lang javascript</span></td>
+<td>Output language (javascript, python, java, csharp)</td>
+</tr>
+<tr>
+<td><span class="inline-code">--save-storage</span></td>
+<td><span class="inline-code">--save-storage auth.json</span></td>
+<td>Save cookies/localStorage after session</td>
+</tr>
+<tr>
+<td><span class="inline-code">--load-storage</span></td>
+<td><span class="inline-code">--load-storage auth.json</span></td>
+<td>Load saved auth state before recording</td>
+</tr>
+<tr>
+<td><span class="inline-code">--channel</span></td>
+<td><span class="inline-code">--channel chrome</span></td>
+<td>Use Chrome or Edge instead of bundled Chromium</td>
+</tr>
+<tr>
+<td><span class="inline-code">--ignore-https-errors</span></td>
+<td><span class="inline-code">--ignore-https-errors</span></td>
+<td>Ignore SSL certificate errors</td>
+</tr>
+<tr>
+<td><span class="inline-code">--timeout</span></td>
+<td><span class="inline-code">--timeout 60000</span></td>
+<td>Navigation timeout in ms</td>
+</tr>
+</table>
+<h3>Codegen Toolbar Features</h3>
+<p>When the Playwright Inspector opens, you will see a toolbar at the top:</p>
+<table>
+<tr>
+<th>Button</th>
+<th>Purpose</th>
+</tr>
+<tr>
+<td><strong>Record</strong></td>
+<td>Toggle recording on/off</td>
+</tr>
+<tr>
+<td><strong>Assert visibility</strong></td>
+<td>Click an element to generate <span class="inline-code">expect(locator).toBeVisible()</span></td>
+</tr>
+<tr>
+<td><strong>Assert text</strong></td>
+<td>Click an element to generate <span class="inline-code">expect(locator).toHaveText()</span></td>
+</tr>
+<tr>
+<td><strong>Assert value</strong></td>
+<td>Click an input to generate <span class="inline-code">expect(locator).toHaveValue()</span></td>
+</tr>
+<tr>
+<td><strong>Pick locator</strong></td>
+<td>Hover over elements to see the recommended locator</td>
+</tr>
+</table>
+<h3>Step-by-Step Walkthrough</h3>
+<h3>Step 1: Start codegen</h3>
+<pre><code>npx playwright codegen https://the-internet.herokuapp.com</code></pre>
+<h3>Step 2: Interact with the page</h3>
+<ul>
+<li>Click "Form Authentication" link</li>
+<li>Type <span class="inline-code">tomsmith</span> in the username field</li>
+<li>Type <span class="inline-code">SuperSecretPassword!</span> in the password field</li>
+<li>Click the "Login" button</li>
+</ul>
+<h3>Step 3: Add assertions</h3>
+<ul>
+<li>Click the "Assert text" toolbar button</li>
+<li>Click the success message to assert its content</li>
+</ul>
+<h3>Step 4: Copy the generated code</h3>
+<p>The Inspector window shows code like:</p>
+<pre><code>import { test, expect } from &#x27;@playwright/test&#x27;;
+
+test(&#x27;test&#x27;, async ({ page }) =&gt; {
+  await page.goto(&#x27;https://the-internet.herokuapp.com/&#x27;);
+  await page.getByRole(&#x27;link&#x27;, { name: &#x27;Form Authentication&#x27; }).click();
+  await page.getByRole(&#x27;textbox&#x27;, { name: &#x27;Username&#x27; }).fill(&#x27;tomsmith&#x27;);
+  await page.getByRole(&#x27;textbox&#x27;, { name: &#x27;Password&#x27; }).fill(&#x27;SuperSecretPassword!&#x27;);
+  await page.getByRole(&#x27;button&#x27;, { name: &#x27;Login&#x27; }).click();
+  await expect(page.getByText(&#x27;You logged into a secure area&#x27;)).toBeVisible();
+});</code></pre>
+<h3>Step 5: Save to a file</h3>
+<p>Copy and paste the code into a <span class="inline-code">.spec.js</span> file inside your <span class="inline-code">tests/</span> directory.</p>
+<h3>Device Emulation Examples</h3>
+<pre><code># iPhone 13
+npx playwright codegen --device &quot;iPhone 13&quot; https://example.com
+
+# iPad Mini
+npx playwright codegen --device &quot;iPad Mini&quot; https://example.com
+
+# Pixel 5
+npx playwright codegen --device &quot;Pixel 5&quot; https://example.com</code></pre>
+<h3>Saving and Reusing Auth State</h3>
+<pre><code># Record a login flow and save cookies
+npx playwright codegen --save-storage auth.json https://myapp.com
+
+# Use saved auth in a new codegen session (skip login)
+npx playwright codegen --load-storage auth.json https://myapp.com/dashboard</code></pre>
+<h3>When Codegen Works Well vs When Manual Coding is Better</h3>
+<table>
+<tr>
+<th>Scenario</th>
+<th>Codegen</th>
+<th>Manual Coding</th>
+</tr>
+<tr>
+<td>Simple form fills and clicks</td>
+<td>Works great</td>
+<td>Overkill</td>
+</tr>
+<tr>
+<td>Linear navigation flows</td>
+<td>Works great</td>
+<td>Overkill</td>
+</tr>
+<tr>
+<td>Dynamic content / waiting logic</td>
+<td>May need edits</td>
+<td>Better control</td>
+</tr>
+<tr>
+<td>File uploads / downloads</td>
+<td>Limited support</td>
+<td>More reliable</td>
+</tr>
+<tr>
+<td>API mocking / route interception</td>
+<td>Not supported</td>
+<td>Required</td>
+</tr>
+<tr>
+<td>Complex assertions (arrays, counts)</td>
+<td>Basic only</td>
+<td>Full flexibility</td>
+</tr>
+<tr>
+<td>Page Object Model structure</td>
+<td>Generates flat code</td>
+<td>Needed for scale</td>
+</tr>
+<tr>
+<td>Multi-tab / popup scenarios</td>
+<td>Limited</td>
+<td>Full control</td>
+</tr>
+</table>
+<p><strong>Best practice:</strong> Use codegen to get the locators and basic flow, then refactor the generated code into your test structure.</p>
+<h3>Limitations</h3>
+<ul>
+<li>Codegen generates flat, sequential code -- no Page Object Model or helpers.</li>
+<li>It cannot record API calls, mocks, or route handlers.</li>
+<li>Hover-based menus may be tricky to record.</li>
+<li>Generated locators are good but may need refinement for stability.</li>
+</ul>
+<h3>Next Steps</h3>
+<p>Continue to <a href="./04_HTML_Reports.md" target="_blank">04_HTML_Reports.md</a> to learn about viewing and configuring HTML test reports.</p>
+</div>
+<div class="topic" id="04-html-reports">
+<span class="badge badge-learning">Learning</span>
+<h2>HTML Reports</h2>
+<h2>HTML Reports - show-report</h2>
+<h3>Default HTML Reporter</h3>
+<p>When you configure the <span class="inline-code">html</span> reporter, Playwright generates a complete HTML report after each test run. The report is saved to the <span class="inline-code">playwright-report/</span> directory by default.</p>
+<pre><code>// playwright.config.js
+export default {
+  reporter: &#x27;html&#x27;,
+};</code></pre>
+<pre><code># Run tests (report is auto-generated)
+npx playwright test
+
+# Open the report in your default browser
+npx playwright show-report</code></pre>
+<h3>How the HTML Report is Generated</h3>
+<ol>
+<li>Tests run and produce results (pass, fail, skip, flaky).</li>
+<li>Playwright writes the report to <span class="inline-code">playwright-report/index.html</span>.</li>
+<li>On failure (by default), the report opens automatically.</li>
+<li>You can always open it manually with <span class="inline-code">npx playwright show-report</span>.</li>
+</ol>
+<h3>Configuring the Report Output Directory</h3>
+<pre><code>// playwright.config.js
+export default {
+  reporter: [[&#x27;html&#x27;, { outputFolder: &#x27;my-custom-report&#x27; }]],
+};</code></pre>
+<p>Then open it:</p>
+<pre><code>npx playwright show-report my-custom-report</code></pre>
+<h3>Opening Reports from Different Paths</h3>
+<pre><code># Default path
+npx playwright show-report
+
+# Custom path
+npx playwright show-report ./reports/sprint-42
+
+# Specify port
+npx playwright show-report --port 9323</code></pre>
+<h3>HTML Report Features</h3>
+<table>
+<tr>
+<th>Feature</th>
+<th>Description</th>
+</tr>
+<tr>
+<td><strong>Summary</strong></td>
+<td>Total passed, failed, flaky, skipped counts</td>
+</tr>
+<tr>
+<td><strong>Test list</strong></td>
+<td>Every test grouped by file, searchable and filterable</td>
+</tr>
+<tr>
+<td><strong>Failure details</strong></td>
+<td>Error message, stack trace, code snippet</td>
+</tr>
+<tr>
+<td><strong>Screenshots</strong></td>
+<td>Attached screenshots on failure (if configured)</td>
+</tr>
+<tr>
+<td><strong>Videos</strong></td>
+<td>Embedded video playback (if configured)</td>
+</tr>
+<tr>
+<td><strong>Traces</strong></td>
+<td>Clickable trace link that opens in Trace Viewer</td>
+</tr>
+<tr>
+<td><strong>Timing</strong></td>
+<td>Duration per test and overall run time</td>
+</tr>
+<tr>
+<td><strong>Retry info</strong></td>
+<td>Shows each retry attempt for flaky tests</td>
+</tr>
+<tr>
+<td><strong>Tags/annotations</strong></td>
+<td>Displays <span class="inline-code">@tag</span> annotations and test descriptions</td>
+</tr>
+<tr>
+<td><strong>Filter bar</strong></td>
+<td>Filter by status: passed, failed, flaky, skipped</td>
+</tr>
+</table>
+<h3>Reporter Comparison Table</h3>
+<table>
+<tr>
+<th>Reporter</th>
+<th>Output</th>
+<th>Best For</th>
+<th>CLI Flag</th>
+</tr>
+<tr>
+<td><span class="inline-code">html</span></td>
+<td>Interactive HTML page</td>
+<td>Post-run analysis, sharing</td>
+<td><span class="inline-code">--reporter html</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">list</span></td>
+<td>Line-by-line in terminal</td>
+<td>Local development</td>
+<td><span class="inline-code">--reporter list</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">dot</span></td>
+<td>Dots in terminal</td>
+<td>CI (minimal output)</td>
+<td><span class="inline-code">--reporter dot</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">line</span></td>
+<td>One line per test</td>
+<td>Compact terminal output</td>
+<td><span class="inline-code">--reporter line</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">json</span></td>
+<td>JSON file</td>
+<td>Custom tooling, dashboards</td>
+<td><span class="inline-code">--reporter json</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">junit</span></td>
+<td>XML file</td>
+<td>CI systems (Jenkins, etc.)</td>
+<td><span class="inline-code">--reporter junit</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">blob</span></td>
+<td>Binary blob</td>
+<td>Merging sharded results</td>
+<td><span class="inline-code">--reporter blob</span></td>
+</tr>
+<tr>
+<td>Custom</td>
+<td>Varies</td>
+<td>Organization-specific needs</td>
+<td>Config only</td>
+</tr>
+</table>
+<h3>Multiple Reporters</h3>
+<p>You can use multiple reporters simultaneously in the config:</p>
+<pre><code>// playwright.config.js
+export default {
+  reporter: [
+    [&#x27;list&#x27;],                                    // Terminal output
+    [&#x27;html&#x27;, { open: &#x27;never&#x27; }],                 // HTML report (don&#x27;t auto-open)
+    [&#x27;junit&#x27;, { outputFile: &#x27;results.xml&#x27; }],    // JUnit for CI
+  ],
+};</code></pre>
+<h3>Controlling Auto-Open Behavior</h3>
+<p>The <span class="inline-code">open</span> option controls when the HTML report opens automatically:</p>
+<table>
+<tr>
+<th>Value</th>
+<th>Behavior</th>
+</tr>
+<tr>
+<td><span class="inline-code">'on-failure'</span></td>
+<td>Open automatically only when tests fail (default)</td>
+</tr>
+<tr>
+<td><span class="inline-code">'always'</span></td>
+<td>Always open after test run</td>
+</tr>
+<tr>
+<td><span class="inline-code">'never'</span></td>
+<td>Never auto-open (manual <span class="inline-code">show-report</span> only)</td>
+</tr>
+</table>
+<pre><code>reporter: [[&#x27;html&#x27;, { open: &#x27;never&#x27; }]],</code></pre>
+<p>In CI, set <span class="inline-code">open: 'never'</span> or rely on the <span class="inline-code">CI</span> environment variable (Playwright auto-detects CI and disables auto-open).</p>
+<h3>Attaching Extra Information to Reports</h3>
+<pre><code>test(&#x27;example&#x27;, async ({ page }, testInfo) =&gt; {
+  // Attach a screenshot
+  const screenshot = await page.screenshot();
+  await testInfo.attach(&#x27;screenshot&#x27;, { body: screenshot, contentType: &#x27;image/png&#x27; });
+
+  // Attach arbitrary text
+  await testInfo.attach(&#x27;log&#x27;, { body: &#x27;Custom log data&#x27;, contentType: &#x27;text/plain&#x27; });
+});</code></pre>
+<p>These attachments appear in the HTML report under each test.</p>
+<h3>CI Artifact Upload (GitHub Actions)</h3>
+<pre><code>- name: Upload HTML Report
+  uses: actions/upload-artifact@v4
+  if: always()
+  with:
+    name: playwright-report
+    path: playwright-report/
+    retention-days: 14</code></pre>
+<h3>Key Takeaways</h3>
+<ul>
+<li>The HTML reporter produces a rich, interactive report with filtering, search, screenshots, and traces.</li>
+<li>Use <span class="inline-code">npx playwright show-report</span> to open it, optionally passing a custom path or port.</li>
+<li>Combine multiple reporters (e.g., <span class="inline-code">list</span> + <span class="inline-code">html</span> + <span class="inline-code">junit</span>) for both terminal output and persistent reports.</li>
+<li>In CI, upload the <span class="inline-code">playwright-report/</span> directory as an artifact.</li>
+</ul>
+<h3>Next Steps</h3>
+<p>Continue to <a href="./05_UI_Mode.md" target="_blank">05_UI_Mode.md</a> to learn about the interactive UI mode test runner.</p>
+</div>
+<div class="topic" id="05-ui-mode">
+<span class="badge badge-learning">Learning</span>
+<h2>UI Mode</h2>
+<h2>UI Mode - Interactive Test Runner</h2>
+<h3>What is UI Mode?</h3>
+<p>UI Mode is an interactive graphical test runner built into Playwright. It lets you run, watch, filter, and debug tests with a rich visual interface directly in your browser.</p>
+<pre><code>npx playwright test --ui</code></pre>
+<p>This opens a browser-based UI at <span class="inline-code">http://localhost:0</span> (random port by default).</p>
+<h3>Launching UI Mode</h3>
+<pre><code># Default launch
+npx playwright test --ui
+
+# Specify a port
+npx playwright test --ui-port 8080
+
+# Specify a host (useful in containers)
+npx playwright test --ui-host 0.0.0.0
+
+# Combine host and port
+npx playwright test --ui-port 8080 --ui-host 0.0.0.0</code></pre>
+<h3>UI Mode Interface Overview</h3>
+<p>The UI Mode window has several panels:</p>
+<table>
+<tr>
+<th>Panel</th>
+<th>Description</th>
+</tr>
+<tr>
+<td><strong>Sidebar (left)</strong></td>
+<td>File tree of all test files and individual tests</td>
+</tr>
+<tr>
+<td><strong>Action list</strong></td>
+<td>Step-by-step list of every action the test performed</td>
+</tr>
+<tr>
+<td><strong>DOM Snapshot</strong></td>
+<td>Visual snapshot of the page at each action step</td>
+</tr>
+<tr>
+<td><strong>Source tab</strong></td>
+<td>Highlights the current line in the test source code</td>
+</tr>
+<tr>
+<td><strong>Network tab</strong></td>
+<td>Shows all network requests made during the step</td>
+</tr>
+<tr>
+<td><strong>Console tab</strong></td>
+<td>Browser console messages logged during the step</td>
+</tr>
+<tr>
+<td><strong>Errors tab</strong></td>
+<td>Detailed error messages and stack traces</td>
+</tr>
+<tr>
+<td><strong>Metadata tab</strong></td>
+<td>Test duration, browser, project, and status</td>
+</tr>
+</table>
+<h3>Key Features</h3>
+<h3>1. Run Individual Tests</h3>
+<p>Click the play button next to any test or test file to run it. No need to type file paths in the terminal.</p>
+<h3>2. Watch Mode</h3>
+<p>UI Mode watches your test files for changes. When you save a file, affected tests re-run automatically.</p>
+<pre><code>Watch mode is ON by default in UI Mode.
+Toggle it using the eye icon in the toolbar.</code></pre>
+<h3>3. Time-Travel Debugging</h3>
+<p>Click on any action in the action list to see:</p>
+<ul>
+<li>The DOM snapshot at that exact moment</li>
+<li>The source code line that triggered the action</li>
+<li>Network requests made during that action</li>
+<li>Console messages logged at that point</li>
+</ul>
+<h3>4. Filtering Tests</h3>
+<table>
+<tr>
+<th>Filter Method</th>
+<th>How</th>
+</tr>
+<tr>
+<td>By file</td>
+<td>Click a file in the sidebar</td>
+</tr>
+<tr>
+<td>By text search</td>
+<td>Type in the search bar at the top</td>
+</tr>
+<tr>
+<td>By status</td>
+<td>Click passed/failed/skipped filter buttons</td>
+</tr>
+<tr>
+<td>By project</td>
+<td>Select project from the dropdown</td>
+</tr>
+<tr>
+<td>By tag</td>
+<td>Search for <span class="inline-code">@tag</span> in the search bar</td>
+</tr>
+</table>
+<h3>5. Pick Locator</h3>
+<p>Use the locator picker tool in UI Mode to hover over elements in the DOM snapshot and see the recommended Playwright locator.</p>
+<h3>UI Mode vs HTML Report</h3>
+<table>
+<tr>
+<th>Feature</th>
+<th>UI Mode</th>
+<th>HTML Report</th>
+</tr>
+<tr>
+<td><strong>When used</strong></td>
+<td>During development</td>
+<td>After test run</td>
+</tr>
+<tr>
+<td><strong>Interactive</strong></td>
+<td>Yes (run, re-run, debug)</td>
+<td>View only</td>
+</tr>
+<tr>
+<td><strong>Watch mode</strong></td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+<tr>
+<td><strong>Time-travel</strong></td>
+<td>Yes (DOM snapshots per step)</td>
+<td>Only if trace attached</td>
+</tr>
+<tr>
+<td><strong>Locator picker</strong></td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+<tr>
+<td><strong>Filtering</strong></td>
+<td>Real-time</td>
+<td>Static filters</td>
+</tr>
+<tr>
+<td><strong>Re-run tests</strong></td>
+<td>Click play button</td>
+<td>Must go back to terminal</td>
+</tr>
+<tr>
+<td><strong>Sharing</strong></td>
+<td>Not shareable (local server)</td>
+<td>Shareable as static files</td>
+</tr>
+<tr>
+<td><strong>CI usage</strong></td>
+<td>Not suitable</td>
+<td>Ideal as artifact</td>
+</tr>
+</table>
+<h3>UI Mode vs Debug Mode</h3>
+<table>
+<tr>
+<th>Feature</th>
+<th>UI Mode</th>
+<th>Debug Mode (Inspector)</th>
+</tr>
+<tr>
+<td><strong>Interface</strong></td>
+<td>Browser-based GUI</td>
+<td>Desktop Inspector window</td>
+</tr>
+<tr>
+<td><strong>Run multiple tests</strong></td>
+<td>Yes</td>
+<td>Usually one at a time</td>
+</tr>
+<tr>
+<td><strong>Watch mode</strong></td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+<tr>
+<td><strong>Step through code</strong></td>
+<td>Click actions in list</td>
+<td>Step/Resume buttons</td>
+</tr>
+<tr>
+<td><strong>Edit and re-run</strong></td>
+<td>Auto re-runs on save</td>
+<td>Must restart</td>
+</tr>
+<tr>
+<td><strong>Best for</strong></td>
+<td>Development workflow</td>
+<td>Pinpointing a specific bug</td>
+</tr>
+</table>
+<h3>Practical Workflow with UI Mode</h3>
+<h3>Step 1: Start UI Mode</h3>
+<pre><code>npx playwright test --ui</code></pre>
+<h3>Step 2: Select a test</h3>
+<p>Click on a test in the sidebar to highlight it.</p>
+<h3>Step 3: Run the test</h3>
+<p>Click the green play button. Watch the actions populate in real time.</p>
+<h3>Step 4: Inspect a step</h3>
+<p>Click on any action (e.g., <span class="inline-code">page.click</span>) to see the DOM snapshot at that moment.</p>
+<h3>Step 5: Edit your test</h3>
+<p>Open the test file in your editor, make changes, and save. UI Mode detects the change and re-runs automatically.</p>
+<h3>Step 6: Fix failures</h3>
+<p>If a test fails, click on the failed step to see the error, DOM state, and network activity.</p>
+<h3>Tips and Best Practices</h3>
+<ul>
+<li>Use UI Mode as your primary development tool -- it replaces the terminal for running tests.</li>
+<li>Keep a terminal open for <span class="inline-code">npx playwright test --ui</span> and your editor side by side.</li>
+<li>Use the search bar to quickly jump to specific tests when your suite grows large.</li>
+<li>UI Mode works best on <span class="inline-code">localhost</span>; for remote machines, set <span class="inline-code">--ui-host 0.0.0.0</span>.</li>
+<li>UI Mode is not designed for CI -- use it only for local development.</li>
+</ul>
+<h3>Limitations</h3>
+<ul>
+<li>Cannot be used in CI/CD pipelines (requires a display).</li>
+<li>The watch mode watches test files, not application source code.</li>
+<li>Large test suites may take a moment to load the sidebar.</li>
+</ul>
+<h3>Next Steps</h3>
+<p>Continue to <a href="./06_Debug_Mode.md" target="_blank">06_Debug_Mode.md</a> to learn about the Playwright Inspector and debug mode.</p>
+</div>
+<div class="topic" id="06-debug-mode">
+<span class="badge badge-learning">Learning</span>
+<h2>Debug Mode</h2>
+<h2>Debug Mode - Playwright Inspector</h2>
+<h3>What is Debug Mode?</h3>
+<p>Debug mode launches the <strong>Playwright Inspector</strong>, a dedicated debugging tool that lets you step through test actions one at a time, inspect locators, and see the browser in headed mode.</p>
+<pre><code>npx playwright test --debug</code></pre>
+<h3>Ways to Activate Debug Mode</h3>
+<table>
+<tr>
+<th>Method</th>
+<th>Usage</th>
+<th>Scope</th>
+</tr>
+<tr>
+<td><span class="inline-code">--debug</span> flag</td>
+<td><span class="inline-code">npx playwright test --debug</span></td>
+<td>All tests</td>
+</tr>
+<tr>
+<td><span class="inline-code">--debug</span> with file</td>
+<td><span class="inline-code">npx playwright test tests/login.spec.js --debug</span></td>
+<td>Single file</td>
+</tr>
+<tr>
+<td><span class="inline-code">--debug</span> with grep</td>
+<td><span class="inline-code">npx playwright test --grep "Login" --debug</span></td>
+<td>Matching tests</td>
+</tr>
+<tr>
+<td><span class="inline-code">PWDEBUG=1</span> env var</td>
+<td><span class="inline-code">PWDEBUG=1 npx playwright test</span></td>
+<td>All tests</td>
+</tr>
+<tr>
+<td><span class="inline-code">page.pause()</span></td>
+<td>Add <span class="inline-code">await page.pause()</span> in code</td>
+<td>Specific breakpoint</td>
+</tr>
+<tr>
+<td><span class="inline-code">PWDEBUG=console</span></td>
+<td><span class="inline-code">PWDEBUG=console npx playwright test</span></td>
+<td>Debug with console API</td>
+</tr>
+</table>
+<h3>What Happens When You Run --debug</h3>
+<ol>
+<li>The browser opens in <strong>headed mode</strong> (you can see it).</li>
+<li>The <strong>Playwright Inspector</strong> window opens alongside the browser.</li>
+<li>Test execution <strong>pauses at the first action</strong>.</li>
+<li>You control execution with the Inspector toolbar buttons.</li>
+</ol>
+<h3>Playwright Inspector Toolbar</h3>
+<table>
+<tr>
+<th>Button</th>
+<th>Keyboard Shortcut</th>
+<th>Action</th>
+</tr>
+<tr>
+<td><strong>Resume</strong></td>
+<td><span class="inline-code">F8</span></td>
+<td>Run until next breakpoint or <span class="inline-code">page.pause()</span></td>
+</tr>
+<tr>
+<td><strong>Step Over</strong></td>
+<td><span class="inline-code">F10</span></td>
+<td>Execute the current action and pause at the next one</td>
+</tr>
+<tr>
+<td><strong>Pick Locator</strong></td>
+<td>--</td>
+<td>Hover over page elements to see locators</td>
+</tr>
+<tr>
+<td><strong>Record</strong></td>
+<td>--</td>
+<td>Start recording new actions</td>
+</tr>
+</table>
+<h3>Using page.pause()</h3>
+<p>Insert <span class="inline-code">await page.pause()</span> anywhere in your test to create a breakpoint:</p>
+<pre><code>test(&#x27;login test&#x27;, async ({ page }) =&gt; {
+  await page.goto(&#x27;https://the-internet.herokuapp.com/login&#x27;);
+  await page.fill(&#x27;#username&#x27;, &#x27;tomsmith&#x27;);
+
+  // Execution will pause here -- Inspector opens
+  await page.pause();
+
+  await page.fill(&#x27;#password&#x27;, &#x27;SuperSecretPassword!&#x27;);
+  await page.click(&#x27;button[type=&quot;submit&quot;]&#x27;);
+});</code></pre>
+<p>When execution reaches <span class="inline-code">page.pause()</span>, the Inspector opens and you can:</p>
+<ul>
+<li>Inspect the current DOM state</li>
+<li>Try locators in the locator input field</li>
+<li>Step through remaining actions</li>
+</ul>
+<h3>PWDEBUG Environment Variable</h3>
+<pre><code># Opens Inspector for all tests
+PWDEBUG=1 npx playwright test
+
+# Windows (PowerShell)
+$env:PWDEBUG=1; npx playwright test
+
+# Windows (cmd)
+set PWDEBUG=1 &amp;&amp; npx playwright test</code></pre>
+<p>When <span class="inline-code">PWDEBUG=1</span> is set:</p>
+<ul>
+<li>Browsers launch in headed mode</li>
+<li>Default timeout is set to 0 (no timeout) so tests wait for you</li>
+<li>The Playwright Inspector opens automatically</li>
+</ul>
+<h3>Browser DevTools Integration</h3>
+<p>You can also use the browser's built-in DevTools alongside the Inspector:</p>
+<pre><code># Launch with DevTools open (Chromium only)
+PWDEBUG=console npx playwright test</code></pre>
+<p>This exposes a <span class="inline-code">playwright</span> object in the browser console:</p>
+<pre><code>// In browser DevTools console:
+playwright.$(selector)    // Query a single element
+playwright.$$(selector)   // Query all elements
+playwright.inspect(selector)  // Highlight element
+playwright.locator(selector)  // Get Playwright locator</code></pre>
+<h3>Step-by-Step Debugging Walkthrough</h3>
+<h3>Step 1: Run a test in debug mode</h3>
+<pre><code>npx playwright test tests/login.spec.js --debug</code></pre>
+<h3>Step 2: Observe the first action</h3>
+<p>The browser navigates to the URL. The Inspector highlights the current line of code.</p>
+<h3>Step 3: Step through actions</h3>
+<p>Press <span class="inline-code">F10</span> (Step Over) to execute one action at a time. Watch the browser update after each step.</p>
+<h3>Step 4: Try a locator</h3>
+<p>Click "Pick Locator" in the Inspector. Hover over elements in the browser to see what locator Playwright recommends.</p>
+<h3>Step 5: Test a locator manually</h3>
+<p>Type a locator in the Inspector's locator input box (e.g., <span class="inline-code">getByRole('button', { name: 'Login' })</span>). Matching elements are highlighted in the browser.</p>
+<h3>Step 6: Resume execution</h3>
+<p>Press <span class="inline-code">F8</span> (Resume) to run all remaining actions at full speed.</p>
+<h3>Common Debugging Scenarios</h3>
+<table>
+<tr>
+<th>Problem</th>
+<th>Debug Approach</th>
+</tr>
+<tr>
+<td>Test fails with "element not found"</td>
+<td>Use <span class="inline-code">--debug</span>, step to the failing action, inspect the DOM</td>
+</tr>
+<tr>
+<td>Wrong element is clicked</td>
+<td>Use Pick Locator to find the correct selector</td>
+</tr>
+<tr>
+<td>Test is flaky (sometimes passes)</td>
+<td>Add <span class="inline-code">page.pause()</span> before the flaky step, inspect timing</td>
+</tr>
+<tr>
+<td>Assertion fails unexpectedly</td>
+<td>Step to just before the assertion, check the page state</td>
+</tr>
+<tr>
+<td>Test works headed but fails headless</td>
+<td>Compare screenshots; check viewport size differences</td>
+</tr>
+<tr>
+<td>Navigation timeout</td>
+<td>Step through, check if the URL redirect is expected</td>
+</tr>
+</table>
+<h3>Debug Mode Configuration</h3>
+<p>You can also set debug-friendly defaults in your config:</p>
+<pre><code>// playwright.config.js
+export default {
+  use: {
+    // Slow down actions by 500ms each (useful for visual debugging)
+    launchOptions: {
+      slowMo: 500,
+    },
+  },
+};</code></pre>
+<h3>Tips</h3>
+<ul>
+<li>Use <span class="inline-code">--workers 1</span> with <span class="inline-code">--debug</span> to avoid multiple browser windows.</li>
+<li><span class="inline-code">page.pause()</span> is safe to commit -- it only activates when <span class="inline-code">PWDEBUG</span> is set or <span class="inline-code">--debug</span> is used.</li>
+<li>Combine <span class="inline-code">--debug</span> with <span class="inline-code">--grep</span> to debug a single test quickly.</li>
+<li>The Inspector's locator input is the fastest way to validate selectors.</li>
+</ul>
+<h3>Next Steps</h3>
+<p>Continue to <a href="./07_Trace_Viewer.md" target="_blank">07_Trace_Viewer.md</a> to learn about the Trace Viewer for post-mortem analysis.</p>
+</div>
+<div class="topic" id="07-trace-viewer">
+<span class="badge badge-learning">Learning</span>
+<h2>Trace Viewer</h2>
+<h2>Trace Viewer - Analyzing Test Execution</h2>
+<h3>What are Traces?</h3>
+<p>Traces are ZIP archives that capture a complete recording of a test run. They include screenshots, DOM snapshots, network logs, console output, and source code -- everything you need to understand what happened during a test.</p>
+<h3>Enabling Traces in Config</h3>
+<pre><code>// playwright.config.js
+export default {
+  use: {
+    trace: &#x27;on-first-retry&#x27;,
+  },
+};</code></pre>
+<h3>Trace Options</h3>
+<table>
+<tr>
+<th>Option</th>
+<th>Description</th>
+</tr>
+<tr>
+<td><span class="inline-code">'off'</span></td>
+<td>Never record traces (default)</td>
+</tr>
+<tr>
+<td><span class="inline-code">'on'</span></td>
+<td>Record a trace for every test</td>
+</tr>
+<tr>
+<td><span class="inline-code">'on-first-retry'</span></td>
+<td>Record trace only on the first retry of a failed test</td>
+</tr>
+<tr>
+<td><span class="inline-code">'retain-on-failure'</span></td>
+<td>Record trace for every test but only keep it if the test fails</td>
+</tr>
+<tr>
+<td><span class="inline-code">'on-all-retries'</span></td>
+<td>Record trace on every retry attempt</td>
+</tr>
+</table>
+<h3>Recommendation by Environment</h3>
+<table>
+<tr>
+<th>Environment</th>
+<th>Recommended Setting</th>
+<th>Reason</th>
+</tr>
+<tr>
+<td>Local development</td>
+<td><span class="inline-code">'on'</span> or <span class="inline-code">'retain-on-failure'</span></td>
+<td>Full debugging info available</td>
+</tr>
+<tr>
+<td>CI/CD</td>
+<td><span class="inline-code">'on-first-retry'</span></td>
+<td>Captures failure data without bloating storage</td>
+</tr>
+<tr>
+<td>Performance-sensitive CI</td>
+<td><span class="inline-code">'retain-on-failure'</span></td>
+<td>Only saves traces for failures</td>
+</tr>
+</table>
+<h3>Enabling Traces via CLI</h3>
+<p>You can override the config setting from the command line:</p>
+<pre><code># Force traces on for this run
+npx playwright test --trace on
+
+# Only on first retry
+npx playwright test --trace on-first-retry
+
+# Disable traces
+npx playwright test --trace off</code></pre>
+<h3>Opening Traces</h3>
+<h3>Local Trace Files</h3>
+<pre><code># Open a trace file
+npx playwright show-trace trace.zip
+
+# Open a trace from test-results
+npx playwright show-trace test-results/tests-login-Login-test/trace.zip</code></pre>
+<h3>Remote Trace Viewer</h3>
+<p>Upload or drag-and-drop a trace ZIP to the online viewer:</p>
+<pre><code>https://trace.playwright.dev</code></pre>
+<p>This is a client-side app -- your trace data stays in the browser and is not uploaded to any server.</p>
+<h3>Trace Viewer Interface</h3>
+<table>
+<tr>
+<th>Panel</th>
+<th>Description</th>
+</tr>
+<tr>
+<td><strong>Timeline</strong></td>
+<td>Visual bar showing all actions over time; click to jump</td>
+</tr>
+<tr>
+<td><strong>Actions list</strong></td>
+<td>Step-by-step list of every Playwright action</td>
+</tr>
+<tr>
+<td><strong>Before/After tabs</strong></td>
+<td>DOM snapshot before and after each action</td>
+</tr>
+<tr>
+<td><strong>Source tab</strong></td>
+<td>Test source code with the current line highlighted</td>
+</tr>
+<tr>
+<td><strong>Network tab</strong></td>
+<td>All HTTP requests/responses during the action</td>
+</tr>
+<tr>
+<td><strong>Console tab</strong></td>
+<td>Browser console messages (log, warn, error)</td>
+</tr>
+<tr>
+<td><strong>Call tab</strong></td>
+<td>Detailed info about the action (locator, timing, args)</td>
+</tr>
+<tr>
+<td><strong>Attachments</strong></td>
+<td>Screenshots, videos, and custom attachments</td>
+</tr>
+</table>
+<h3>What is Inside a Trace ZIP?</h3>
+<p>A trace ZIP file contains:</p>
+<pre><code>trace.zip
+  ├── trace.trace          # Binary action log
+  ├── trace.network         # Network request/response data
+  ├── resources/
+  │   ├── screenshot-1.png  # Screenshots at each step
+  │   ├── screenshot-2.png
+  │   └── ...
+  └── ...</code></pre>
+<p>You do not need to manually unzip -- the Trace Viewer reads the ZIP directly.</p>
+<h3>Using Traces to Debug Flaky Tests</h3>
+<p>Flaky tests pass sometimes and fail other times. Traces are invaluable for debugging them:</p>
+<h3>Step 1: Enable traces on retry</h3>
+<pre><code>use: { trace: &#x27;on-first-retry&#x27; },
+retries: 2,</code></pre>
+<h3>Step 2: Run the tests multiple times</h3>
+<pre><code>npx playwright test --repeat-each 10 --retries 1</code></pre>
+<h3>Step 3: Open the trace of a failed retry</h3>
+<pre><code>npx playwright show-trace test-results/&lt;test-folder&gt;/trace.zip</code></pre>
+<h3>Step 4: Compare actions</h3>
+<p>Look at the timeline and DOM snapshots to find:</p>
+<ul>
+<li>Race conditions (element not ready)</li>
+<li>Network timing differences</li>
+<li>Unexpected pop-ups or overlays</li>
+<li>Different data returned by the API</li>
+</ul>
+<h3>Trace Configuration Options in Detail</h3>
+<pre><code>// playwright.config.js
+export default {
+  use: {
+    trace: {
+      mode: &#x27;on-first-retry&#x27;,
+      screenshots: true,      // Include screenshots (default: true)
+      snapshots: true,         // Include DOM snapshots (default: true)
+      sources: true,           // Include source code (default: true)
+    },
+  },
+};</code></pre>
+<table>
+<tr>
+<th>Sub-option</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+<tr>
+<td><span class="inline-code">screenshots</span></td>
+<td><span class="inline-code">true</span></td>
+<td>Capture screenshots at each action</td>
+</tr>
+<tr>
+<td><span class="inline-code">snapshots</span></td>
+<td><span class="inline-code">true</span></td>
+<td>Capture full DOM snapshots</td>
+</tr>
+<tr>
+<td><span class="inline-code">sources</span></td>
+<td><span class="inline-code">true</span></td>
+<td>Embed test source code in the trace</td>
+</tr>
+</table>
+<p>Disabling any of these reduces trace file size but limits debugging capability.</p>
+<h3>Trace File Sizes</h3>
+<table>
+<tr>
+<th>Content</th>
+<th>Typical Impact on Size</th>
+</tr>
+<tr>
+<td>DOM snapshots</td>
+<td>Largest contributor</td>
+</tr>
+<tr>
+<td>Screenshots</td>
+<td>Moderate</td>
+</tr>
+<tr>
+<td>Network bodies</td>
+<td>Can be large for data-heavy APIs</td>
+</tr>
+<tr>
+<td>Source code</td>
+<td>Minimal</td>
+</tr>
+</table>
+<p>For CI, <span class="inline-code">'on-first-retry'</span> or <span class="inline-code">'retain-on-failure'</span> keeps storage manageable by only saving traces when needed.</p>
+<h3>Programmatic Trace Control</h3>
+<p>You can start and stop tracing within a test:</p>
+<pre><code>test(&#x27;manual trace&#x27;, async ({ page, context }) =&gt; {
+  await context.tracing.start({ screenshots: true, snapshots: true });
+
+  await page.goto(&#x27;https://example.com&#x27;);
+  await page.click(&#x27;text=More info&#x27;);
+
+  await context.tracing.stop({ path: &#x27;my-trace.zip&#x27; });
+});</code></pre>
+<h3>Tips</h3>
+<ul>
+<li>Always enable <span class="inline-code">trace: 'on-first-retry'</span> in CI -- it is the best default for catching failures.</li>
+<li>Use <span class="inline-code">trace.playwright.dev</span> to share traces with teammates without requiring local setup.</li>
+<li>Traces are more useful than screenshots alone because they include DOM state, network, and timing.</li>
+<li>Keep <span class="inline-code">retries: 1</span> or <span class="inline-code">retries: 2</span> in CI so that traces get generated on failure.</li>
+</ul>
+<h3>Next Steps</h3>
+<p>Continue to <a href="./08_Browser_Management.md" target="_blank">08_Browser_Management.md</a> to learn about installing and managing browsers.</p>
+</div>
+<div class="topic" id="08-browser-management">
+<span class="badge badge-learning">Learning</span>
+<h2>Browser Management</h2>
+<h2>Browser Management - install</h2>
+<h3>Overview</h3>
+<p>Playwright bundles its own browser binaries (Chromium, Firefox, WebKit). The <span class="inline-code">npx playwright install</span> command downloads these binaries to your system. Browsers must be installed before tests can run.</p>
+<h3>Install Commands</h3>
+<table>
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+<tr>
+<td><span class="inline-code">npx playwright install</span></td>
+<td>Install all configured browsers</td>
+</tr>
+<tr>
+<td><span class="inline-code">npx playwright install chromium</span></td>
+<td>Install only Chromium</td>
+</tr>
+<tr>
+<td><span class="inline-code">npx playwright install firefox</span></td>
+<td>Install only Firefox</td>
+</tr>
+<tr>
+<td><span class="inline-code">npx playwright install webkit</span></td>
+<td>Install only WebKit</td>
+</tr>
+<tr>
+<td><span class="inline-code">npx playwright install --with-deps</span></td>
+<td>Install browsers and OS-level dependencies</td>
+</tr>
+<tr>
+<td><span class="inline-code">npx playwright install chromium --with-deps</span></td>
+<td>Install Chromium and its OS dependencies</td>
+</tr>
+<tr>
+<td><span class="inline-code">npx playwright install --dry-run</span></td>
+<td>Show what would be installed without downloading</td>
+</tr>
+</table>
+<h3>Browser Channels</h3>
+<p>In addition to the bundled browsers, Playwright can use installed "branded" browsers via channels:</p>
+<table>
+<tr>
+<th>Channel</th>
+<th>Browser Used</th>
+</tr>
+<tr>
+<td><span class="inline-code">chrome</span></td>
+<td>Google Chrome (stable)</td>
+</tr>
+<tr>
+<td><span class="inline-code">chrome-beta</span></td>
+<td>Google Chrome Beta</td>
+</tr>
+<tr>
+<td><span class="inline-code">chrome-dev</span></td>
+<td>Google Chrome Dev</td>
+</tr>
+<tr>
+<td><span class="inline-code">chrome-canary</span></td>
+<td>Google Chrome Canary</td>
+</tr>
+<tr>
+<td><span class="inline-code">msedge</span></td>
+<td>Microsoft Edge (stable)</td>
+</tr>
+<tr>
+<td><span class="inline-code">msedge-beta</span></td>
+<td>Microsoft Edge Beta</td>
+</tr>
+<tr>
+<td><span class="inline-code">msedge-dev</span></td>
+<td>Microsoft Edge Dev</td>
+</tr>
+<tr>
+<td><span class="inline-code">msedge-canary</span></td>
+<td>Microsoft Edge Canary</td>
+</tr>
+</table>
+<h3>Using channels in config</h3>
+<pre><code>// playwright.config.js
+export default {
+  projects: [
+    {
+      name: &#x27;Google Chrome&#x27;,
+      use: { channel: &#x27;chrome&#x27; },
+    },
+    {
+      name: &#x27;Microsoft Edge&#x27;,
+      use: { channel: &#x27;msedge&#x27; },
+    },
+  ],
+};</code></pre>
+<h3>Using channels from CLI</h3>
+<pre><code>npx playwright test --project &quot;Google Chrome&quot;</code></pre>
+<p><strong>Note:</strong> Channels use the browser already installed on your system. They are not downloaded by <span class="inline-code">npx playwright install</span>.</p>
+<h3>Where Browsers are Stored</h3>
+<p>Playwright stores downloaded browsers in a cache directory:</p>
+<table>
+<tr>
+<th>OS</th>
+<th>Default Path</th>
+</tr>
+<tr>
+<td>macOS</td>
+<td><span class="inline-code">~/Library/Caches/ms-playwright</span></td>
+</tr>
+<tr>
+<td>Linux</td>
+<td><span class="inline-code">~/.cache/ms-playwright</span></td>
+</tr>
+<tr>
+<td>Windows</td>
+<td><span class="inline-code">%LOCALAPPDATA%\ms-playwright</span></td>
+</tr>
+</table>
+<p>You can customize the location with the <span class="inline-code">PLAYWRIGHT_BROWSERS_PATH</span> environment variable:</p>
+<pre><code># Store browsers in a custom directory
+PLAYWRIGHT_BROWSERS_PATH=/opt/pw-browsers npx playwright install
+
+# Use the same path when running tests
+PLAYWRIGHT_BROWSERS_PATH=/opt/pw-browsers npx playwright test</code></pre>
+<h3>Browser Versions</h3>
+<p>Playwright pins specific browser versions for each release to ensure consistent behavior:</p>
+<table>
+<tr>
+<th>Playwright Version</th>
+<th>Chromium</th>
+<th>Firefox</th>
+<th>WebKit</th>
+</tr>
+<tr>
+<td>1.49.x</td>
+<td>131.x</td>
+<td>133.x</td>
+<td>18.2</td>
+</tr>
+<tr>
+<td>1.48.x</td>
+<td>130.x</td>
+<td>132.x</td>
+<td>18.2</td>
+</tr>
+<tr>
+<td>1.47.x</td>
+<td>129.x</td>
+<td>130.x</td>
+<td>18.0</td>
+</tr>
+<tr>
+<td>1.46.x</td>
+<td>128.x</td>
+<td>129.x</td>
+<td>18.0</td>
+</tr>
+</table>
+<p><em>These are approximate. Check <span class="inline-code">npx playwright --version</span> and the <a href="https://github.com/microsoft/playwright/releases" target="_blank">Playwright releases page</a> for exact versions.</em></p>
+<p>To see which browsers are currently installed:</p>
+<pre><code>npx playwright install --dry-run</code></pre>
+<h3>System Dependencies (--with-deps)</h3>
+<p>On Linux, browsers require system libraries (e.g., <span class="inline-code">libgbm</span>, <span class="inline-code">libatk</span>, <span class="inline-code">libcups</span>). The <span class="inline-code">--with-deps</span> flag installs them automatically:</p>
+<pre><code># Install browsers AND required system packages
+npx playwright install --with-deps
+
+# Install only Chromium and its dependencies
+npx playwright install chromium --with-deps</code></pre>
+<p>This requires <span class="inline-code">sudo</span> permissions on Linux. On macOS and Windows, system dependencies are generally not needed.</p>
+<h3>Docker</h3>
+<p>Playwright provides official Docker images with browsers pre-installed:</p>
+<pre><code># Pull the official Playwright Docker image
+docker pull mcr.microsoft.com/playwright:v1.49.0-noble
+
+# Run tests inside the container
+docker run --rm -v $(pwd):/app -w /app mcr.microsoft.com/playwright:v1.49.0-noble \
+  npx playwright test</code></pre>
+<h3>Docker Image Naming Convention</h3>
+<pre><code>mcr.microsoft.com/playwright:v&lt;version&gt;-&lt;os&gt;</code></pre>
+<table>
+<tr>
+<th>Tag</th>
+<th>Description</th>
+</tr>
+<tr>
+<td><span class="inline-code">v1.49.0-noble</span></td>
+<td>Ubuntu 24.04 (Noble) with Playwright 1.49.0</td>
+</tr>
+<tr>
+<td><span class="inline-code">v1.49.0-jammy</span></td>
+<td>Ubuntu 22.04 (Jammy) with Playwright 1.49.0</td>
+</tr>
+</table>
+<h3>Dockerfile Example</h3>
+<pre><code>FROM mcr.microsoft.com/playwright:v1.49.0-noble
+
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+COPY . .
+
+CMD [&quot;npx&quot;, &quot;playwright&quot;, &quot;test&quot;]</code></pre>
+<h3>CI Considerations</h3>
+<h3>GitHub Actions</h3>
+<pre><code>- name: Install Playwright Browsers
+  run: npx playwright install --with-deps</code></pre>
+<h3>Caching Browsers in CI</h3>
+<pre><code>- name: Cache Playwright browsers
+  uses: actions/cache@v4
+  with:
+    path: ~/.cache/ms-playwright
+    key: playwright-${{ hashFiles(&#x27;package-lock.json&#x27;) }}
+
+- name: Install Playwright (skip if cached)
+  run: npx playwright install --with-deps</code></pre>
+<h3>Using Docker in CI</h3>
+<pre><code>jobs:
+  test:
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.49.0-noble
+    steps:
+      - uses: actions/checkout@v4
+      - run: npm ci
+      - run: npx playwright test</code></pre>
+<h3>Uninstalling / Cleaning Up Browsers</h3>
+<pre><code># Remove all Playwright browser caches
+rm -rf ~/Library/Caches/ms-playwright     # macOS
+rm -rf ~/.cache/ms-playwright             # Linux</code></pre>
+<p>There is no built-in <span class="inline-code">npx playwright uninstall</span> command.</p>
+<h3>Tips</h3>
+<ul>
+<li>Always run <span class="inline-code">npx playwright install</span> after updating the <span class="inline-code">@playwright/test</span> package.</li>
+<li>Use <span class="inline-code">--with-deps</span> on Linux CI environments to avoid missing library errors.</li>
+<li>Use Docker images in CI to avoid browser installation entirely.</li>
+<li>Set <span class="inline-code">PLAYWRIGHT_BROWSERS_PATH</span> for shared or custom installation directories.</li>
+</ul>
+<h3>Next Steps</h3>
+<p>Continue to <a href="./09_Config_vs_CLI_Flags.md" target="_blank">09_Config_vs_CLI_Flags.md</a> to learn the relationship between config options and CLI flags.</p>
+</div>
+<div class="topic" id="09-config-vs-cli-flags">
+<span class="badge badge-learning">Learning</span>
+<h2>Config vs CLI Flags</h2>
+<h2>Config File vs CLI Flags</h2>
+<h3>Precedence Rule</h3>
+<p><strong>CLI flags always override config file settings.</strong></p>
+<p>If <span class="inline-code">playwright.config.js</span> sets <span class="inline-code">workers: 4</span> and you run <span class="inline-code">npx playwright test --workers 1</span>, the test uses 1 worker. The config file provides defaults; the CLI provides overrides.</p>
+<pre><code>CLI flags  &gt;  Config file  &gt;  Playwright defaults</code></pre>
+<h3>Using a Custom Config File</h3>
+<pre><code># Default: uses playwright.config.js or playwright.config.ts
+npx playwright test
+
+# Use a custom config file
+npx playwright test --config staging.config.js
+npx playwright test --config configs/ci.config.ts</code></pre>
+<h3>Mapping Table: Config Option to CLI Equivalent</h3>
+<table>
+<tr>
+<th>Config Option</th>
+<th>CLI Equivalent</th>
+<th>Example</th>
+</tr>
+<tr>
+<td><span class="inline-code">workers</span></td>
+<td><span class="inline-code">--workers</span></td>
+<td><span class="inline-code">--workers 4</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">retries</span></td>
+<td><span class="inline-code">--retries</span></td>
+<td><span class="inline-code">--retries 2</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">timeout</span></td>
+<td><span class="inline-code">--timeout</span></td>
+<td><span class="inline-code">--timeout 30000</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">globalTimeout</span></td>
+<td><span class="inline-code">--global-timeout</span></td>
+<td><span class="inline-code">--global-timeout 600000</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">reporter</span></td>
+<td><span class="inline-code">--reporter</span></td>
+<td><span class="inline-code">--reporter html</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">outputDir</span></td>
+<td><span class="inline-code">--output</span></td>
+<td><span class="inline-code">--output results/</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">grep</span></td>
+<td><span class="inline-code">--grep</span></td>
+<td><span class="inline-code">--grep "Login"</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">grepInvert</span></td>
+<td><span class="inline-code">--grep-invert</span></td>
+<td><span class="inline-code">--grep-invert "SKIP"</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">shard</span></td>
+<td><span class="inline-code">--shard</span></td>
+<td><span class="inline-code">--shard 1/3</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">forbidOnly</span></td>
+<td><span class="inline-code">--forbid-only</span></td>
+<td><span class="inline-code">--forbid-only</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">fullyParallel</span></td>
+<td><span class="inline-code">--fully-parallel</span></td>
+<td><span class="inline-code">--fully-parallel</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">maxFailures</span></td>
+<td><span class="inline-code">--max-failures</span></td>
+<td><span class="inline-code">--max-failures 5</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">repeatEach</span></td>
+<td><span class="inline-code">--repeat-each</span></td>
+<td><span class="inline-code">--repeat-each 3</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">updateSnapshots</span></td>
+<td><span class="inline-code">--update-snapshots</span></td>
+<td><span class="inline-code">--update-snapshots</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">use.trace</span></td>
+<td><span class="inline-code">--trace</span></td>
+<td><span class="inline-code">--trace on</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">use.headless: false</span></td>
+<td><span class="inline-code">--headed</span></td>
+<td><span class="inline-code">--headed</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">projects[n].name</span></td>
+<td><span class="inline-code">--project</span></td>
+<td><span class="inline-code">--project chromium</span></td>
+</tr>
+</table>
+<h3>Config-Only Options (No CLI Equivalent)</h3>
+<p>These options can only be set in <span class="inline-code">playwright.config.js</span>:</p>
+<table>
+<tr>
+<th>Config Option</th>
+<th>Purpose</th>
+<th>Example</th>
+</tr>
+<tr>
+<td><span class="inline-code">use.baseURL</span></td>
+<td>Base URL for <span class="inline-code">page.goto('/')</span></td>
+<td><span class="inline-code">'https://staging.example.com'</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">use.storageState</span></td>
+<td>Pre-saved auth cookies/tokens</td>
+<td><span class="inline-code">'auth.json'</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">use.viewport</span></td>
+<td>Browser viewport size</td>
+<td><span class="inline-code">{ width: 1280, height: 720 }</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">use.locale</span></td>
+<td>Browser locale</td>
+<td><span class="inline-code">'en-US'</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">use.timezoneId</span></td>
+<td>Timezone emulation</td>
+<td><span class="inline-code">'America/New_York'</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">use.geolocation</span></td>
+<td>GPS coordinates emulation</td>
+<td><span class="inline-code">{ latitude: 40.7, longitude: -74.0 }</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">use.permissions</span></td>
+<td>Browser permissions</td>
+<td><span class="inline-code">['geolocation']</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">use.httpCredentials</span></td>
+<td>HTTP basic auth</td>
+<td><span class="inline-code">{ username: 'user', password: 'pass' }</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">use.video</span></td>
+<td>Video recording</td>
+<td><span class="inline-code">'on'</span>, <span class="inline-code">'retain-on-failure'</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">use.screenshot</span></td>
+<td>Automatic screenshots</td>
+<td><span class="inline-code">'on'</span>, <span class="inline-code">'only-on-failure'</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">use.launchOptions</span></td>
+<td>Browser launch args</td>
+<td><span class="inline-code">{ slowMo: 500 }</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">use.extraHTTPHeaders</span></td>
+<td>Custom request headers</td>
+<td><span class="inline-code">{ 'X-Custom': 'value' }</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">testDir</span></td>
+<td>Directory to scan for tests</td>
+<td><span class="inline-code">'./tests'</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">testMatch</span></td>
+<td>File pattern for test files</td>
+<td><span class="inline-code">'<em>*/</em>.spec.js'</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">testIgnore</span></td>
+<td>Files to exclude</td>
+<td><span class="inline-code">'<strong>/helpers/</strong>'</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">webServer</span></td>
+<td>Start a dev server before tests</td>
+<td><span class="inline-code">{ command: 'npm start', port: 3000 }</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">projects</span></td>
+<td>Multi-browser/device configuration</td>
+<td>Array of project objects</td>
+</tr>
+<tr>
+<td><span class="inline-code">globalSetup</span></td>
+<td>Script to run once before all tests</td>
+<td><span class="inline-code">'./global-setup.js'</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">globalTeardown</span></td>
+<td>Script to run once after all tests</td>
+<td><span class="inline-code">'./global-teardown.js'</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">expect</span></td>
+<td>Assertion configuration</td>
+<td><span class="inline-code">{ timeout: 10000 }</span></td>
+</tr>
+</table>
+<h3>CLI-Only Options (No Config Equivalent)</h3>
+<table>
+<tr>
+<th>CLI Flag</th>
+<th>Purpose</th>
+</tr>
+<tr>
+<td><span class="inline-code">--ui</span></td>
+<td>Launch interactive UI mode</td>
+</tr>
+<tr>
+<td><span class="inline-code">--debug</span></td>
+<td>Launch Playwright Inspector</td>
+</tr>
+<tr>
+<td><span class="inline-code">--list</span></td>
+<td>List tests without running them</td>
+</tr>
+<tr>
+<td><span class="inline-code">--last-failed</span></td>
+<td>Re-run only previously failed tests</td>
+</tr>
+<tr>
+<td><span class="inline-code">--pass-with-no-tests</span></td>
+<td>Exit 0 if no tests found</td>
+</tr>
+<tr>
+<td><span class="inline-code">--quiet</span></td>
+<td>Suppress reporter output</td>
+</tr>
+<tr>
+<td><span class="inline-code">--config</span></td>
+<td>Specify a config file path</td>
+</tr>
+<tr>
+<td><span class="inline-code">show-report</span></td>
+<td>Open the HTML report</td>
+</tr>
+<tr>
+<td><span class="inline-code">show-trace</span></td>
+<td>Open the Trace Viewer</td>
+</tr>
+<tr>
+<td><span class="inline-code">codegen</span></td>
+<td>Record test code</td>
+</tr>
+<tr>
+<td><span class="inline-code">install</span></td>
+<td>Download browser binaries</td>
+</tr>
+</table>
+<h3>Practical Guide: What to Put Where</h3>
+<table>
+<tr>
+<th>Setting</th>
+<th>Where to Put It</th>
+<th>Why</th>
+</tr>
+<tr>
+<td><span class="inline-code">baseURL</span></td>
+<td>Config</td>
+<td>Shared across all tests, varies by environment</td>
+</tr>
+<tr>
+<td><span class="inline-code">workers</span></td>
+<td>Config (CI override via CLI)</td>
+<td>Default for local, override in CI</td>
+</tr>
+<tr>
+<td><span class="inline-code">retries</span></td>
+<td>Config</td>
+<td>Consistent retry policy</td>
+</tr>
+<tr>
+<td><span class="inline-code">reporter</span></td>
+<td>Config</td>
+<td>Multiple reporters need config syntax</td>
+</tr>
+<tr>
+<td><span class="inline-code">trace</span></td>
+<td>Config</td>
+<td><span class="inline-code">'on-first-retry'</span> is a good default</td>
+</tr>
+<tr>
+<td><span class="inline-code">timeout</span></td>
+<td>Config</td>
+<td>Consistent across runs</td>
+</tr>
+<tr>
+<td><span class="inline-code">--headed</span></td>
+<td>CLI only</td>
+<td>Temporary for debugging</td>
+</tr>
+<tr>
+<td><span class="inline-code">--debug</span></td>
+<td>CLI only</td>
+<td>One-off debugging</td>
+</tr>
+<tr>
+<td><span class="inline-code">--grep</span></td>
+<td>CLI only</td>
+<td>Ad-hoc test filtering</td>
+</tr>
+<tr>
+<td><span class="inline-code">--project</span></td>
+<td>CLI only</td>
+<td>Running a subset of browsers</td>
+</tr>
+<tr>
+<td><span class="inline-code">--shard</span></td>
+<td>CLI only</td>
+<td>CI parallelism</td>
+</tr>
+</table>
+<h3>Environment-Specific Configs</h3>
+<h3>Option A: Multiple config files</h3>
+<pre><code>npx playwright test --config playwright.staging.config.js
+npx playwright test --config playwright.production.config.js</code></pre>
+<h3>Option B: Environment variables in a single config</h3>
+<pre><code>// playwright.config.js
+export default {
+  use: {
+    baseURL: process.env.BASE_URL || &#x27;http://localhost:3000&#x27;,
+  },
+  retries: process.env.CI ? 2 : 0,
+  workers: process.env.CI ? 4 : undefined,
+  reporter: process.env.CI ? [[&#x27;html&#x27;], [&#x27;junit&#x27;, { outputFile: &#x27;results.xml&#x27; }]] : &#x27;list&#x27;,
+};</code></pre>
+<pre><code># Local
+npx playwright test
+
+# CI / staging
+BASE_URL=https://staging.example.com CI=true npx playwright test</code></pre>
+<h3>Common Patterns</h3>
+<h3>Local development config</h3>
+<pre><code>export default {
+  retries: 0,
+  workers: undefined,          // Auto-detect
+  use: {
+    trace: &#x27;retain-on-failure&#x27;,
+    baseURL: &#x27;http://localhost:3000&#x27;,
+  },
+  reporter: &#x27;list&#x27;,
+};</code></pre>
+<h3>CI config overrides via CLI</h3>
+<pre><code>npx playwright test \
+  --retries 2 \
+  --workers 4 \
+  --reporter html \
+  --forbid-only \
+  --shard 1/3</code></pre>
+<h3>Next Steps</h3>
+<p>Continue to <a href="./10_CI_CD_Integration.md" target="_blank">10_CI_CD_Integration.md</a> to see complete CI/CD pipeline configurations.</p>
+</div>
+<div class="topic" id="10-ci-cd-integration">
+<span class="badge badge-learning">Learning</span>
+<h2>CI CD Integration</h2>
+<h2>CI/CD Integration</h2>
+<h3>Overview</h3>
+<p>Running Playwright tests in CI/CD ensures that every code change is validated automatically. This guide covers GitHub Actions, sharding, artifacts, Docker, and other CI platforms.</p>
+<h3>The CI Environment Variable</h3>
+<p>When <span class="inline-code">CI=true</span> is set (automatically done by most CI providers), Playwright changes its behavior:</p>
+<table>
+<tr>
+<th>Behavior</th>
+<th>With <span class="inline-code">CI=true</span></th>
+</tr>
+<tr>
+<td>HTML report auto-open</td>
+<td>Disabled</td>
+</tr>
+<tr>
+<td>Browser installation check</td>
+<td>Strict (fails if not installed)</td>
+</tr>
+<tr>
+<td>Screenshot on failure</td>
+<td>Follows config (no prompt)</td>
+</tr>
+<tr>
+<td>Terminal colors</td>
+<td>Disabled for cleaner logs</td>
+</tr>
+</table>
+<h3>GitHub Actions - Complete Workflow</h3>
+<pre><code># .github/workflows/playwright.yml
+name: Playwright Tests
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: &#x27;npm&#x27;
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+
+      - name: Run Playwright tests
+        run: npx playwright test
+
+      - name: Upload HTML report
+        uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 14
+
+      - name: Upload test results (traces)
+        uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: test-results
+          path: test-results/
+          retention-days: 7</code></pre>
+<h3>Sharding Across Multiple CI Jobs</h3>
+<p>Split tests across multiple machines for faster execution:</p>
+<pre><code># .github/workflows/playwright-sharded.yml
+name: Playwright Tests (Sharded)
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1/4, 2/4, 3/4, 4/4]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: &#x27;npm&#x27;
+
+      - run: npm ci
+      - run: npx playwright install --with-deps
+
+      - name: Run tests (shard ${{ matrix.shard }})
+        run: npx playwright test --shard ${{ matrix.shard }}
+
+      - name: Upload blob report
+        uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: blob-report-${{ strategy.job-index }}
+          path: blob-report/
+          retention-days: 1
+
+  merge-reports:
+    if: ${{ !cancelled() }}
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: &#x27;npm&#x27;
+      - run: npm ci
+
+      - name: Download blob reports
+        uses: actions/download-artifact@v4
+        with:
+          path: all-blob-reports
+          pattern: blob-report-*
+          merge-multiple: true
+
+      - name: Merge reports
+        run: npx playwright merge-reports --reporter html ./all-blob-reports
+
+      - name: Upload merged HTML report
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 14</code></pre>
+<h3>Multi-Browser Matrix Strategy</h3>
+<pre><code>strategy:
+  fail-fast: false
+  matrix:
+    browser: [chromium, firefox, webkit]
+
+steps:
+  # ... setup steps ...
+  - name: Run tests on ${{ matrix.browser }}
+    run: npx playwright test --project ${{ matrix.browser }}</code></pre>
+<h3>Retry Strategies in CI</h3>
+<pre><code>// playwright.config.js
+export default {
+  retries: process.env.CI ? 2 : 0,
+  use: {
+    trace: &#x27;on-first-retry&#x27;,
+  },
+};</code></pre>
+<table>
+<tr>
+<th>Strategy</th>
+<th>Config</th>
+<th>When</th>
+</tr>
+<tr>
+<td>No retries</td>
+<td><span class="inline-code">retries: 0</span></td>
+<td>Local development</td>
+</tr>
+<tr>
+<td>1 retry</td>
+<td><span class="inline-code">retries: 1</span></td>
+<td>Stable test suites</td>
+</tr>
+<tr>
+<td>2 retries</td>
+<td><span class="inline-code">retries: 2</span></td>
+<td>Suites with occasional flakiness</td>
+</tr>
+<tr>
+<td>3 retries</td>
+<td><span class="inline-code">retries: 3</span></td>
+<td>Very flaky (address root cause instead)</td>
+</tr>
+</table>
+<h3>Docker Integration</h3>
+<h3>Using the Official Playwright Image</h3>
+<pre><code>jobs:
+  test:
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.49.0-noble
+    steps:
+      - uses: actions/checkout@v4
+      - run: npm ci
+      - run: npx playwright test
+      # No need for &quot;npx playwright install&quot; -- browsers are pre-installed</code></pre>
+<h3>Standalone Docker Run</h3>
+<pre><code>docker run --rm \
+  -v $(pwd):/app \
+  -w /app \
+  mcr.microsoft.com/playwright:v1.49.0-noble \
+  bash -c &quot;npm ci &amp;&amp; npx playwright test&quot;</code></pre>
+<h3>Docker Image Tags</h3>
+<table>
+<tr>
+<th>Tag</th>
+<th>Description</th>
+</tr>
+<tr>
+<td><span class="inline-code">v1.49.0-noble</span></td>
+<td>Ubuntu 24.04, Playwright 1.49.0</td>
+</tr>
+<tr>
+<td><span class="inline-code">v1.49.0-jammy</span></td>
+<td>Ubuntu 22.04, Playwright 1.49.0</td>
+</tr>
+</table>
+<h3>GitLab CI Example</h3>
+<pre><code># .gitlab-ci.yml
+playwright-tests:
+  image: mcr.microsoft.com/playwright:v1.49.0-noble
+  stage: test
+  script:
+    - npm ci
+    - npx playwright test
+  artifacts:
+    when: always
+    paths:
+      - playwright-report/
+      - test-results/
+    expire_in: 7 days
+  retry:
+    max: 1
+    when: script_failure</code></pre>
+<h3>Jenkins Pipeline Example</h3>
+<pre><code>// Jenkinsfile
+pipeline {
+    agent {
+        docker {
+            image &#x27;mcr.microsoft.com/playwright:v1.49.0-noble&#x27;
+        }
+    }
+    stages {
+        stage(&#x27;Install&#x27;) {
+            steps {
+                sh &#x27;npm ci&#x27;
+            }
+        }
+        stage(&#x27;Test&#x27;) {
+            steps {
+                sh &#x27;npx playwright test --reporter junit --output test-results&#x27;
+            }
+            post {
+                always {
+                    junit &#x27;test-results/*.xml&#x27;
+                    archiveArtifacts artifacts: &#x27;playwright-report/**&#x27;, allowEmptyArchive: true
+                }
+            }
+        }
+    }
+}</code></pre>
+<h3>CI Best Practices Checklist</h3>
+<table>
+<tr>
+<th>Practice</th>
+<th>How</th>
+</tr>
+<tr>
+<td>Install browsers in CI</td>
+<td><span class="inline-code">npx playwright install --with-deps</span></td>
+</tr>
+<tr>
+<td>Use <span class="inline-code">--forbid-only</span></td>
+<td>Prevents <span class="inline-code">test.only</span> from reaching CI</td>
+</tr>
+<tr>
+<td>Enable retries</td>
+<td><span class="inline-code">retries: process.env.CI ? 2 : 0</span></td>
+</tr>
+<tr>
+<td>Upload reports as artifacts</td>
+<td><span class="inline-code">actions/upload-artifact@v4</span></td>
+</tr>
+<tr>
+<td>Enable traces for failures</td>
+<td><span class="inline-code">trace: 'on-first-retry'</span></td>
+</tr>
+<tr>
+<td>Shard for speed</td>
+<td><span class="inline-code">--shard N/M</span> with matrix strategy</td>
+</tr>
+<tr>
+<td>Set global timeout</td>
+<td><span class="inline-code">--global-timeout 600000</span></td>
+</tr>
+<tr>
+<td>Use Docker for consistency</td>
+<td><span class="inline-code">mcr.microsoft.com/playwright</span> image</td>
+</tr>
+<tr>
+<td>Cache browser downloads</td>
+<td><span class="inline-code">actions/cache@v4</span> on <span class="inline-code">~/.cache/ms-playwright</span></td>
+</tr>
+<tr>
+<td>Pin Playwright version</td>
+<td>Lock in <span class="inline-code">package-lock.json</span></td>
+</tr>
+</table>
+<h3>Recommended CI Config</h3>
+<pre><code>// playwright.config.js -- CI-optimized
+export default {
+  testDir: &#x27;./tests&#x27;,
+  fullyParallel: true,
+  forbidOnly: !!process.env.CI,
+  retries: process.env.CI ? 2 : 0,
+  workers: process.env.CI ? 4 : undefined,
+  reporter: process.env.CI
+    ? [[&#x27;html&#x27;, { open: &#x27;never&#x27; }], [&#x27;blob&#x27;]]
+    : &#x27;list&#x27;,
+  use: {
+    baseURL: process.env.BASE_URL || &#x27;http://localhost:3000&#x27;,
+    trace: &#x27;on-first-retry&#x27;,
+    screenshot: &#x27;only-on-failure&#x27;,
+  },
+};</code></pre>
+<h3>Summary</h3>
+<ul>
+<li>Use <span class="inline-code">npx playwright install --with-deps</span> in every CI pipeline.</li>
+<li>Enable <span class="inline-code">trace: 'on-first-retry'</span> and <span class="inline-code">retries: 2</span> for CI.</li>
+<li>Upload <span class="inline-code">playwright-report/</span> and <span class="inline-code">test-results/</span> as artifacts.</li>
+<li>Shard tests with <span class="inline-code">--shard N/M</span> and merge reports for faster pipelines.</li>
+<li>Use the official Docker image to eliminate browser installation steps.</li>
+<li>Add <span class="inline-code">--forbid-only</span> to prevent accidental <span class="inline-code">test.only</span> in production runs.</li>
+</ul>
+</div>
+<div class="topic" id="01-basic-cli-exercise">
+<span class="badge badge-exercise">Exercises</span>
+<h2>Basic CLI Exercise</h2>
+<h2>Exercise 1: Basic CLI Commands</h2>
+<h3>Objective</h3>
+<p>Get hands-on experience with the core Playwright CLI commands for running, filtering, and configuring test execution from the terminal.</p>
+<h3>Prerequisites</h3>
+<ul>
+<li>Node.js installed</li>
+<li>A Playwright project with at least 5-10 test files</li>
+<li>Browsers installed via <span class="inline-code">npx playwright install</span></li>
+</ul>
+<h3>Tasks</h3>
+<h3>Task 1: Run All Tests</h3>
+<pre><code>npx playwright test</code></pre>
+<ul>
+<li>Note the total number of tests discovered</li>
+<li>Note the default reporter format</li>
+<li>Record the total execution time</li>
+</ul>
+<h3>Task 2: Compare Worker Counts</h3>
+<pre><code>npx playwright test --workers 4
+npx playwright test --workers 1</code></pre>
+<ul>
+<li>Run each command 3 times and record the average execution time</li>
+<li>What is the speed difference between 4 workers and 1 worker?</li>
+<li>Why might you use <span class="inline-code">--workers 1</span> intentionally?</li>
+</ul>
+<h3>Task 3: Filter Tests with --grep</h3>
+<pre><code>npx playwright test --grep &quot;login&quot;
+npx playwright test --grep &quot;login|signup&quot;
+npx playwright test --grep-invert &quot;login&quot;</code></pre>
+<ul>
+<li>How many tests match "login"?</li>
+<li>What does <span class="inline-code">--grep-invert</span> do differently?</li>
+<li>Can you use regex patterns with <span class="inline-code">--grep</span>?</li>
+</ul>
+<h3>Task 4: Compare Reporters</h3>
+<pre><code>npx playwright test --reporter list
+npx playwright test --reporter dot
+npx playwright test --reporter line
+npx playwright test --reporter json
+npx playwright test --reporter html</code></pre>
+<ul>
+<li>Describe the output format of each reporter in one sentence</li>
+<li>Which reporter gives the most detail during execution?</li>
+<li>Which reporter is best for CI pipelines?</li>
+</ul>
+<h3>Task 5: Test Sharding</h3>
+<pre><code>npx playwright test --shard 1/2
+npx playwright test --shard 2/2</code></pre>
+<ul>
+<li>How many tests does each shard run?</li>
+<li>Do the shards overlap (run the same test twice)?</li>
+<li>Try <span class="inline-code">--shard 1/3</span>, <span class="inline-code">--shard 2/3</span>, <span class="inline-code">--shard 3/3</span> -- does every test get covered?</li>
+</ul>
+<h3>Task 6: Timeout Control</h3>
+<pre><code>npx playwright test --timeout 5000
+npx playwright test --timeout 1000
+npx playwright test --timeout 0</code></pre>
+<ul>
+<li>What happens when timeout is too short?</li>
+<li>What does <span class="inline-code">--timeout 0</span> mean?</li>
+<li>How does CLI timeout interact with <span class="inline-code">test.setTimeout()</span> in code?</li>
+</ul>
+<h3>Deliverable</h3>
+<p>Complete the following comparison table:</p>
+<table>
+<tr>
+<th>Command</th>
+<th>Tests Run</th>
+<th>Time (s)</th>
+<th>Reporter Output</th>
+<th>Notes</th>
+</tr>
+<tr>
+<td><span class="inline-code">npx playwright test</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">--workers 4</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">--workers 1</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">--grep "login"</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">--reporter list</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">--reporter dot</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">--reporter line</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">--shard 1/2</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">--shard 2/2</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">--timeout 5000</span></td>
+</tr>
+</table>
+<h3>Bonus Challenge</h3>
+<ul>
+<li>Combine multiple flags: <span class="inline-code">npx playwright test --grep "login" --workers 1 --reporter list --timeout 10000</span></li>
+<li>What is the order of precedence when flags conflict with config file settings?</li>
+</ul>
+</div>
+<div class="topic" id="02-codegen-exercise">
+<span class="badge badge-exercise">Exercises</span>
+<h2>Codegen Exercise</h2>
+<h2>Exercise 2: Recording Tests with Codegen</h2>
+<h3>Objective</h3>
+<p>Learn to use <span class="inline-code">npx playwright codegen</span> to record browser interactions, generate test code, and critically evaluate the output for production readiness.</p>
+<h3>Prerequisites</h3>
+<ul>
+<li>Playwright installed with browsers</li>
+<li>Access to https://the-internet.herokuapp.com</li>
+<li>A text editor for saving generated code</li>
+</ul>
+<h3>Tasks</h3>
+<h3>Task 1: Launch Codegen</h3>
+<pre><code>npx playwright codegen https://the-internet.herokuapp.com/checkboxes</code></pre>
+<ul>
+<li>Two windows should open: the browser and the Playwright Inspector</li>
+<li>Observe the Inspector panel -- it shows generated code in real time</li>
+<li>Try switching the target language dropdown (JavaScript, Python, Java, C#)</li>
+</ul>
+<h3>Task 2: Record Checkbox Interactions</h3>
+<p>In the codegen browser window:</p>
+<ol>
+<li>Click the first checkbox to check it</li>
+<li>Click the second checkbox to uncheck it</li>
+<li>In the Inspector toolbar, click "Assert visibility" and click on checkbox 1</li>
+<li>Click "Assert checked" and verify checkbox states</li>
+<li>Watch the generated code update in real time</li>
+</ol>
+<h3>Task 3: Save the Generated Code</h3>
+<ul>
+<li>Copy the generated code from the Inspector</li>
+<li>Save it to <span class="inline-code">tests/codegen_checkboxes.spec.js</span></li>
+<li>Review the generated imports and test structure</li>
+</ul>
+<h3>Task 4: Run the Generated Test</h3>
+<pre><code>npx playwright test tests/codegen_checkboxes.spec.js</code></pre>
+<ul>
+<li>Does the test pass on the first run?</li>
+<li>If it fails, what is the error? How would you fix it?</li>
+<li>Run it with <span class="inline-code">--headed</span> to watch the execution</li>
+</ul>
+<h3>Task 5: Record Add/Remove Elements</h3>
+<pre><code>npx playwright codegen https://the-internet.herokuapp.com/add_remove_elements/</code></pre>
+<p>Record the following sequence:</p>
+<ol>
+<li>Click "Add Element" three times</li>
+<li>Verify three "Delete" buttons appear</li>
+<li>Click each "Delete" button to remove all three elements</li>
+<li>Verify no "Delete" buttons remain</li>
+</ol>
+<ul>
+<li>Save as <span class="inline-code">tests/codegen_add_remove.spec.js</span></li>
+</ul>
+<h3>Task 6: Compare Codegen vs Hand-Written</h3>
+<p>Take one of your previously hand-written tests and compare it with the codegen version:</p>
+<table>
+<tr>
+<th>Aspect</th>
+<th>Codegen Output</th>
+<th>Hand-Written</th>
+</tr>
+<tr>
+<td>Locator strategy</td>
+</tr>
+<tr>
+<td>Assertion quality</td>
+</tr>
+<tr>
+<td>Readability</td>
+</tr>
+<tr>
+<td>Maintainability</td>
+</tr>
+<tr>
+<td>Page Object usage</td>
+</tr>
+<tr>
+<td>Error handling</td>
+</tr>
+</table>
+<h3>Task 7: Identify Improvements</h3>
+<p>List 3 specific ways you would improve the codegen output:</p>
+<ol>
+<li>_______________________________________________</li>
+<li>_______________________________________________</li>
+<li>_______________________________________________</li>
+</ol>
+<p>Consider:</p>
+<ul>
+<li>Are the locators robust or brittle?</li>
+<li>Are there missing assertions?</li>
+<li>Would you add waits or retries?</li>
+<li>Could you extract it into a Page Object?</li>
+</ul>
+<h3>Deliverable</h3>
+<ul>
+<li><span class="inline-code">tests/codegen_checkboxes.spec.js</span> -- recorded and verified passing</li>
+<li><span class="inline-code">tests/codegen_add_remove.spec.js</span> -- recorded and verified passing</li>
+<li>Improvement notes (at least 3 items) written as comments in the test files</li>
+</ul>
+<h3>Bonus: Advanced Codegen Flags</h3>
+<p>Try these variations and note the differences:</p>
+<pre><code>npx playwright codegen --browser firefox https://example.com
+npx playwright codegen --viewport-size &quot;800,600&quot; https://example.com
+npx playwright codegen --device &quot;iPhone 13&quot; https://example.com
+npx playwright codegen --color-scheme dark https://example.com
+npx playwright codegen --save-storage auth.json https://example.com</code></pre>
+</div>
+<div class="topic" id="03-debug-trace-exercise">
+<span class="badge badge-exercise">Exercises</span>
+<h2>Debug Trace Exercise</h2>
+<h2>Exercise 3: Debugging with Inspector & Trace Viewer</h2>
+<h3>Objective</h3>
+<p>Master Playwright's built-in debugging tools: the Inspector for stepping through tests, and the Trace Viewer for post-mortem analysis of test runs.</p>
+<h3>Prerequisites</h3>
+<ul>
+<li>A Playwright project with both passing and failing tests</li>
+<li>At least one test that interacts with form elements</li>
+</ul>
+<h3>Part A: Playwright Inspector</h3>
+<h3>Task 1: Debug a Passing Test</h3>
+<pre><code>npx playwright test tests/example.spec.js --debug</code></pre>
+<ul>
+<li>The Inspector window opens alongside the browser</li>
+<li>Click "Step Over" to execute one action at a time</li>
+<li>Observe: the current line is highlighted in the Inspector</li>
+<li>Note how the browser state changes after each step</li>
+</ul>
+<h3>Task 2: Use page.pause()</h3>
+<p>Add <span class="inline-code">await page.pause()</span> in the middle of any test:</p>
+<pre><code>test(&#x27;example test&#x27;, async ({ page }) =&gt; {
+  await page.goto(&#x27;https://example.com&#x27;);
+  await page.pause(); // Execution stops here
+  await page.click(&#x27;text=More information&#x27;);
+});</code></pre>
+<p>Run without <span class="inline-code">--debug</span>:</p>
+<pre><code>npx playwright test tests/example.spec.js</code></pre>
+<ul>
+<li>What happens when execution hits <span class="inline-code">page.pause()</span>?</li>
+<li>Can you resume execution from the Inspector?</li>
+<li>Can you run additional commands in the Inspector console?</li>
+</ul>
+<h3>Task 3: Pick Locator</h3>
+<ul>
+<li>While paused in the Inspector, click the "Pick Locator" button (crosshair icon)</li>
+<li>Hover over elements on the page -- observe the suggested locator</li>
+<li>Click on an element to copy the locator</li>
+<li>Compare the suggested locator with what you would have written manually</li>
+<li>Try picking 5 different elements and record the locators</li>
+</ul>
+<h3>Task 4: Debug a Failing Test</h3>
+<p>Intentionally break a test (e.g., use a wrong selector) and run:</p>
+<pre><code>npx playwright test tests/broken.spec.js --debug</code></pre>
+<ul>
+<li>Step through until the failure point</li>
+<li>What information does the Inspector show at the failure?</li>
+<li>Can you identify the root cause from the Inspector alone?</li>
+</ul>
+<h3>Part B: Trace Viewer</h3>
+<h3>Task 5: Record Traces</h3>
+<p>Add trace configuration to your test or config:</p>
+<pre><code>// playwright.config.js
+use: {
+  trace: &#x27;on&#x27;,
+}</code></pre>
+<p>Run tests:</p>
+<pre><code>npx playwright test</code></pre>
+<ul>
+<li>Find the trace ZIP files in <span class="inline-code">test-results/</span> directory</li>
+<li>What is the file naming pattern for traces?</li>
+<li>How large is a typical trace file?</li>
+</ul>
+<h3>Task 6: Open Trace Locally</h3>
+<pre><code>npx playwright show-trace test-results/&lt;test-folder&gt;/trace.zip</code></pre>
+<p>Explore the Trace Viewer:</p>
+<ul>
+<li><strong>Timeline</strong>: Click on different actions to see the page state</li>
+<li><strong>DOM Snapshot</strong>: Inspect the page at each step (before/after)</li>
+<li><strong>Network</strong>: Review all network requests during the test</li>
+<li><strong>Console</strong>: Check for browser console errors</li>
+<li><strong>Source</strong>: See which line of code corresponds to each action</li>
+</ul>
+<h3>Task 7: Use trace.playwright.dev</h3>
+<ul>
+<li>Open https://trace.playwright.dev in your browser</li>
+<li>Drag and drop a trace ZIP file onto the page</li>
+<li>Navigate through the same views as the local Trace Viewer</li>
+<li>Note: traces are processed locally in the browser, not uploaded to a server</li>
+</ul>
+<h3>Deliverable</h3>
+<p>Capture screenshots or notes for each of the following:</p>
+<ol>
+<li>Inspector paused mid-test with "Pick Locator" active</li>
+<li>Inspector showing a test failure with error details</li>
+<li>Trace Viewer timeline with at least 5 actions visible</li>
+<li>Trace Viewer DOM snapshot showing before/after state</li>
+<li>Trace Viewer network tab showing API calls</li>
+<li>A comparison of the locator suggested by "Pick Locator" vs your manual locator</li>
+</ol>
+<h3>Bonus: Environment Variable Debugging</h3>
+<pre><code>PWDEBUG=1 npx playwright test           # Opens Inspector for every test
+PWDEBUG=console npx playwright test      # Enables playwright.$ in DevTools console
+DEBUG=pw:api npx playwright test         # Verbose API logging
+DEBUG=pw:browser npx playwright test     # Browser protocol logging</code></pre>
+<p>Try each and describe when you would use it.</p>
+</div>
+<div class="topic" id="04-config-flags-exercise">
+<span class="badge badge-exercise">Exercises</span>
+<h2>Config Flags Exercise</h2>
+<h2>Exercise 4: Config File vs CLI Flags</h2>
+<h3>Objective</h3>
+<p>Understand the relationship between <span class="inline-code">playwright.config.js</span> settings and CLI flags, learn when each takes precedence, and create a CI-specific configuration.</p>
+<h3>Prerequisites</h3>
+<ul>
+<li>An existing <span class="inline-code">playwright.config.js</span> in your project</li>
+<li>Multiple test files across different features</li>
+</ul>
+<h3>Tasks</h3>
+<h3>Task 1: Create a CI Config</h3>
+<p>Create <span class="inline-code">playwright.ci.config.js</span> with CI-optimized settings:</p>
+<pre><code>// @ts-check
+const { defineConfig } = require(&#x27;@playwright/test&#x27;);
+
+module.exports = defineConfig({
+  testDir: &#x27;./tests&#x27;,
+  fullyParallel: true,
+  forbidOnly: true,
+  retries: 2,
+  workers: 4,
+  reporter: [
+    [&#x27;list&#x27;],
+    [&#x27;html&#x27;, { open: &#x27;never&#x27; }],
+    [&#x27;json&#x27;, { outputFile: &#x27;test-results/results.json&#x27; }],
+  ],
+  use: {
+    headless: true,
+    trace: &#x27;on-first-retry&#x27;,
+    screenshot: &#x27;only-on-failure&#x27;,
+    video: &#x27;retain-on-failure&#x27;,
+  },
+  projects: [
+    { name: &#x27;chromium&#x27;, use: { browserName: &#x27;chromium&#x27; } },
+    { name: &#x27;firefox&#x27;, use: { browserName: &#x27;firefox&#x27; } },
+    { name: &#x27;webkit&#x27;, use: { browserName: &#x27;webkit&#x27; } },
+  ],
+});</code></pre>
+<h3>Task 2: Run with Custom Config</h3>
+<pre><code>npx playwright test --config playwright.ci.config.js</code></pre>
+<ul>
+<li>Verify retries are set to 2 (intentionally fail a test to confirm)</li>
+<li>Verify all three browsers run</li>
+<li>Check that HTML report is generated but not auto-opened</li>
+</ul>
+<h3>Task 3: CLI Overrides Config</h3>
+<pre><code>npx playwright test --config playwright.ci.config.js --timeout 10000</code></pre>
+<p>Your CI config has no explicit timeout (defaults to 30000). The CLI sets 10000.</p>
+<ul>
+<li>Which value wins? Verify by adding a <span class="inline-code">console.log</span> with timing</li>
+<li>Try: <span class="inline-code">--workers 1</span> when config says <span class="inline-code">workers: 4</span> -- which wins?</li>
+<li>Try: <span class="inline-code">--retries 0</span> when config says <span class="inline-code">retries: 2</span> -- which wins?</li>
+</ul>
+<p><strong>Rule</strong>: CLI flags always override config file values.</p>
+<h3>Task 4: Config-Only Options (No CLI Equivalent)</h3>
+<p>Identify and document 5 options that can ONLY be set in the config file:</p>
+<table>
+<tr>
+<th>Config Option</th>
+<th>Purpose</th>
+<th>Example Value</th>
+</tr>
+<tr>
+<td>1.</td>
+</tr>
+<tr>
+<td>2.</td>
+</tr>
+<tr>
+<td>3.</td>
+</tr>
+<tr>
+<td>4.</td>
+</tr>
+<tr>
+<td>5.</td>
+</tr>
+</table>
+<p>Hints: <span class="inline-code">fullyParallel</span>, <span class="inline-code">forbidOnly</span>, <span class="inline-code">use.baseURL</span>, <span class="inline-code">use.storageState</span>, <span class="inline-code">webServer</span>, <span class="inline-code">expect.timeout</span>, <span class="inline-code">testMatch</span>, <span class="inline-code">globalSetup</span>, <span class="inline-code">globalTeardown</span>, <span class="inline-code">snapshotPathTemplate</span></p>
+<h3>Task 5: CLI-Only Options (No Config Equivalent)</h3>
+<p>Identify and document 5 options that can ONLY be passed via CLI:</p>
+<table>
+<tr>
+<th>CLI Flag</th>
+<th>Purpose</th>
+<th>Example</th>
+</tr>
+<tr>
+<td>1.</td>
+</tr>
+<tr>
+<td>2.</td>
+</tr>
+<tr>
+<td>3.</td>
+</tr>
+<tr>
+<td>4.</td>
+</tr>
+<tr>
+<td>5.</td>
+</tr>
+</table>
+<p>Hints: <span class="inline-code">--debug</span>, <span class="inline-code">--ui</span>, <span class="inline-code">--pass-with-no-tests</span>, <span class="inline-code">--shard</span>, <span class="inline-code">--list</span>, <span class="inline-code">--last-failed</span>, <span class="inline-code">--update-snapshots</span>, <span class="inline-code">--headed</span> (partially)</p>
+<h3>Task 6: Multi-Browser Projects</h3>
+<p>Run tests for a single project:</p>
+<pre><code>npx playwright test --project chromium
+npx playwright test --project firefox
+npx playwright test --project &quot;chromium&quot; --project &quot;firefox&quot;</code></pre>
+<ul>
+<li>How do you run only chromium and firefox but skip webkit?</li>
+<li>What happens if you specify a project name that doesn't exist?</li>
+<li>Can you define project-specific timeouts?</li>
+</ul>
+<h3>Deliverable</h3>
+<ol>
+<li><span class="inline-code">playwright.ci.config.js</span> -- complete and working</li>
+<li>Comparison table showing config vs CLI precedence for 5 settings</li>
+<li>Lists of config-only and CLI-only options (5 each)</li>
+<li>Output showing <span class="inline-code">--project</span> filtering in action</li>
+</ol>
+<h3>Bonus: Multiple Config Strategy</h3>
+<p>Create three config files for different environments:</p>
+<pre><code>playwright.config.js        # Default/local development
+playwright.ci.config.js     # CI pipeline
+playwright.staging.config.js # Staging environment tests</code></pre>
+<p>Document when and why you would use each.</p>
+</div>
+<div class="topic" id="05-cli-toolkit-mini-project">
+<span class="badge badge-exercise">Exercises</span>
+<h2>CLI Toolkit Mini Project</h2>
+<h2>Exercise 5: Build a CLI Toolkit</h2>
+<h3>Objective</h3>
+<p>Create a complete developer toolkit around Playwright CLI: npm scripts for every common task, a CI simulation shell script, and a Makefile for convenience commands.</p>
+<h3>Prerequisites</h3>
+<ul>
+<li>A working Playwright project with tests</li>
+<li>Familiarity with npm scripts and basic shell scripting</li>
+<li>Tests that cover at least 2 browser targets</li>
+</ul>
+<h3>Step 1: Add npm Scripts to package.json</h3>
+<p>Update the <span class="inline-code">"scripts"</span> section of your <span class="inline-code">package.json</span>:</p>
+<pre><code>{
+  &quot;scripts&quot;: {
+    &quot;test&quot;: &quot;npx playwright test&quot;,
+    &quot;test:headed&quot;: &quot;npx playwright test --headed&quot;,
+    &quot;test:debug&quot;: &quot;npx playwright test --debug&quot;,
+    &quot;test:ui&quot;: &quot;npx playwright test --ui&quot;,
+    &quot;test:chrome&quot;: &quot;npx playwright test --project chromium&quot;,
+    &quot;test:firefox&quot;: &quot;npx playwright test --project firefox&quot;,
+    &quot;test:webkit&quot;: &quot;npx playwright test --project webkit&quot;,
+    &quot;test:all-browsers&quot;: &quot;npx playwright test --project chromium --project firefox --project webkit&quot;,
+    &quot;test:smoke&quot;: &quot;npx playwright test --grep @smoke&quot;,
+    &quot;test:regression&quot;: &quot;npx playwright test --grep @regression&quot;,
+    &quot;test:retry&quot;: &quot;npx playwright test --retries 2&quot;,
+    &quot;codegen&quot;: &quot;npx playwright codegen&quot;,
+    &quot;codegen:app&quot;: &quot;npx playwright codegen http://localhost:3000&quot;,
+    &quot;report&quot;: &quot;npx playwright show-report&quot;,
+    &quot;trace&quot;: &quot;npx playwright show-trace&quot;,
+    &quot;install:browsers&quot;: &quot;npx playwright install --with-deps&quot;
+  }
+}</code></pre>
+<p>Verify each script works:</p>
+<pre><code>npm test
+npm run test:headed
+npm run test:chrome
+npm run codegen
+npm run report</code></pre>
+<h3>Step 2: Create CI Simulation Script</h3>
+<p>Create <span class="inline-code">ci_simulation.sh</span>:</p>
+<pre><code>#!/bin/bash
+set -e
+
+echo &quot;=========================================&quot;
+echo &quot;  Playwright CI Simulation&quot;
+echo &quot;=========================================&quot;
+echo &quot;&quot;
+
+# Step 1: Install dependencies
+echo &quot;[1/6] Installing dependencies...&quot;
+npm ci
+npx playwright install --with-deps chromium
+
+# Step 2: Run linting (if available)
+echo &quot;[2/6] Running lint checks...&quot;
+npm run lint 2&gt;/dev/null || echo &quot;No lint script found, skipping...&quot;
+
+# Step 3: Run tests with retries and JSON output
+echo &quot;[3/6] Running tests (shard 1/2)...&quot;
+npx playwright test --shard 1/2 --retries 2 --reporter json &gt; test-results/shard1.json 2&gt;&amp;1 || true
+
+echo &quot;[4/6] Running tests (shard 2/2)...&quot;
+npx playwright test --shard 2/2 --retries 2 --reporter json &gt; test-results/shard2.json 2&gt;&amp;1 || true
+
+# Step 4: Generate HTML report
+echo &quot;[5/6] Generating HTML report...&quot;
+npx playwright test --reporter html 2&gt;/dev/null || true
+
+# Step 5: Check results
+echo &quot;[6/6] Checking results...&quot;
+FAILURES=$(npx playwright test --reporter json 2&gt;/dev/null | node -e &quot;
+  let data = &#x27;&#x27;;
+  process.stdin.on(&#x27;data&#x27;, chunk =&gt; data += chunk);
+  process.stdin.on(&#x27;end&#x27;, () =&gt; {
+    try {
+      const results = JSON.parse(data);
+      const failed = results.suites?.reduce((acc, s) =&gt;
+        acc + s.specs?.filter(sp =&gt; sp.ok === false).length, 0) || 0;
+      console.log(failed);
+    } catch(e) { console.log(&#x27;unknown&#x27;); }
+  });
+&quot;)
+
+echo &quot;&quot;
+echo &quot;=========================================&quot;
+if [ &quot;$FAILURES&quot; = &quot;0&quot; ]; then
+  echo &quot;  ALL TESTS PASSED&quot;
+  echo &quot;=========================================&quot;
+  exit 0
+else
+  echo &quot;  TESTS COMPLETED WITH FAILURES: $FAILURES&quot;
+  echo &quot;=========================================&quot;
+  echo &quot;  Check report: npx playwright show-report&quot;
+  exit 1
+fi</code></pre>
+<p>Make it executable:</p>
+<pre><code>chmod +x ci_simulation.sh</code></pre>
+<h3>Step 3: Create a Makefile</h3>
+<p>Create <span class="inline-code">Makefile</span>:</p>
+<pre><code>.PHONY: test debug report codegen ci install clean help
+
+# Default target
+help:
+	@echo &quot;Playwright CLI Toolkit&quot;
+	@echo &quot;======================&quot;
+	@echo &quot;&quot;
+	@echo &quot;  make test       - Run all tests headless&quot;
+	@echo &quot;  make test-headed - Run all tests with browser visible&quot;
+	@echo &quot;  make debug      - Run tests in debug mode&quot;
+	@echo &quot;  make ui         - Open Playwright UI mode&quot;
+	@echo &quot;  make chrome     - Run tests on Chromium only&quot;
+	@echo &quot;  make firefox    - Run tests on Firefox only&quot;
+	@echo &quot;  make webkit     - Run tests on WebKit only&quot;
+	@echo &quot;  make codegen    - Launch Playwright codegen&quot;
+	@echo &quot;  make report     - Open last HTML report&quot;
+	@echo &quot;  make trace FILE=&lt;path&gt; - Open a trace file&quot;
+	@echo &quot;  make ci         - Run full CI simulation&quot;
+	@echo &quot;  make install    - Install browsers&quot;
+	@echo &quot;  make clean      - Remove test results and reports&quot;
+	@echo &quot;&quot;
+
+test:
+	npx playwright test
+
+test-headed:
+	npx playwright test --headed
+
+debug:
+	npx playwright test --debug
+
+ui:
+	npx playwright test --ui
+
+chrome:
+	npx playwright test --project chromium
+
+firefox:
+	npx playwright test --project firefox
+
+webkit:
+	npx playwright test --project webkit
+
+codegen:
+	npx playwright codegen
+
+report:
+	npx playwright show-report
+
+trace:
+	@if [ -z &quot;$(FILE)&quot; ]; then \
+		echo &quot;Usage: make trace FILE=path/to/trace.zip&quot;; \
+	else \
+		npx playwright show-trace $(FILE); \
+	fi
+
+ci:
+	bash ci_simulation.sh
+
+install:
+	npx playwright install --with-deps
+
+clean:
+	rm -rf test-results/ playwright-report/ blob-report/
+	@echo &quot;Cleaned test results and reports.&quot;</code></pre>
+<h3>Step 4: Test All npm Scripts</h3>
+<p>Run each npm script and verify it works. Fill in the table:</p>
+<table>
+<tr>
+<th>Script</th>
+<th>Command</th>
+<th>Works?</th>
+<th>Notes</th>
+</tr>
+<tr>
+<td>test</td>
+<td><span class="inline-code">npm test</span></td>
+</tr>
+<tr>
+<td>test:headed</td>
+<td><span class="inline-code">npm run test:headed</span></td>
+</tr>
+<tr>
+<td>test:debug</td>
+<td><span class="inline-code">npm run test:debug</span></td>
+</tr>
+<tr>
+<td>test:chrome</td>
+<td><span class="inline-code">npm run test:chrome</span></td>
+</tr>
+<tr>
+<td>test:firefox</td>
+<td><span class="inline-code">npm run test:firefox</span></td>
+</tr>
+<tr>
+<td>test:webkit</td>
+<td><span class="inline-code">npm run test:webkit</span></td>
+</tr>
+<tr>
+<td>codegen</td>
+<td><span class="inline-code">npm run codegen</span></td>
+</tr>
+<tr>
+<td>report</td>
+<td><span class="inline-code">npm run report</span></td>
+</tr>
+</table>
+<h3>Step 5: Run the CI Simulation</h3>
+<pre><code>./ci_simulation.sh</code></pre>
+<ul>
+<li>Does it complete successfully?</li>
+<li>Are shard results generated?</li>
+<li>Is the HTML report created?</li>
+<li>What is the exit code on success vs failure?</li>
+</ul>
+<h3>Deliverables</h3>
+<ol>
+<li>Updated <span class="inline-code">package.json</span> with all npm scripts</li>
+<li><span class="inline-code">ci_simulation.sh</span> -- executable and tested</li>
+<li><span class="inline-code">Makefile</span> -- all targets working</li>
+<li>Execution output showing at least 3 npm scripts and the CI simulation running successfully</li>
+</ol>
+<h3>Bonus</h3>
+<ul>
+<li>Add a <span class="inline-code">test:parallel</span> script that runs with <span class="inline-code">--fully-parallel</span></li>
+<li>Add a <span class="inline-code">test:last-failed</span> script using <span class="inline-code">--last-failed</span></li>
+<li>Add a <span class="inline-code">snapshot:update</span> script using <span class="inline-code">--update-snapshots</span></li>
+<li>Create a <span class="inline-code">.env</span> file with <span class="inline-code">CI=true</span> and test its effect on Playwright behavior</li>
+</ul>
+</div>
+<div class="topic" id="ci-cd-pipeline-notes">
+<span class="badge badge-note">Notes</span>
+<h2>CI CD Pipeline Notes</h2>
+<h2>CI/CD Pipeline - Quick Notes</h2>
+<h3>GitHub Actions Template (Copy-Paste Ready)</h3>
+<pre><code>name: Playwright Tests
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1/4, 2/4, 3/4, 4/4]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: &#x27;npm&#x27;
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+
+      - name: Run tests
+        run: npx playwright test --shard ${{ matrix.shard }} --retries 2
+        env:
+          CI: true
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-${{ strategy.job-index }}
+          path: test-results/
+          retention-days: 7
+
+      - name: Upload HTML report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-${{ strategy.job-index }}
+          path: playwright-report/
+          retention-days: 14</code></pre>
+<h3>Common CI Gotchas & Solutions</h3>
+<table>
+<tr>
+<th>Problem</th>
+<th>Cause</th>
+<th>Solution</th>
+</tr>
+<tr>
+<td>Tests pass locally, fail in CI</td>
+<td>Missing OS deps</td>
+<td>Use <span class="inline-code">--with-deps</span> flag</td>
+</tr>
+<tr>
+<td>Timeout errors in CI</td>
+<td>Slower CI machines</td>
+<td>Increase timeout: <span class="inline-code">--timeout 60000</span></td>
+</tr>
+<tr>
+<td>Flaky tests</td>
+<td>Race conditions</td>
+<td>Add <span class="inline-code">retries: 2</span> in CI config</td>
+</tr>
+<tr>
+<td><span class="inline-code">test.only</span> left in code</td>
+<td>Dev oversight</td>
+<td>Add <span class="inline-code">--forbid-only</span> in CI</td>
+</tr>
+<tr>
+<td>Browser not found</td>
+<td>Not installed</td>
+<td>Run <span class="inline-code">npx playwright install</span> in CI</td>
+</tr>
+<tr>
+<td>Screenshots differ</td>
+<td>Font rendering</td>
+<td>Use Docker image for consistency</td>
+</tr>
+<tr>
+<td>Out of memory</td>
+<td>Too many workers</td>
+<td>Reduce <span class="inline-code">--workers 2</span> in CI</td>
+</tr>
+<tr>
+<td>Tests run twice</td>
+<td>Duplicate config projects</td>
+<td>Check project dependencies</td>
+</tr>
+<tr>
+<td>Trace files too large</td>
+<td><span class="inline-code">trace: 'on'</span></td>
+<td>Use <span class="inline-code">trace: 'on-first-retry'</span></td>
+</tr>
+<tr>
+<td>Slow browser install</td>
+<td>No cache</td>
+<td>Cache <span class="inline-code">~/.cache/ms-playwright</span></td>
+</tr>
+</table>
+<h3>Docker Setup</h3>
+<pre><code># Use official Playwright Docker image
+FROM mcr.microsoft.com/playwright:v1.50.0-noble
+
+WORKDIR /app
+
+COPY package.json package-lock.json ./
+RUN npm ci
+
+COPY . .
+
+# Run tests
+CMD [&quot;npx&quot;, &quot;playwright&quot;, &quot;test&quot;]</code></pre>
+<p>Run locally:</p>
+<pre><code>docker build -t pw-tests .
+docker run --rm pw-tests
+docker run --rm pw-tests npx playwright test --project chromium</code></pre>
+<h3>Artifact Upload Patterns</h3>
+<pre><code># Upload everything on failure
+- uses: actions/upload-artifact@v4
+  if: failure()
+  with:
+    name: test-failures
+    path: |
+      test-results/
+      playwright-report/
+
+# Upload traces only
+- uses: actions/upload-artifact@v4
+  if: always()
+  with:
+    name: traces
+    path: test-results/**/trace.zip
+
+# Upload screenshots only
+- uses: actions/upload-artifact@v4
+  if: failure()
+  with:
+    name: screenshots
+    path: test-results/**/*.png</code></pre>
+<h3>Sharding Matrix Example</h3>
+<p>For large test suites, split across multiple machines:</p>
+<pre><code>strategy:
+  fail-fast: false
+  matrix:
+    shard: [1/4, 2/4, 3/4, 4/4]
+
+# Access in step:
+run: npx playwright test --shard ${{ matrix.shard }}</code></pre>
+<p>Multi-browser matrix:</p>
+<pre><code>strategy:
+  fail-fast: false
+  matrix:
+    browser: [chromium, firefox, webkit]
+    shard: [1/2, 2/2]
+
+steps:
+  - run: npx playwright test --project ${{ matrix.browser }} --shard ${{ matrix.shard }}</code></pre>
+<h3>Browser Caching in CI</h3>
+<pre><code>- name: Cache Playwright browsers
+  uses: actions/cache@v4
+  with:
+    path: ~/.cache/ms-playwright
+    key: playwright-${{ runner.os }}-${{ hashFiles(&#x27;package-lock.json&#x27;) }}
+
+- name: Install Playwright (uses cache if available)
+  run: npx playwright install --with-deps</code></pre>
+<h3>CI Config Best Practices</h3>
+<pre><code>// playwright.ci.config.js
+module.exports = defineConfig({
+  forbidOnly: true,           // Fail on test.only
+  retries: 2,                 // Retry flaky tests
+  workers: &#x27;50%&#x27;,             // Don&#x27;t overwhelm CI
+  reporter: [
+    [&#x27;list&#x27;],
+    [&#x27;html&#x27;, { open: &#x27;never&#x27; }],
+    [&#x27;junit&#x27;, { outputFile: &#x27;results.xml&#x27; }],
+  ],
+  use: {
+    trace: &#x27;on-first-retry&#x27;,  // Traces only on retry
+    screenshot: &#x27;only-on-failure&#x27;,
+    video: &#x27;retain-on-failure&#x27;,
+  },
+});</code></pre>
+</div>
+<div class="topic" id="cli-quick-reference">
+<span class="badge badge-note">Notes</span>
+<h2>CLI Quick Reference</h2>
+<h2>Playwright CLI - Quick Reference</h2>
+<h3>Running Tests</h3>
+<table>
+<tr>
+<th>Command</th>
+<th>Example</th>
+<th>Description</th>
+</tr>
+<tr>
+<td><span class="inline-code">npx playwright test</span></td>
+<td><span class="inline-code">npx playwright test</span></td>
+<td>Run all tests in the project</td>
+</tr>
+<tr>
+<td><span class="inline-code">npx playwright test <file></span></td>
+<td><span class="inline-code">npx playwright test login.spec.js</span></td>
+<td>Run tests in a specific file</td>
+</tr>
+<tr>
+<td><span class="inline-code">npx playwright test <dir></span></td>
+<td><span class="inline-code">npx playwright test tests/auth/</span></td>
+<td>Run all tests in a directory</td>
+</tr>
+<tr>
+<td><span class="inline-code">npx playwright test -g <regex></span></td>
+<td><span class="inline-code">npx playwright test -g "login"</span></td>
+<td>Run tests matching a pattern</td>
+</tr>
+<tr>
+<td><span class="inline-code">npx playwright test --grep-invert</span></td>
+<td><span class="inline-code">npx playwright test --grep-invert "slow"</span></td>
+<td>Exclude tests matching pattern</td>
+</tr>
+<tr>
+<td><span class="inline-code">npx playwright test --project</span></td>
+<td><span class="inline-code">npx playwright test --project chromium</span></td>
+<td>Run tests for a specific project</td>
+</tr>
+<tr>
+<td><span class="inline-code">npx playwright test --headed</span></td>
+<td><span class="inline-code">npx playwright test --headed</span></td>
+<td>Run with visible browser window</td>
+</tr>
+<tr>
+<td><span class="inline-code">npx playwright test --workers</span></td>
+<td><span class="inline-code">npx playwright test --workers 4</span></td>
+<td>Set parallel worker count</td>
+</tr>
+<tr>
+<td><span class="inline-code">npx playwright test --retries</span></td>
+<td><span class="inline-code">npx playwright test --retries 2</span></td>
+<td>Retry failed tests N times</td>
+</tr>
+<tr>
+<td><span class="inline-code">npx playwright test --repeat-each</span></td>
+<td><span class="inline-code">npx playwright test --repeat-each 3</span></td>
+<td>Run each test N times</td>
+</tr>
+<tr>
+<td><span class="inline-code">npx playwright test --shard</span></td>
+<td><span class="inline-code">npx playwright test --shard 1/3</span></td>
+<td>Run a subset of tests (for CI)</td>
+</tr>
+<tr>
+<td><span class="inline-code">npx playwright test --timeout</span></td>
+<td><span class="inline-code">npx playwright test --timeout 60000</span></td>
+<td>Set test timeout in ms</td>
+</tr>
+<tr>
+<td><span class="inline-code">npx playwright test --config</span></td>
+<td><span class="inline-code">npx playwright test --config ci.config.js</span></td>
+<td>Use a custom config file</td>
+</tr>
+<tr>
+<td><span class="inline-code">npx playwright test --last-failed</span></td>
+<td><span class="inline-code">npx playwright test --last-failed</span></td>
+<td>Re-run only previously failed tests</td>
+</tr>
+<tr>
+<td><span class="inline-code">npx playwright test --list</span></td>
+<td><span class="inline-code">npx playwright test --list</span></td>
+<td>List all tests without running</td>
+</tr>
+<tr>
+<td><span class="inline-code">npx playwright test --pass-with-no-tests</span></td>
+<td><span class="inline-code">npx playwright test --pass-with-no-tests</span></td>
+<td>Exit 0 even if no tests found</td>
+</tr>
+<tr>
+<td><span class="inline-code">npx playwright test --forbid-only</span></td>
+<td><span class="inline-code">npx playwright test --forbid-only</span></td>
+<td>Fail if test.only is present</td>
+</tr>
+<tr>
+<td><span class="inline-code">npx playwright test --fully-parallel</span></td>
+<td><span class="inline-code">npx playwright test --fully-parallel</span></td>
+<td>Run all tests in parallel</td>
+</tr>
+<tr>
+<td><span class="inline-code">npx playwright test --output</span></td>
+<td><span class="inline-code">npx playwright test --output results/</span></td>
+<td>Set output directory</td>
+</tr>
+<tr>
+<td><span class="inline-code">npx playwright test --update-snapshots</span></td>
+<td><span class="inline-code">npx playwright test --update-snapshots</span></td>
+<td>Update visual comparison baselines</td>
+</tr>
+</table>
+<h3>Recording Tests</h3>
+<table>
+<tr>
+<th>Command</th>
+<th>Example</th>
+<th>Description</th>
+</tr>
+<tr>
+<td><span class="inline-code">npx playwright codegen</span></td>
+<td><span class="inline-code">npx playwright codegen https://example.com</span></td>
+<td>Record browser actions as test code</td>
+</tr>
+<tr>
+<td><span class="inline-code">codegen --browser</span></td>
+<td><span class="inline-code">npx playwright codegen --browser firefox</span></td>
+<td>Record using specific browser</td>
+</tr>
+<tr>
+<td><span class="inline-code">codegen --device</span></td>
+<td><span class="inline-code">npx playwright codegen --device "iPhone 13"</span></td>
+<td>Emulate a mobile device</td>
+</tr>
+<tr>
+<td><span class="inline-code">codegen --viewport-size</span></td>
+<td><span class="inline-code">npx playwright codegen --viewport-size "800,600"</span></td>
+<td>Set custom viewport</td>
+</tr>
+<tr>
+<td><span class="inline-code">codegen --color-scheme</span></td>
+<td><span class="inline-code">npx playwright codegen --color-scheme dark</span></td>
+<td>Set dark/light mode</td>
+</tr>
+<tr>
+<td><span class="inline-code">codegen --save-storage</span></td>
+<td><span class="inline-code">npx playwright codegen --save-storage auth.json</span></td>
+<td>Save auth state after session</td>
+</tr>
+<tr>
+<td><span class="inline-code">codegen --load-storage</span></td>
+<td><span class="inline-code">npx playwright codegen --load-storage auth.json</span></td>
+<td>Load saved auth state</td>
+</tr>
+</table>
+<h3>Reporting</h3>
+<table>
+<tr>
+<th>Command</th>
+<th>Example</th>
+<th>Description</th>
+</tr>
+<tr>
+<td><span class="inline-code">--reporter list</span></td>
+<td><span class="inline-code">npx playwright test --reporter list</span></td>
+<td>Detailed step-by-step output</td>
+</tr>
+<tr>
+<td><span class="inline-code">--reporter dot</span></td>
+<td><span class="inline-code">npx playwright test --reporter dot</span></td>
+<td>Minimal dot output</td>
+</tr>
+<tr>
+<td><span class="inline-code">--reporter line</span></td>
+<td><span class="inline-code">npx playwright test --reporter line</span></td>
+<td>One line per test update</td>
+</tr>
+<tr>
+<td><span class="inline-code">--reporter html</span></td>
+<td><span class="inline-code">npx playwright test --reporter html</span></td>
+<td>Generate interactive HTML report</td>
+</tr>
+<tr>
+<td><span class="inline-code">--reporter json</span></td>
+<td><span class="inline-code">npx playwright test --reporter json</span></td>
+<td>Output results as JSON</td>
+</tr>
+<tr>
+<td><span class="inline-code">--reporter junit</span></td>
+<td><span class="inline-code">npx playwright test --reporter junit</span></td>
+<td>JUnit XML format for CI</td>
+</tr>
+<tr>
+<td><span class="inline-code">show-report</span></td>
+<td><span class="inline-code">npx playwright show-report</span></td>
+<td>Open last HTML report in browser</td>
+</tr>
+</table>
+<h3>Debugging</h3>
+<table>
+<tr>
+<th>Command</th>
+<th>Example</th>
+<th>Description</th>
+</tr>
+<tr>
+<td><span class="inline-code">--debug</span></td>
+<td><span class="inline-code">npx playwright test --debug</span></td>
+<td>Run with Playwright Inspector</td>
+</tr>
+<tr>
+<td><span class="inline-code">--ui</span></td>
+<td><span class="inline-code">npx playwright test --ui</span></td>
+<td>Open interactive UI mode</td>
+</tr>
+<tr>
+<td><span class="inline-code">PWDEBUG=1</span></td>
+<td><span class="inline-code">PWDEBUG=1 npx playwright test</span></td>
+<td>Force Inspector for all tests</td>
+</tr>
+<tr>
+<td><span class="inline-code">PWDEBUG=console</span></td>
+<td><span class="inline-code">PWDEBUG=console npx playwright test</span></td>
+<td>Enable playwright.$ in DevTools</td>
+</tr>
+<tr>
+<td><span class="inline-code">DEBUG=pw:api</span></td>
+<td><span class="inline-code">DEBUG=pw:api npx playwright test</span></td>
+<td>Verbose Playwright API logs</td>
+</tr>
+<tr>
+<td><span class="inline-code">show-trace</span></td>
+<td><span class="inline-code">npx playwright show-trace trace.zip</span></td>
+<td>Open Trace Viewer for a trace file</td>
+</tr>
+</table>
+<h3>Browser Management</h3>
+<table>
+<tr>
+<th>Command</th>
+<th>Example</th>
+<th>Description</th>
+</tr>
+<tr>
+<td><span class="inline-code">install</span></td>
+<td><span class="inline-code">npx playwright install</span></td>
+<td>Install all browsers</td>
+</tr>
+<tr>
+<td><span class="inline-code">install <browser></span></td>
+<td><span class="inline-code">npx playwright install chromium</span></td>
+<td>Install a specific browser</td>
+</tr>
+<tr>
+<td><span class="inline-code">install --with-deps</span></td>
+<td><span class="inline-code">npx playwright install --with-deps</span></td>
+<td>Install browsers + OS dependencies</td>
+</tr>
+<tr>
+<td><span class="inline-code">install --dry-run</span></td>
+<td><span class="inline-code">npx playwright install --dry-run</span></td>
+<td>Show what would be installed</td>
+</tr>
+<tr>
+<td><span class="inline-code">uninstall</span></td>
+<td><span class="inline-code">npx playwright uninstall</span></td>
+<td>Remove installed browsers</td>
+</tr>
+<tr>
+<td><span class="inline-code">uninstall --all</span></td>
+<td><span class="inline-code">npx playwright uninstall --all</span></td>
+<td>Remove all Playwright browsers</td>
+</tr>
+</table>
+<h3>Project Initialization</h3>
+<table>
+<tr>
+<th>Command</th>
+<th>Example</th>
+<th>Description</th>
+</tr>
+<tr>
+<td><span class="inline-code">init</span></td>
+<td><span class="inline-code">npm init playwright@latest</span></td>
+<td>Create a new Playwright project</td>
+</tr>
+<tr>
+<td><span class="inline-code">--help</span></td>
+<td><span class="inline-code">npx playwright --help</span></td>
+<td>Show all available commands</td>
+</tr>
+<tr>
+<td><span class="inline-code">--version</span></td>
+<td><span class="inline-code">npx playwright --version</span></td>
+<td>Show installed Playwright version</td>
+</tr>
+</table>
+</div>
+<div class="topic" id="config-file-reference">
+<span class="badge badge-note">Notes</span>
+<h2>Config File Reference</h2>
+<h2>playwright.config.js - Complete Reference</h2>
+<p>All configuration options for Playwright Test, organized by section.</p>
+<h3>TestConfig (Top-Level)</h3>
+<table>
+<tr>
+<th>Option</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+<tr>
+<td><span class="inline-code">testDir</span></td>
+<td><span class="inline-code">string</span></td>
+<td><span class="inline-code">"."</span></td>
+<td>Directory to scan for test files</td>
+</tr>
+<tr>
+<td><span class="inline-code">testMatch</span></td>
+<td>`string \</td>
+<td>RegExp \</td>
+<td>Array`</td>
+<td><span class="inline-code"><em>*/</em>.spec.{js,ts}</span></td>
+<td>Pattern to match test files</td>
+</tr>
+<tr>
+<td><span class="inline-code">testIgnore</span></td>
+<td>`string \</td>
+<td>RegExp \</td>
+<td>Array`</td>
+<td><span class="inline-code"><strong>/node_modules/</strong></span></td>
+<td>Pattern to ignore test files</td>
+</tr>
+<tr>
+<td><span class="inline-code">timeout</span></td>
+<td><span class="inline-code">number</span></td>
+<td><span class="inline-code">30000</span></td>
+<td>Per-test timeout in milliseconds</td>
+</tr>
+<tr>
+<td><span class="inline-code">globalTimeout</span></td>
+<td><span class="inline-code">number</span></td>
+<td><span class="inline-code">0</span></td>
+<td>Total timeout for the entire test run</td>
+</tr>
+<tr>
+<td><span class="inline-code">fullyParallel</span></td>
+<td><span class="inline-code">boolean</span></td>
+<td><span class="inline-code">false</span></td>
+<td>Run all tests in parallel across files</td>
+</tr>
+<tr>
+<td><span class="inline-code">forbidOnly</span></td>
+<td><span class="inline-code">boolean</span></td>
+<td><span class="inline-code">false</span></td>
+<td>Fail if <span class="inline-code">test.only</span> is present (useful in CI)</td>
+</tr>
+<tr>
+<td><span class="inline-code">retries</span></td>
+<td><span class="inline-code">number</span></td>
+<td><span class="inline-code">0</span></td>
+<td>Number of retries for failed tests</td>
+</tr>
+<tr>
+<td><span class="inline-code">workers</span></td>
+<td>`number \</td>
+<td>string`</td>
+<td><span class="inline-code">"50%"</span></td>
+<td>Number of parallel workers</td>
+</tr>
+<tr>
+<td><span class="inline-code">maxFailures</span></td>
+<td><span class="inline-code">number</span></td>
+<td><span class="inline-code">0</span></td>
+<td>Stop after N failures (0 = unlimited)</td>
+</tr>
+<tr>
+<td><span class="inline-code">reporter</span></td>
+<td>`string \</td>
+<td>Array`</td>
+<td><span class="inline-code">"list"</span></td>
+<td>Reporter(s) to use</td>
+</tr>
+<tr>
+<td><span class="inline-code">outputDir</span></td>
+<td><span class="inline-code">string</span></td>
+<td><span class="inline-code">"test-results"</span></td>
+<td>Directory for test artifacts</td>
+</tr>
+<tr>
+<td><span class="inline-code">globalSetup</span></td>
+<td><span class="inline-code">string</span></td>
+<td><span class="inline-code">undefined</span></td>
+<td>Path to global setup script</td>
+</tr>
+<tr>
+<td><span class="inline-code">globalTeardown</span></td>
+<td><span class="inline-code">string</span></td>
+<td><span class="inline-code">undefined</span></td>
+<td>Path to global teardown script</td>
+</tr>
+<tr>
+<td><span class="inline-code">preserveOutput</span></td>
+<td><span class="inline-code">string</span></td>
+<td><span class="inline-code">"always"</span></td>
+<td>When to keep output: <span class="inline-code">always</span>, <span class="inline-code">never</span>, <span class="inline-code">failures-only</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">snapshotDir</span></td>
+<td><span class="inline-code">string</span></td>
+<td><span class="inline-code">auto</span></td>
+<td>Directory for snapshot files</td>
+</tr>
+<tr>
+<td><span class="inline-code">snapshotPathTemplate</span></td>
+<td><span class="inline-code">string</span></td>
+<td><span class="inline-code">auto</span></td>
+<td>Template for snapshot file paths</td>
+</tr>
+<tr>
+<td><span class="inline-code">updateSnapshots</span></td>
+<td><span class="inline-code">string</span></td>
+<td><span class="inline-code">"missing"</span></td>
+<td>When to update snapshots: <span class="inline-code">all</span>, <span class="inline-code">none</span>, <span class="inline-code">missing</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">metadata</span></td>
+<td><span class="inline-code">object</span></td>
+<td><span class="inline-code">{}</span></td>
+<td>Custom metadata for reports</td>
+</tr>
+</table>
+<h3>Use (Shared Browser Options)</h3>
+<table>
+<tr>
+<th>Option</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+<tr>
+<td><span class="inline-code">baseURL</span></td>
+<td><span class="inline-code">string</span></td>
+<td><span class="inline-code">undefined</span></td>
+<td>Base URL for <span class="inline-code">page.goto()</span> relative paths</td>
+</tr>
+<tr>
+<td><span class="inline-code">headless</span></td>
+<td><span class="inline-code">boolean</span></td>
+<td><span class="inline-code">true</span></td>
+<td>Run browsers in headless mode</td>
+</tr>
+<tr>
+<td><span class="inline-code">browserName</span></td>
+<td><span class="inline-code">string</span></td>
+<td><span class="inline-code">"chromium"</span></td>
+<td>Browser to use: <span class="inline-code">chromium</span>, <span class="inline-code">firefox</span>, <span class="inline-code">webkit</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">viewport</span></td>
+<td><span class="inline-code">object</span></td>
+<td><span class="inline-code">{width:1280, height:720}</span></td>
+<td>Browser viewport size</td>
+</tr>
+<tr>
+<td><span class="inline-code">ignoreHTTPSErrors</span></td>
+<td><span class="inline-code">boolean</span></td>
+<td><span class="inline-code">false</span></td>
+<td>Ignore HTTPS certificate errors</td>
+</tr>
+<tr>
+<td><span class="inline-code">screenshot</span></td>
+<td><span class="inline-code">string</span></td>
+<td><span class="inline-code">"off"</span></td>
+<td><span class="inline-code">off</span>, <span class="inline-code">on</span>, <span class="inline-code">only-on-failure</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">video</span></td>
+<td><span class="inline-code">string</span></td>
+<td><span class="inline-code">"off"</span></td>
+<td><span class="inline-code">off</span>, <span class="inline-code">on</span>, <span class="inline-code">retain-on-failure</span>, <span class="inline-code">on-first-retry</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">trace</span></td>
+<td><span class="inline-code">string</span></td>
+<td><span class="inline-code">"off"</span></td>
+<td><span class="inline-code">off</span>, <span class="inline-code">on</span>, <span class="inline-code">retain-on-failure</span>, <span class="inline-code">on-first-retry</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">actionTimeout</span></td>
+<td><span class="inline-code">number</span></td>
+<td><span class="inline-code">0</span></td>
+<td>Timeout for each action (click, fill, etc.)</td>
+</tr>
+<tr>
+<td><span class="inline-code">navigationTimeout</span></td>
+<td><span class="inline-code">number</span></td>
+<td><span class="inline-code">0</span></td>
+<td>Timeout for navigation actions</td>
+</tr>
+<tr>
+<td><span class="inline-code">locale</span></td>
+<td><span class="inline-code">string</span></td>
+<td><span class="inline-code">system</span></td>
+<td>Browser locale (e.g., <span class="inline-code">"en-US"</span>)</td>
+</tr>
+<tr>
+<td><span class="inline-code">timezoneId</span></td>
+<td><span class="inline-code">string</span></td>
+<td><span class="inline-code">system</span></td>
+<td>Timezone (e.g., <span class="inline-code">"America/New_York"</span>)</td>
+</tr>
+<tr>
+<td><span class="inline-code">geolocation</span></td>
+<td><span class="inline-code">object</span></td>
+<td><span class="inline-code">undefined</span></td>
+<td><span class="inline-code">{latitude, longitude, accuracy}</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">permissions</span></td>
+<td><span class="inline-code">string[]</span></td>
+<td><span class="inline-code">[]</span></td>
+<td>Browser permissions to grant</td>
+</tr>
+<tr>
+<td><span class="inline-code">colorScheme</span></td>
+<td><span class="inline-code">string</span></td>
+<td><span class="inline-code">"light"</span></td>
+<td><span class="inline-code">light</span>, <span class="inline-code">dark</span>, <span class="inline-code">no-preference</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">storageState</span></td>
+<td>`string \</td>
+<td>object`</td>
+<td><span class="inline-code">undefined</span></td>
+<td>Path to saved auth/storage state</td>
+</tr>
+<tr>
+<td><span class="inline-code">userAgent</span></td>
+<td><span class="inline-code">string</span></td>
+<td><span class="inline-code">browser default</span></td>
+<td>Custom user agent string</td>
+</tr>
+<tr>
+<td><span class="inline-code">extraHTTPHeaders</span></td>
+<td><span class="inline-code">object</span></td>
+<td><span class="inline-code">{}</span></td>
+<td>Extra headers for every request</td>
+</tr>
+<tr>
+<td><span class="inline-code">httpCredentials</span></td>
+<td><span class="inline-code">object</span></td>
+<td><span class="inline-code">undefined</span></td>
+<td><span class="inline-code">{username, password}</span> for HTTP auth</td>
+</tr>
+<tr>
+<td><span class="inline-code">proxy</span></td>
+<td><span class="inline-code">object</span></td>
+<td><span class="inline-code">undefined</span></td>
+<td><span class="inline-code">{server, bypass, username, password}</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">deviceScaleFactor</span></td>
+<td><span class="inline-code">number</span></td>
+<td><span class="inline-code">1</span></td>
+<td>Device pixel ratio</td>
+</tr>
+<tr>
+<td><span class="inline-code">isMobile</span></td>
+<td><span class="inline-code">boolean</span></td>
+<td><span class="inline-code">false</span></td>
+<td>Enable mobile emulation</td>
+</tr>
+<tr>
+<td><span class="inline-code">hasTouch</span></td>
+<td><span class="inline-code">boolean</span></td>
+<td><span class="inline-code">false</span></td>
+<td>Enable touch events</td>
+</tr>
+<tr>
+<td><span class="inline-code">javaScriptEnabled</span></td>
+<td><span class="inline-code">boolean</span></td>
+<td><span class="inline-code">true</span></td>
+<td>Enable/disable JavaScript</td>
+</tr>
+<tr>
+<td><span class="inline-code">bypassCSP</span></td>
+<td><span class="inline-code">boolean</span></td>
+<td><span class="inline-code">false</span></td>
+<td>Bypass Content Security Policy</td>
+</tr>
+<tr>
+<td><span class="inline-code">offline</span></td>
+<td><span class="inline-code">boolean</span></td>
+<td><span class="inline-code">false</span></td>
+<td>Emulate offline mode</td>
+</tr>
+<tr>
+<td><span class="inline-code">launchOptions</span></td>
+<td><span class="inline-code">object</span></td>
+<td><span class="inline-code">{}</span></td>
+<td>Options passed to <span class="inline-code">browser.launch()</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">contextOptions</span></td>
+<td><span class="inline-code">object</span></td>
+<td><span class="inline-code">{}</span></td>
+<td>Options passed to <span class="inline-code">browser.newContext()</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">connectOptions</span></td>
+<td><span class="inline-code">object</span></td>
+<td><span class="inline-code">undefined</span></td>
+<td>Options for connecting to remote browser</td>
+</tr>
+</table>
+<h3>Projects</h3>
+<pre><code>projects: [
+  {
+    name: &#x27;chromium&#x27;,           // Project identifier
+    use: { browserName: &#x27;chromium&#x27; },
+    testDir: &#x27;./tests&#x27;,         // Override testDir per project
+    testMatch: &#x27;**/*.spec.js&#x27;,  // Override testMatch per project
+    timeout: 60000,             // Override timeout per project
+    retries: 1,                 // Override retries per project
+    dependencies: [&#x27;setup&#x27;],    // Projects that must run first
+    teardown: &#x27;cleanup&#x27;,        // Project to run after this one
+    grep: /@chromium/,          // Filter tests by tag
+    grepInvert: /@skip/,        // Exclude tests by tag
+  },
+]</code></pre>
+<h3>Reporter Configuration</h3>
+<pre><code>reporter: [
+  [&#x27;list&#x27;],                                          // Console output
+  [&#x27;html&#x27;, { open: &#x27;never&#x27;, outputFolder: &#x27;report&#x27; }], // HTML report
+  [&#x27;json&#x27;, { outputFile: &#x27;results.json&#x27; }],          // JSON results
+  [&#x27;junit&#x27;, { outputFile: &#x27;results.xml&#x27; }],          // JUnit XML
+  [&#x27;dot&#x27;],                                           // Minimal dots
+  [&#x27;line&#x27;],                                          // Single line updates
+]</code></pre>
+<h3>Expect</h3>
+<table>
+<tr>
+<th>Option</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+<tr>
+<td><span class="inline-code">expect.timeout</span></td>
+<td><span class="inline-code">number</span></td>
+<td><span class="inline-code">5000</span></td>
+<td>Default assertion timeout</td>
+</tr>
+<tr>
+<td><span class="inline-code">expect.toHaveScreenshot.maxDiffPixels</span></td>
+<td><span class="inline-code">number</span></td>
+<td><span class="inline-code">0</span></td>
+<td>Allowed pixel difference</td>
+</tr>
+<tr>
+<td><span class="inline-code">expect.toHaveScreenshot.maxDiffPixelRatio</span></td>
+<td><span class="inline-code">number</span></td>
+<td><span class="inline-code">0</span></td>
+<td>Allowed pixel ratio difference</td>
+</tr>
+<tr>
+<td><span class="inline-code">expect.toHaveScreenshot.threshold</span></td>
+<td><span class="inline-code">number</span></td>
+<td><span class="inline-code">0.2</span></td>
+<td>Color difference threshold</td>
+</tr>
+<tr>
+<td><span class="inline-code">expect.toHaveScreenshot.animations</span></td>
+<td><span class="inline-code">string</span></td>
+<td><span class="inline-code">"disabled"</span></td>
+<td><span class="inline-code">disabled</span> or <span class="inline-code">allow</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">expect.toMatchSnapshot.maxDiffPixelRatio</span></td>
+<td><span class="inline-code">number</span></td>
+<td><span class="inline-code">0</span></td>
+<td>For non-screenshot snapshots</td>
+</tr>
+</table>
+<h3>WebServer</h3>
+<pre><code>webServer: {
+  command: &#x27;npm run start&#x27;,     // Command to start the server
+  port: 3000,                   // Port to wait for
+  url: &#x27;http://localhost:3000&#x27;, // Alternative: URL to wait for
+  timeout: 120000,              // Startup timeout
+  reuseExistingServer: !process.env.CI,  // Reuse if already running
+  cwd: &#x27;./app&#x27;,                 // Working directory for command
+  env: { NODE_ENV: &#x27;test&#x27; },   // Environment variables
+  stdout: &#x27;pipe&#x27;,              // How to handle stdout
+  stderr: &#x27;pipe&#x27;,              // How to handle stderr
+}</code></pre>
+</div>
+<div class="topic" id="playwright-cli-flags">
+<span class="badge badge-note">Notes</span>
+<h2>Playwright CLI Flags</h2>
+<h2>Playwright CLI Flags - Complete Reference</h2>
+<p>All flags for <span class="inline-code">npx playwright test</span> organized by category.</p>
+<h3>File Selection</h3>
+<table>
+<tr>
+<th>Flag</th>
+<th>Example</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+<tr>
+<td><span class="inline-code"><file></span></td>
+<td><span class="inline-code">npx playwright test login.spec.js</span></td>
+<td>Run specific test file(s)</td>
+<td>All files matching testMatch</td>
+</tr>
+<tr>
+<td><span class="inline-code"><directory></span></td>
+<td><span class="inline-code">npx playwright test tests/auth/</span></td>
+<td>Run all tests in a directory</td>
+<td>testDir from config</td>
+</tr>
+<tr>
+<td><span class="inline-code">--config <path></span></td>
+<td><span class="inline-code">--config playwright.ci.config.js</span></td>
+<td>Path to config file</td>
+<td><span class="inline-code">playwright.config.js</span></td>
+</tr>
+</table>
+<h3>Filtering</h3>
+<table>
+<tr>
+<th>Flag</th>
+<th>Example</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+<tr>
+<td><span class="inline-code">--grep <regex></span> / <span class="inline-code">-g</span></td>
+<td><span class="inline-code">--grep "login"</span></td>
+<td>Run tests matching pattern</td>
+<td>None (run all)</td>
+</tr>
+<tr>
+<td><span class="inline-code">--grep-invert <regex></span></td>
+<td><span class="inline-code">--grep-invert "slow"</span></td>
+<td>Skip tests matching pattern</td>
+<td>None</td>
+</tr>
+<tr>
+<td><span class="inline-code">--project <name></span></td>
+<td><span class="inline-code">--project chromium</span></td>
+<td>Run specific project(s)</td>
+<td>All projects</td>
+</tr>
+<tr>
+<td><span class="inline-code">--last-failed</span></td>
+<td><span class="inline-code">--last-failed</span></td>
+<td>Re-run only previously failed tests</td>
+<td>Off</td>
+</tr>
+<tr>
+<td><span class="inline-code">--list</span></td>
+<td><span class="inline-code">--list</span></td>
+<td>List tests without running</td>
+<td>Off</td>
+</tr>
+</table>
+<h3>Execution</h3>
+<table>
+<tr>
+<th>Flag</th>
+<th>Example</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+<tr>
+<td><span class="inline-code">--workers <n></span> / <span class="inline-code">-j</span></td>
+<td><span class="inline-code">--workers 4</span></td>
+<td>Number of parallel workers</td>
+<td>50% of CPU cores</td>
+</tr>
+<tr>
+<td><span class="inline-code">--retries <n></span></td>
+<td><span class="inline-code">--retries 2</span></td>
+<td>Retry count for failed tests</td>
+<td>0</td>
+</tr>
+<tr>
+<td><span class="inline-code">--repeat-each <n></span></td>
+<td><span class="inline-code">--repeat-each 3</span></td>
+<td>Run each test N times</td>
+<td>1</td>
+</tr>
+<tr>
+<td><span class="inline-code">--timeout <ms></span></td>
+<td><span class="inline-code">--timeout 30000</span></td>
+<td>Per-test timeout in milliseconds</td>
+<td>30000</td>
+</tr>
+<tr>
+<td><span class="inline-code">--global-timeout <ms></span></td>
+<td><span class="inline-code">--global-timeout 3600000</span></td>
+<td>Total timeout for entire run</td>
+<td>0 (no limit)</td>
+</tr>
+<tr>
+<td><span class="inline-code">--max-failures <n></span> / <span class="inline-code">-x</span></td>
+<td><span class="inline-code">--max-failures 5</span></td>
+<td>Stop after N test failures</td>
+<td>0 (no limit)</td>
+</tr>
+<tr>
+<td><span class="inline-code">--fully-parallel</span></td>
+<td><span class="inline-code">--fully-parallel</span></td>
+<td>Run all tests in parallel (ignore serial)</td>
+<td>Off</td>
+</tr>
+<tr>
+<td><span class="inline-code">--forbid-only</span></td>
+<td><span class="inline-code">--forbid-only</span></td>
+<td>Fail if <span class="inline-code">test.only</span> is present</td>
+<td>Off</td>
+</tr>
+<tr>
+<td><span class="inline-code">--shard <n/total></span></td>
+<td><span class="inline-code">--shard 1/3</span></td>
+<td>Run subset of tests for sharding</td>
+<td>None</td>
+</tr>
+<tr>
+<td><span class="inline-code">--pass-with-no-tests</span></td>
+<td><span class="inline-code">--pass-with-no-tests</span></td>
+<td>Exit 0 if no tests are found</td>
+<td>Off (exit 1)</td>
+</tr>
+<tr>
+<td><span class="inline-code">--ignore-snapshots</span></td>
+<td><span class="inline-code">--ignore-snapshots</span></td>
+<td>Skip snapshot expectations</td>
+<td>Off</td>
+</tr>
+<tr>
+<td><span class="inline-code">--update-snapshots</span> / <span class="inline-code">-u</span></td>
+<td><span class="inline-code">--update-snapshots</span></td>
+<td>Update golden/baseline snapshots</td>
+<td>Off</td>
+</tr>
+</table>
+<h3>Output & Reporting</h3>
+<table>
+<tr>
+<th>Flag</th>
+<th>Example</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+<tr>
+<td><span class="inline-code">--reporter <name></span></td>
+<td><span class="inline-code">--reporter list</span></td>
+<td>Set reporter (list, dot, line, html, json, junit)</td>
+<td>Depends on CI</td>
+</tr>
+<tr>
+<td><span class="inline-code">--output <dir></span></td>
+<td><span class="inline-code">--output ./results</span></td>
+<td>Test results output directory</td>
+<td><span class="inline-code">test-results/</span></td>
+</tr>
+<tr>
+<td><span class="inline-code">--quiet</span></td>
+<td><span class="inline-code">--quiet</span></td>
+<td>Suppress stdio from tests</td>
+<td>Off</td>
+</tr>
+</table>
+<h3>Browser & Display</h3>
+<table>
+<tr>
+<th>Flag</th>
+<th>Example</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+<tr>
+<td><span class="inline-code">--headed</span></td>
+<td><span class="inline-code">--headed</span></td>
+<td>Run tests with visible browser</td>
+<td>Headless</td>
+</tr>
+<tr>
+<td><span class="inline-code">--browser <name></span></td>
+<td><span class="inline-code">--browser firefox</span></td>
+<td>Run on specific browser (no config needed)</td>
+<td>chromium</td>
+</tr>
+<tr>
+<td><span class="inline-code">--debug</span></td>
+<td><span class="inline-code">--debug</span></td>
+<td>Run with Playwright Inspector open</td>
+<td>Off</td>
+</tr>
+<tr>
+<td><span class="inline-code">--ui</span></td>
+<td><span class="inline-code">--ui</span></td>
+<td>Launch interactive UI mode</td>
+<td>Off</td>
+</tr>
+<tr>
+<td><span class="inline-code">--ui-host <host></span></td>
+<td><span class="inline-code">--ui-host 0.0.0.0</span></td>
+<td>Host for UI mode server</td>
+<td>localhost</td>
+</tr>
+<tr>
+<td><span class="inline-code">--ui-port <port></span></td>
+<td><span class="inline-code">--ui-port 8080</span></td>
+<td>Port for UI mode server</td>
+<td>Auto</td>
+</tr>
+</table>
+<h3>Advanced</h3>
+<table>
+<tr>
+<th>Flag</th>
+<th>Example</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+<tr>
+<td><span class="inline-code">--trace <mode></span></td>
+<td><span class="inline-code">--trace on</span></td>
+<td>Force trace recording (on, off, retain-on-failure)</td>
+<td>Config value</td>
+</tr>
+<tr>
+<td><span class="inline-code">--no-deps</span></td>
+<td><span class="inline-code">--no-deps</span></td>
+<td>Do not run project dependencies</td>
+<td>Off</td>
+</tr>
+<tr>
+<td><span class="inline-code">--tsconfig <path></span></td>
+<td><span class="inline-code">--tsconfig custom.tsconfig.json</span></td>
+<td>Path to TypeScript config</td>
+<td>Auto-detected</td>
+</tr>
+</table>
+<h3>Environment Variables</h3>
+<table>
+<tr>
+<th>Variable</th>
+<th>Example</th>
+<th>Description</th>
+</tr>
+<tr>
+<td><span class="inline-code">CI</span></td>
+<td><span class="inline-code">CI=true npx playwright test</span></td>
+<td>Enable CI mode (changes defaults)</td>
+</tr>
+<tr>
+<td><span class="inline-code">PWDEBUG</span></td>
+<td><span class="inline-code">PWDEBUG=1 npx playwright test</span></td>
+<td>Force Playwright Inspector</td>
+</tr>
+<tr>
+<td><span class="inline-code">DEBUG</span></td>
+<td><span class="inline-code">DEBUG=pw:api npx playwright test</span></td>
+<td>Enable debug logging</td>
+</tr>
+<tr>
+<td><span class="inline-code">PLAYWRIGHT_BROWSERS_PATH</span></td>
+<td><span class="inline-code">PLAYWRIGHT_BROWSERS_PATH=/cache</span></td>
+<td>Custom browser install path</td>
+</tr>
+<tr>
+<td><span class="inline-code">PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD</span></td>
+<td><span class="inline-code">PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1</span></td>
+<td>Skip auto browser download</td>
+</tr>
+</table>
+<h3>Flag Precedence Rules</h3>
+<ol>
+<li>CLI flags always override config file values</li>
+<li>Environment variables override both CLI flags and config for certain settings</li>
+<li><span class="inline-code">test.use()</span> in code overrides project-level config</li>
+<li>Fixture overrides in <span class="inline-code">test.extend()</span> take highest precedence</li>
+</ol>
+</div>
+<div class="topic" id="01-cli-basics-interview-qa">
+<span class="badge badge-interview">Interview Questions</span>
+<h2>CLI Basics Interview QA</h2>
+<h2>CLI Basics - Interview Questions & Answers</h2>
+<p><strong>Q1: How do you run a specific test file using the Playwright CLI?</strong></p>
+<p>A1: You pass the file path as an argument to <span class="inline-code">npx playwright test</span>, for example <span class="inline-code">npx playwright test tests/login.spec.js</span>. You can also pass multiple files separated by spaces. Playwright will only execute tests within the specified file(s) while respecting the config for browser projects, retries, and other settings.</p>
+<p><strong>Q2: What is the difference between <span class="inline-code">--grep</span> and <span class="inline-code">--grep-invert</span>?</strong></p>
+<p>A2: <span class="inline-code">--grep</span> filters tests to only run those whose title matches the provided regex pattern, such as <span class="inline-code">--grep "login"</span> to run only login-related tests. <span class="inline-code">--grep-invert</span> does the opposite -- it excludes tests matching the pattern and runs everything else. You can combine both flags to include one pattern while excluding another, for example <span class="inline-code">--grep "@smoke" --grep-invert "@skip"</span>.</p>
+<p><strong>Q3: How do you run Playwright tests in headed mode?</strong></p>
+<p>A3: Use the <span class="inline-code">--headed</span> flag: <span class="inline-code">npx playwright test --headed</span>. This launches a visible browser window so you can watch the test execute in real time. It is useful for debugging and understanding test flow, but should be avoided in CI where there is typically no display server available. You can also set <span class="inline-code">headless: false</span> in the config file.</p>
+<p><strong>Q4: What does the <span class="inline-code">--workers</span> flag control and what is the default?</strong></p>
+<p>A4: The <span class="inline-code">--workers</span> flag sets the number of parallel worker processes that run tests simultaneously. The default is 50% of the available CPU cores on the machine. Setting <span class="inline-code">--workers 1</span> runs tests sequentially, which is useful for debugging order-dependent issues. In CI, you might limit workers to avoid overwhelming shared runners.</p>
+<p><strong>Q5: How does <span class="inline-code">--retries</span> work in Playwright?</strong></p>
+<p>A5: The <span class="inline-code">--retries</span> flag specifies how many times a failed test should be retried before being marked as failed. For example, <span class="inline-code">--retries 2</span> means a failing test gets up to 2 additional attempts. If it passes on any retry, it is reported as "flaky" rather than "failed." This is commonly set to 1-2 in CI pipelines to handle transient failures without masking real bugs.</p>
+<p><strong>Q6: What is the purpose of <span class="inline-code">--repeat-each</span> and when would you use it?</strong></p>
+<p>A6: <span class="inline-code">--repeat-each N</span> runs every test N times in a row. This is primarily used to detect flaky tests -- if a test passes once but fails on subsequent runs, it indicates a reliability issue. For example, <span class="inline-code">--repeat-each 5</span> runs each test 5 times. This is a debugging and validation tool, not something you would use in regular CI runs due to the multiplied execution time.</p>
+<p><strong>Q7: How does test sharding work with <span class="inline-code">--shard</span>?</strong></p>
+<p>A7: The <span class="inline-code">--shard</span> flag splits the test suite into equal parts for parallel execution across multiple machines. The syntax is <span class="inline-code">--shard X/Y</span> where X is the current shard number and Y is the total number of shards. For example, with <span class="inline-code">--shard 1/3</span> and <span class="inline-code">--shard 2/3</span> and <span class="inline-code">--shard 3/3</span>, each machine runs roughly one-third of the tests. Shards do not overlap, ensuring every test runs exactly once across all shards.</p>
+<p><strong>Q8: What reporters are available in Playwright and how do you select one?</strong></p>
+<p>A8: Playwright includes several built-in reporters: <span class="inline-code">list</span> (detailed step-by-step), <span class="inline-code">dot</span> (minimal dots), <span class="inline-code">line</span> (single updating line), <span class="inline-code">html</span> (interactive HTML report), <span class="inline-code">json</span> (machine-readable JSON), and <span class="inline-code">junit</span> (XML for CI tools). You select one with <span class="inline-code">--reporter list</span> on the CLI. Multiple reporters can be configured simultaneously in the config file, for example outputting both <span class="inline-code">list</span> to the console and <span class="inline-code">html</span> to a file.</p>
+<p><strong>Q9: What does <span class="inline-code">--timeout</span> set and how does it interact with code-level timeouts?</strong></p>
+<p>A9: <span class="inline-code">--timeout</span> sets the maximum time in milliseconds that each individual test can run before being terminated. The default is 30000ms (30 seconds). CLI timeout overrides the config file timeout. However, <span class="inline-code">test.setTimeout()</span> called within test code overrides the CLI flag for that specific test. There is also <span class="inline-code">--global-timeout</span> which sets a maximum for the entire test run.</p>
+<p><strong>Q10: How do you run tests for a specific browser project?</strong></p>
+<p>A10: Use the <span class="inline-code">--project</span> flag followed by the project name defined in your config, for example <span class="inline-code">npx playwright test --project chromium</span>. You can specify multiple projects: <span class="inline-code">--project chromium --project firefox</span>. If you specify a project name that does not exist in the config, Playwright will report an error. This is useful for running quick local checks on a single browser before pushing.</p>
+<p><strong>Q11: What is the <span class="inline-code">--output</span> flag used for?</strong></p>
+<p>A11: The <span class="inline-code">--output</span> flag sets the directory where test artifacts are stored, such as screenshots, videos, traces, and downloaded files. The default directory is <span class="inline-code">test-results/</span>. Changing it with <span class="inline-code">--output ./my-results</span> is useful when you need to organize artifacts differently, for example separating results by shard or environment in CI pipelines.</p>
+<p><strong>Q12: How do you use multiple config files in a Playwright project?</strong></p>
+<p>A12: You create separate config files like <span class="inline-code">playwright.config.js</span> for local development and <span class="inline-code">playwright.ci.config.js</span> for CI, then select one at runtime with <span class="inline-code">--config playwright.ci.config.js</span>. This allows different settings per environment: for example, local config might have <span class="inline-code">retries: 0</span> and <span class="inline-code">headed: true</span>, while CI config has <span class="inline-code">retries: 2</span>, <span class="inline-code">forbidOnly: true</span>, and multiple browser projects. The CI config can import and extend the base config to avoid duplication.</p>
+<p><strong>Q13: What information does <span class="inline-code">npx playwright --help</span> provide?</strong></p>
+<p>A13: Running <span class="inline-code">npx playwright --help</span> displays all available Playwright CLI commands such as <span class="inline-code">test</span>, <span class="inline-code">codegen</span>, <span class="inline-code">install</span>, <span class="inline-code">show-report</span>, and <span class="inline-code">show-trace</span>. For detailed flags on a specific command, you run <span class="inline-code">npx playwright test --help</span> which lists every available flag with a brief description. This is the fastest way to look up flag names and syntax without leaving the terminal.</p>
+<p><strong>Q14: What exit codes does Playwright return and why do they matter?</strong></p>
+<p>A14: Playwright returns exit code 0 when all tests pass and exit code 1 when any test fails or an error occurs. This is critical for CI pipelines where the exit code determines whether the build is marked as successful or failed. The <span class="inline-code">--pass-with-no-tests</span> flag changes behavior so that exit code 0 is returned even when no tests are found, which can be useful in certain shard configurations.</p>
+<p><strong>Q15: How do you filter tests by tag in Playwright?</strong></p>
+<p>A15: Playwright uses <span class="inline-code">--grep</span> for tag-based filtering. By convention, tags are added to test titles using the <span class="inline-code">@</span> prefix, for example <span class="inline-code">test('login @smoke', ...)</span>. You then run <span class="inline-code">npx playwright test --grep "@smoke"</span> to execute only smoke tests. Multiple tags can be combined with regex: <span class="inline-code">--grep "@smoke|@critical"</span>. Tags can also be excluded with <span class="inline-code">--grep-invert "@slow"</span>.</p>
+<p><strong>Q16: How does Playwright handle parallel test execution by default?</strong></p>
+<p>A16: By default, Playwright runs test files in parallel (each file gets its own worker) but tests within a single file run sequentially. The <span class="inline-code">fullyParallel: true</span> config option or <span class="inline-code">--fully-parallel</span> CLI flag changes this so that individual tests within files can also run in parallel. The number of parallel workers defaults to 50% of CPU cores and can be controlled with <span class="inline-code">--workers</span>.</p>
+<p><strong>Q17: Can you control the order in which tests run?</strong></p>
+<p>A17: Playwright does not guarantee test execution order by default since tests run in parallel across workers. Within a single file, tests run in the order they are defined. You can use <span class="inline-code">test.describe.serial()</span> to enforce sequential execution within a describe block, where later tests are skipped if an earlier test fails. For cross-file ordering, project dependencies in the config allow you to run one project before another.</p>
+<p><strong>Q18: What is the default reporter and how does it change in CI?</strong></p>
+<p>A18: The default reporter is <span class="inline-code">list</span> for local development, which shows each test with a step-by-step pass/fail status. When the <span class="inline-code">CI</span> environment variable is set (automatically true in most CI systems), Playwright switches to the <span class="inline-code">dot</span> reporter by default for more compact output. You can always override this with <span class="inline-code">--reporter</span> on the CLI or the <span class="inline-code">reporter</span> config option regardless of environment.</p>
+<p><strong>Q19: How do you pass environment variables to Playwright tests?</strong></p>
+<p>A19: Environment variables can be passed inline on the command line: <span class="inline-code">MY_VAR=value npx playwright test</span>. They are accessible in test code via <span class="inline-code">process.env.MY_VAR</span>. You can also use <span class="inline-code">.env</span> files with the <span class="inline-code">dotenv</span> package, or set them in your config file. In CI, environment variables are typically set in the workflow YAML. Common Playwright-specific variables include <span class="inline-code">CI</span>, <span class="inline-code">PWDEBUG</span>, and <span class="inline-code">PLAYWRIGHT_BROWSERS_PATH</span>.</p>
+<p><strong>Q20: How do you run Playwright tests from a different directory?</strong></p>
+<p>A20: You can either change to the project directory with <span class="inline-code">cd /path/to/project && npx playwright test</span>, or use the <span class="inline-code">--config</span> flag to point to a config file in another directory: <span class="inline-code">npx playwright test --config /path/to/project/playwright.config.js</span>. The <span class="inline-code">testDir</span> in the config file is resolved relative to the config file's location, so all test paths are determined from there regardless of your current working directory.</p>
+</div>
+<div class="topic" id="02-debug-trace-interview-qa">
+<span class="badge badge-interview">Interview Questions</span>
+<h2>Debug Trace Interview QA</h2>
+<h2>Debugging & Tracing - Interview Questions & Answers</h2>
+<p><strong>Q1: What is the Playwright Inspector and how do you launch it?</strong></p>
+<p>A1: The Playwright Inspector is a GUI debugging tool that lets you step through test execution one action at a time. You launch it by running <span class="inline-code">npx playwright test --debug</span> or by setting the environment variable <span class="inline-code">PWDEBUG=1</span>. It opens two windows: the browser where the test runs and the Inspector panel showing the test code, current execution step, and locator suggestions. You can step over, resume, or pick locators from the Inspector toolbar.</p>
+<p><strong>Q2: What does the <span class="inline-code">--debug</span> flag do when running Playwright tests?</strong></p>
+<p>A2: The <span class="inline-code">--debug</span> flag starts tests with the Playwright Inspector attached and sets the browser to headed mode automatically. It also sets the test timeout to 0 (no timeout) so the test does not fail while you are stepping through it. Workers are set to 1 so only one test runs at a time. This makes it ideal for interactively debugging a single test by pausing and inspecting each action.</p>
+<p><strong>Q3: What is the difference between <span class="inline-code">PWDEBUG=1</span> and the <span class="inline-code">--debug</span> flag?</strong></p>
+<p>A3: Both open the Playwright Inspector, but they are used in slightly different contexts. The <span class="inline-code">--debug</span> flag is a CLI argument that combines Inspector mode with headed browser and no timeout. <span class="inline-code">PWDEBUG=1</span> is an environment variable that achieves the same effect but can be set system-wide or in your shell profile. <span class="inline-code">PWDEBUG=console</span> is a variant that instead of opening the Inspector, exposes a <span class="inline-code">playwright</span> object in the browser DevTools console for manual interaction.</p>
+<p><strong>Q4: What happens when you add <span class="inline-code">await page.pause()</span> to a test?</strong></p>
+<p>A4: When execution reaches <span class="inline-code">await page.pause()</span>, the test pauses and the Playwright Inspector opens, even if you did not use <span class="inline-code">--debug</span>. The browser window stays visible with the page in its current state. You can then use the Inspector to step through remaining actions, pick locators, or run commands manually. This is useful for pausing at a specific point rather than stepping from the beginning.</p>
+<p><strong>Q5: How does the "Pick Locator" feature work in the Inspector?</strong></p>
+<p>A5: When you click the crosshair "Pick Locator" button in the Inspector toolbar, you can hover over any element on the page and Playwright will suggest the best locator for it. Playwright prioritizes accessible locators like <span class="inline-code">getByRole</span>, <span class="inline-code">getByText</span>, and <span class="inline-code">getByLabel</span> over CSS selectors. Clicking on an element copies the suggested locator. This helps you write robust selectors without manually inspecting the DOM.</p>
+<p><strong>Q6: What is a Playwright trace and what does it contain?</strong></p>
+<p>A6: A trace is a ZIP archive that captures a complete recording of a test execution. It contains DOM snapshots before and after each action, screenshots, network requests and responses, console logs, the test source code, and action timing information. Traces provide a time-travel debugging experience where you can inspect the page state at any point during the test without re-running it.</p>
+<p><strong>Q7: What are the contents of a trace ZIP file?</strong></p>
+<p>A7: A trace ZIP file contains several internal files: a <span class="inline-code">trace.trace</span> file with the action log and metadata, <span class="inline-code">trace.network</span> with captured network requests/responses, screenshot PNG files for each action step, DOM snapshots serialized as JSON, and the original test source code. The Trace Viewer parses all of these to reconstruct the full test execution timeline. Trace files are typically 1-10 MB depending on the test complexity.</p>
+<p><strong>Q8: How do you open a trace file with the <span class="inline-code">show-trace</span> command?</strong></p>
+<p>A8: Run <span class="inline-code">npx playwright show-trace path/to/trace.zip</span> to open the Trace Viewer in your default browser. The Trace Viewer displays a timeline of all actions, DOM snapshots, network requests, console output, and source code. You can click on any action in the timeline to see the page state before and after that action. The Trace Viewer runs entirely locally as a web application.</p>
+<p><strong>Q9: What is trace.playwright.dev and how does it work?</strong></p>
+<p>A9: trace.playwright.dev is a web-hosted version of the Playwright Trace Viewer. You can drag and drop a trace ZIP file onto the page to view it. Importantly, the trace file is processed entirely in the browser using client-side JavaScript -- the file is never uploaded to any server. This makes it safe for viewing traces that contain sensitive data, and it works as a convenient alternative to running <span class="inline-code">show-trace</span> locally.</p>
+<p><strong>Q10: What are the different trace configuration options?</strong></p>
+<p>A10: The <span class="inline-code">trace</span> option accepts several values: <span class="inline-code">'off'</span> disables tracing entirely, <span class="inline-code">'on'</span> records traces for every test, <span class="inline-code">'retain-on-failure'</span> records all traces but deletes them for passing tests, and <span class="inline-code">'on-first-retry'</span> only records a trace when a test is retried. For CI, <span class="inline-code">'on-first-retry'</span> is the recommended setting because it captures traces only for flaky/failing tests, minimizing storage and performance overhead.</p>
+<p><strong>Q11: What is the difference between <span class="inline-code">trace: 'on'</span>, <span class="inline-code">'on-first-retry'</span>, and <span class="inline-code">'retain-on-failure'</span>?</strong></p>
+<p>A11: <span class="inline-code">'on'</span> records traces for every test run regardless of outcome, consuming the most resources. <span class="inline-code">'retain-on-failure'</span> records traces for all tests but automatically deletes trace files for tests that pass, keeping only the failures. <span class="inline-code">'on-first-retry'</span> only begins recording when a test is being retried, so passing tests on the first attempt generate no trace at all. For CI, <span class="inline-code">'on-first-retry'</span> is most efficient because it only captures data when something goes wrong.</p>
+<p><strong>Q12: What features does Playwright UI mode offer?</strong></p>
+<p>A12: UI mode (<span class="inline-code">npx playwright test --ui</span>) provides an interactive browser-based interface for running and debugging tests. It shows a test explorer sidebar, lets you run individual tests with a click, displays a timeline view similar to the Trace Viewer, shows DOM snapshots with time-travel capability, and provides watch mode that re-runs tests on file changes. It combines the best of the Inspector and Trace Viewer into a single development tool.</p>
+<p><strong>Q13: How does UI mode differ from the HTML report?</strong></p>
+<p>A13: UI mode is a live development tool for running and debugging tests interactively, with watch mode and real-time execution. The HTML report is a static post-execution artifact that summarizes test results, showing pass/fail status, error messages, screenshots, and traces. UI mode is used during development for writing and debugging tests, while the HTML report is used after a test run (especially in CI) to review results and investigate failures.</p>
+<p><strong>Q14: What is time-travel debugging in Playwright traces?</strong></p>
+<p>A14: Time-travel debugging refers to the ability to navigate to any point in a completed test execution and inspect the page state at that moment. In the Trace Viewer, you click on any action in the timeline and see the exact DOM snapshot, network state, and console output from that instant. You can move forward and backward through actions, comparing "before" and "after" states. This eliminates the need to re-run failing tests repeatedly to understand what happened.</p>
+<p><strong>Q15: What information is available in the DOM snapshot tab of the Trace Viewer?</strong></p>
+<p>A15: The DOM snapshot tab shows the complete page state captured at each action step. It provides two views: "Before" shows the page state just before the action executed, and "After" shows the state immediately after. You can inspect individual elements, see their attributes, computed styles, and text content. This is particularly valuable for debugging selector issues where the DOM might not have been in the expected state when a locator tried to find an element.</p>
+<p><strong>Q16: What does the network tab in the Trace Viewer show?</strong></p>
+<p>A16: The network tab displays every HTTP request and response that occurred during the test, including URLs, methods, status codes, headers, request/response bodies, timing, and sizes. You can filter by request type (XHR, fetch, images, etc.) and search for specific URLs. This is essential for debugging API-related test failures, verifying that the correct endpoints were called, and identifying slow network responses that might cause timeouts.</p>
+<p><strong>Q17: What information is available in the console tab of the Trace Viewer?</strong></p>
+<p>A17: The console tab captures all browser console output during the test, including <span class="inline-code">console.log</span>, <span class="inline-code">console.error</span>, <span class="inline-code">console.warn</span>, and unhandled JavaScript errors. Each message is timestamped and associated with the action during which it occurred. This helps identify JavaScript errors on the page that might be causing test failures, especially when the error is not directly related to the Playwright action but affects the page state.</p>
+<p><strong>Q18: How do you debug flaky tests using Playwright tools?</strong></p>
+<p>A18: First, use <span class="inline-code">--repeat-each 10</span> to reproduce the flakiness consistently. Then enable tracing with <span class="inline-code">trace: 'on'</span> to capture every run. Compare trace files from passing and failing runs to spot differences in timing, network responses, or DOM state. Use the Trace Viewer's network tab to check for slow or failed API calls. Check the console tab for intermittent JavaScript errors. Finally, look at the DOM snapshots at the failing action to see if the page was in an unexpected state.</p>
+<p><strong>Q19: How do you debug timeout errors in Playwright?</strong></p>
+<p>A19: Start by identifying which action timed out from the error message -- it will show the locator that was not found or the navigation that did not complete. Run the test with <span class="inline-code">--debug</span> to step through and observe the page state at the timeout point. Check if the element exists but has a different attribute than expected. Use the Trace Viewer network tab to see if a slow API call delayed page rendering. Increase <span class="inline-code">actionTimeout</span> for specific slow operations rather than increasing the global timeout.</p>
+<p><strong>Q20: How do you debug selector/locator issues in Playwright?</strong></p>
+<p>A20: Use the Inspector's "Pick Locator" feature to see what Playwright suggests for the target element. Compare this with your test's locator. Run <span class="inline-code">await page.pause()</span> just before the failing action to inspect the live page. In the Trace Viewer, check the DOM snapshot at the failing step to verify the element exists and has the expected attributes. Use <span class="inline-code">page.locator('your-selector').count()</span> in the Inspector console to verify matches. Consider switching to more robust locators like <span class="inline-code">getByRole</span> or <span class="inline-code">getByTestId</span> if CSS selectors are brittle.</p>
+</div>
+<div class="topic" id="03-ci-cd-interview-qa">
+<span class="badge badge-interview">Interview Questions</span>
+<h2>CI CD Interview QA</h2>
+<h2>CI/CD Integration - Interview Questions & Answers</h2>
+<p><strong>Q1: How do you set up Playwright tests in GitHub Actions?</strong></p>
+<p>A1: Create a workflow YAML file in <span class="inline-code">.github/workflows/</span> that checks out the code, sets up Node.js, installs npm dependencies with <span class="inline-code">npm ci</span>, installs Playwright browsers with <span class="inline-code">npx playwright install --with-deps</span>, and runs tests with <span class="inline-code">npx playwright test</span>. The <span class="inline-code">--with-deps</span> flag is critical because it also installs OS-level dependencies (like font libraries and media codecs) that browsers need on the CI runner. Use <span class="inline-code">actions/upload-artifact</span> to save reports and traces.</p>
+<p><strong>Q2: What does setting <span class="inline-code">CI=true</span> do in Playwright?</strong></p>
+<p>A2: When <span class="inline-code">CI=true</span> is set (which most CI platforms do automatically), Playwright changes several default behaviors. The default reporter switches from <span class="inline-code">list</span> to <span class="inline-code">dot</span> for more compact output. The HTML report will not auto-open in a browser after the test run. Playwright also changes the default for <span class="inline-code">webServer.reuseExistingServer</span> to <span class="inline-code">false</span>, ensuring a fresh server is started for each run. These changes optimize Playwright for non-interactive CI environments.</p>
+<p><strong>Q3: Why is <span class="inline-code">--with-deps</span> important when installing browsers in CI?</strong></p>
+<p>A3: The <span class="inline-code">--with-deps</span> flag installs not only the browser binaries but also the operating system dependencies they require, such as font packages, graphics libraries, and media codecs. Without these, browsers may crash or render pages incorrectly on fresh CI runners that lack these system libraries. This is especially important on Ubuntu-based runners. On your local machine these dependencies are typically already installed.</p>
+<p><strong>Q4: How do you implement test sharding in CI for faster execution?</strong></p>
+<p>A4: Use a GitHub Actions matrix strategy with the <span class="inline-code">--shard</span> flag. Define a matrix variable like <span class="inline-code">shard: [1/4, 2/4, 3/4, 4/4]</span> and run <span class="inline-code">npx playwright test --shard ${{ matrix.shard }}</span> in each job. This creates 4 parallel CI jobs, each running one quarter of the test suite. Playwright splits tests automatically and ensures no overlap. Combine sharded results by uploading artifacts from each job and merging them in a subsequent job.</p>
+<p><strong>Q5: How do you upload test artifacts in GitHub Actions?</strong></p>
+<p>A5: Use the <span class="inline-code">actions/upload-artifact@v4</span> action with the <span class="inline-code">if: always()</span> condition so artifacts are saved even when tests fail. Upload the <span class="inline-code">test-results/</span> directory to capture screenshots, videos, and traces, and the <span class="inline-code">playwright-report/</span> directory for the HTML report. Set a <span class="inline-code">retention-days</span> value to automatically clean up old artifacts. Use unique artifact names per shard when running parallel jobs to avoid name conflicts.</p>
+<p><strong>Q6: What is the official Playwright Docker image and when should you use it?</strong></p>
+<p>A6: Microsoft publishes official Docker images at <span class="inline-code">mcr.microsoft.com/playwright:v<version>-noble</span> with all browsers and OS dependencies pre-installed. Use these images when you need consistent rendering across environments (especially for visual snapshot tests), when you want faster CI runs by avoiding browser installation, or when running tests in containerized environments like Kubernetes. The image tag should match your installed Playwright version.</p>
+<p><strong>Q7: What retry strategy should you use in CI?</strong></p>
+<p>A7: Set <span class="inline-code">retries: 2</span> in your CI config as a standard practice. This allows flaky tests to pass on retry while still catching real failures. Tests that pass on retry are reported as "flaky" so you can track and fix them later. Avoid setting retries too high (like 5+) as this masks real bugs and slows down the pipeline. Use <span class="inline-code">trace: 'on-first-retry'</span> to capture trace data only for retried tests, providing debugging info without the overhead of tracing every test.</p>
+<p><strong>Q8: How do you run multi-browser testing in CI using a matrix strategy?</strong></p>
+<p>A8: Define browser projects in your config file (chromium, firefox, webkit) and use a GitHub Actions matrix to run each browser in a separate CI job: <span class="inline-code">matrix: { browser: [chromium, firefox, webkit] }</span> with <span class="inline-code">npx playwright test --project ${{ matrix.browser }}</span>. This runs all three browsers in parallel. You can combine this with sharding for even more parallelism: <span class="inline-code">matrix: { browser: [chromium, firefox], shard: [1/2, 2/2] }</span> creates 4 parallel jobs.</p>
+<p><strong>Q9: How does parallel execution work in CI and what are the considerations?</strong></p>
+<p>A9: Playwright runs tests in parallel using worker processes. In CI, set <span class="inline-code">workers</span> to a reasonable number based on the runner's CPU cores -- using <span class="inline-code">'50%'</span> is a safe default. Too many workers on a resource-constrained CI runner causes memory pressure and slower execution. Set <span class="inline-code">fullyParallel: true</span> for maximum parallelism. Ensure tests are isolated and do not share state, as parallel execution means tests may run in any order.</p>
+<p><strong>Q10: How do you generate and access test reports in CI?</strong></p>
+<p>A10: Configure multiple reporters in your CI config: <span class="inline-code">['list']</span> for console output during the run, <span class="inline-code">['html', { open: 'never' }]</span> for an interactive HTML report, and <span class="inline-code">['junit', { outputFile: 'results.xml' }]</span> for CI tool integration. Upload the <span class="inline-code">playwright-report/</span> directory as an artifact. To view the HTML report, download the artifact and run <span class="inline-code">npx playwright show-report</span> locally, or publish it to GitHub Pages or a static hosting service.</p>
+<p><strong>Q11: How should you handle flaky tests in a CI pipeline?</strong></p>
+<p>A11: First, use retries to prevent flaky tests from blocking deployments. Second, track flaky tests by monitoring which tests pass only on retry -- most CI tools and the Playwright HTML report highlight these. Third, fix flaky tests systematically by reviewing their traces and adding proper waits or more robust locators. Fourth, consider quarantining persistently flaky tests with a <span class="inline-code">@flaky</span> tag and running them separately from the main pipeline so they do not block releases.</p>
+<p><strong>Q12: Why is test isolation important in CI and how do you achieve it?</strong></p>
+<p>A12: Test isolation ensures each test runs independently without relying on the outcome or side effects of other tests. Playwright achieves this by default by giving each test a fresh browser context. In CI, avoid shared databases or global state. Use <span class="inline-code">globalSetup</span> to prepare a clean test environment and <span class="inline-code">globalTeardown</span> to clean up. Each test should set up its own data rather than relying on data created by previous tests, as parallel execution makes ordering unpredictable.</p>
+<p><strong>Q13: Why do Playwright tests typically run headless in CI?</strong></p>
+<p>A13: CI environments usually lack a display server (no physical or virtual monitor). Headless mode runs the browser without rendering to a screen, which is faster and requires fewer resources. Playwright defaults to headless mode, and setting <span class="inline-code">CI=true</span> reinforces this. If you do need headed mode in CI (rare), you can use <span class="inline-code">xvfb-run</span> on Linux to create a virtual display: <span class="inline-code">xvfb-run npx playwright test --headed</span>. Most debugging needs are better served by traces.</p>
+<p><strong>Q14: How do you cache Playwright browsers in CI for faster runs?</strong></p>
+<p>A14: Use the <span class="inline-code">actions/cache@v4</span> action to cache the <span class="inline-code">~/.cache/ms-playwright</span> directory with a cache key based on <span class="inline-code">package-lock.json</span> (since the Playwright version determines which browsers are needed). On cache hit, <span class="inline-code">npx playwright install</span> detects existing browsers and skips downloading. This can save 1-3 minutes per CI run. Always include <span class="inline-code">--with-deps</span> even with caching, as OS dependencies are not included in the cache.</p>
+<p><strong>Q15: How do you manage environment variables for Playwright tests in CI?</strong></p>
+<p>A15: Define non-sensitive variables directly in the workflow YAML under the <span class="inline-code">env</span> key at the job or step level. For sensitive values like API keys and passwords, use GitHub Secrets: <span class="inline-code">${{ secrets.API_KEY }}</span>. Access them in tests via <span class="inline-code">process.env.API_KEY</span>. You can also use a <span class="inline-code">.env</span> file loaded with the <span class="inline-code">dotenv</span> package, but never commit it to the repository. Use different environment variables per deployment target (staging vs production).</p>
+<p><strong>Q16: How do you handle secrets management for Playwright tests in CI?</strong></p>
+<p>A16: Store sensitive values (API keys, passwords, tokens) in GitHub Actions secrets, never in code or config files. Reference them in YAML with <span class="inline-code">${{ secrets.SECRET_NAME }}</span> and pass them as environment variables to the test step. For local development, use a <span class="inline-code">.env</span> file (added to <span class="inline-code">.gitignore</span>). In the config, access secrets via <span class="inline-code">process.env</span> and provide fallback values for local runs. Never log secrets in test output or include them in screenshots/traces that are uploaded as artifacts.</p>
+<p><strong>Q17: How do you set up Playwright tests as PR checks?</strong></p>
+<p>A17: Configure a GitHub Actions workflow triggered on <span class="inline-code">pull_request</span> events targeting the main branch. The workflow runs the full test suite and its exit code determines the PR check status. In repository settings, mark this workflow as a required status check so PRs cannot be merged unless all tests pass. Add comments to the PR with a link to the test report artifact. Use <span class="inline-code">--forbid-only</span> to prevent accidental <span class="inline-code">test.only</span> from bypassing the full suite.</p>
+<p><strong>Q18: What are deployment gates and how does Playwright fit in?</strong></p>
+<p>A18: Deployment gates are automated checks that must pass before code is deployed to production. Playwright tests serve as a deployment gate by running against a staging environment after deployment and before promoting to production. If tests fail, the deployment is rolled back automatically. This is implemented by running Playwright with <span class="inline-code">baseURL</span> pointing to the staging environment in a post-deployment CI step, with the deployment pipeline waiting for the test job to succeed.</p>
+<p><strong>Q19: How do you monitor test trends and track test health over time?</strong></p>
+<p>A19: Generate JUnit XML reports in CI and integrate them with tools like Allure, ReportPortal, or CI platform analytics (GitHub Actions does not natively support this). Track metrics such as test pass rate, average execution time, flaky test count, and failure frequency. Use JSON reporter output to build custom dashboards. Regularly review the flaky test list and dedicate time to fixing them. Set up alerts when the overall pass rate drops below a threshold.</p>
+<p><strong>Q20: How do you optimize CI costs when running Playwright tests?</strong></p>
+<p>A20: First, use sharding to parallelize across multiple smaller runners instead of one large runner. Second, cache browser installations to avoid repeated downloads. Third, use <span class="inline-code">trace: 'on-first-retry'</span> instead of <span class="inline-code">'on'</span> to reduce artifact storage. Fourth, run only affected tests on PRs using <span class="inline-code">--grep</span> with changed feature tags, and run the full suite nightly. Fifth, use the Playwright Docker image to skip browser installation time. Sixth, limit video recording to failures only with <span class="inline-code">video: 'retain-on-failure'</span>.</p>
+</div>
+<div class="footer">PPTP Tutorial - Playwright Learning Batch</div>
+  </main>
+  <script>
+    // Highlight active sidebar link on scroll
+    const links = document.querySelectorAll('.sidebar a');
+    const topics = document.querySelectorAll('.topic');
+    window.addEventListener('scroll', () => {
+      let current = '';
+      topics.forEach(topic => {
+        const top = topic.offsetTop - 100;
+        if (window.scrollY >= top) current = topic.id;
+      });
+      links.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === '#' + current) link.classList.add('active');
+      });
+    });
+    // Smooth scroll
+    links.forEach(link => {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        const id = link.getAttribute('href').substring(1);
+        document.getElementById(id).scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,811 @@
+{
+  "config": {
+    "configFile": "/Users/promode/Documents/LearningPlaywrightBatch/Lecture_Playwright_CLI/playwright.config.js",
+    "rootDir": "/Users/promode/Documents/LearningPlaywrightBatch/Lecture_Playwright_CLI/cli_project/tests",
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/Users/promode/Documents/LearningPlaywrightBatch/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "/Users/promode/Documents/LearningPlaywrightBatch/Lecture_Playwright_CLI/cli_project/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/promode/Documents/LearningPlaywrightBatch/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "firefox",
+        "name": "firefox",
+        "testDir": "/Users/promode/Documents/LearningPlaywrightBatch/Lecture_Playwright_CLI/cli_project/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/promode/Documents/LearningPlaywrightBatch/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "webkit",
+        "name": "webkit",
+        "testDir": "/Users/promode/Documents/LearningPlaywrightBatch/Lecture_Playwright_CLI/cli_project/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "html",
+        {
+          "outputFolder": "/Users/promode/Documents/LearningPlaywrightBatch/Lecture_Playwright_CLI/cli_project/reports/html-report",
+          "open": "never"
+        }
+      ],
+      [
+        "json",
+        {
+          "outputFile": "/Users/promode/Documents/LearningPlaywrightBatch/Lecture_Playwright_CLI/cli_project/reports/results.json"
+        }
+      ],
+      [
+        "/Users/promode/Documents/LearningPlaywrightBatch/Lecture_Playwright_CLI/cli_project/reporters/CustomTTAReporter.js",
+        null
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "runAgents": "none",
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.58.2",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "01_homepage_title.spec.js",
+      "file": "01_homepage_title.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "TC-001: Homepage Title Verification",
+          "file": "01_homepage_title.spec.js",
+          "line": 3,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should have correct title and heading on homepage",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4134,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ TC-001: Homepage Title Verification - Passed\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-19T11:53:59.981Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/Users/promode/Documents/LearningPlaywrightBatch/test-results/01_homepage_title-TC-001-H-60247-tle-and-heading-on-homepage-chromium/trace.zip"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "5c4865ea39473969c051-17b4e17604f4c189d5da",
+              "file": "01_homepage_title.spec.js",
+              "line": 4,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "02_navigation_links.spec.js",
+      "file": "02_navigation_links.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "TC-002: Navigation Links Verification",
+          "file": "02_navigation_links.spec.js",
+          "line": 3,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should have at least 5 links and include Form Authentication",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4100,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ TC-002: Navigation Links Verification - Passed\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-19T11:54:04.437Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/Users/promode/Documents/LearningPlaywrightBatch/test-results/02_navigation_links-TC-002-1294b-include-Form-Authentication-chromium/trace.zip"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "45013c555347c25af758-b872073092e84f5a07b4",
+              "file": "02_navigation_links.spec.js",
+              "line": 4,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "03_form_authentication.spec.js",
+      "file": "03_form_authentication.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "TC-003: Form Authentication",
+          "file": "03_form_authentication.spec.js",
+          "line": 3,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should login successfully with valid credentials",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 5679,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ TC-003: Form Authentication - Passed\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-19T11:54:08.555Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/Users/promode/Documents/LearningPlaywrightBatch/test-results/03_form_authentication-TC--dcb5f-ully-with-valid-credentials-chromium/trace.zip"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "cef5ef690d71c395ad60-542fa7b2f2c48b8bf3d1",
+              "file": "03_form_authentication.spec.js",
+              "line": 4,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "04_dropdown_page.spec.js",
+      "file": "04_dropdown_page.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "TC-004: Dropdown Page",
+          "file": "04_dropdown_page.spec.js",
+          "line": 3,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should select option 2 from dropdown",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4064,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ TC-004: Dropdown Page - Passed\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-19T11:54:14.264Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/Users/promode/Documents/LearningPlaywrightBatch/test-results/04_dropdown_page-TC-004-Dr-42bc2-lect-option-2-from-dropdown-chromium/trace.zip"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "e8d7055bb9f8b17218ce-500d184a766a549733f3",
+              "file": "04_dropdown_page.spec.js",
+              "line": 4,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "05_checkboxes.spec.js",
+      "file": "05_checkboxes.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "TC-005: Checkboxes",
+          "file": "05_checkboxes.spec.js",
+          "line": 3,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should check the first checkbox",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4118,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ TC-005: Checkboxes - Passed\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-19T11:54:18.344Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/Users/promode/Documents/LearningPlaywrightBatch/test-results/05_checkboxes-TC-005-Check-da062-ld-check-the-first-checkbox-chromium/trace.zip"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "7f1f7231b1503213e0e4-05a33d743af043ec5771",
+              "file": "05_checkboxes.spec.js",
+              "line": 4,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "06_input_fields.spec.js",
+      "file": "06_input_fields.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "TC-006: Input Fields",
+          "file": "06_input_fields.spec.js",
+          "line": 3,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should type a number into the input field",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4165,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ TC-006: Input Fields - Passed\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-19T11:54:22.477Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/Users/promode/Documents/LearningPlaywrightBatch/test-results/06_input_fields-TC-006-Inp-34873-number-into-the-input-field-chromium/trace.zip"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "4c27e8a975188998d487-4377b733a7e3497512ad",
+              "file": "06_input_fields.spec.js",
+              "line": 4,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "07_nonexistent_page.spec.js",
+      "file": "07_nonexistent_page.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "TC-007: INTENTIONAL FAIL - Nonexistent Page",
+          "file": "07_nonexistent_page.spec.js",
+          "line": 5,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should find heading \"Page Found\" on 404 page",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 6406,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('h1')\nExpected: \u001b[32m\"\u001b[7mPage\u001b[27m Found\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mNot\u001b[27m Found\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('h1')\u001b[22m\n\u001b[2m    9 × locator resolved to <h1>Not Found</h1>\u001b[22m\n\u001b[2m      - unexpected value \"Not Found\"\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('h1')\nExpected: \u001b[32m\"\u001b[7mPage\u001b[27m Found\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mNot\u001b[27m Found\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('h1')\u001b[22m\n\u001b[2m    9 × locator resolved to <h1>Not Found</h1>\u001b[22m\n\u001b[2m      - unexpected value \"Not Found\"\u001b[22m\n\n    at /Users/promode/Documents/LearningPlaywrightBatch/Lecture_Playwright_CLI/cli_project/tests/07_nonexistent_page.spec.js:8:38",
+                        "location": {
+                          "file": "/Users/promode/Documents/LearningPlaywrightBatch/Lecture_Playwright_CLI/cli_project/tests/07_nonexistent_page.spec.js",
+                          "column": 38,
+                          "line": 8
+                        },
+                        "snippet": "   6 |   test('should find heading \"Page Found\" on 404 page', async ({ page }) => {\n   7 |     await page.goto('https://the-internet.herokuapp.com/this-page-does-not-exist');\n>  8 |     await expect(page.locator('h1')).toHaveText('Page Found');\n     |                                      ^\n   9 |     console.log('❌ TC-007: Nonexistent Page - This should not print (test should fail)');\n  10 |   });\n  11 | });"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/promode/Documents/LearningPlaywrightBatch/Lecture_Playwright_CLI/cli_project/tests/07_nonexistent_page.spec.js",
+                            "column": 38,
+                            "line": 8
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('h1')\nExpected: \u001b[32m\"\u001b[7mPage\u001b[27m Found\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mNot\u001b[27m Found\"\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('h1')\u001b[22m\n\u001b[2m    9 × locator resolved to <h1>Not Found</h1>\u001b[22m\n\u001b[2m      - unexpected value \"Not Found\"\u001b[22m\n\n\n   6 |   test('should find heading \"Page Found\" on 404 page', async ({ page }) => {\n   7 |     await page.goto('https://the-internet.herokuapp.com/this-page-does-not-exist');\n>  8 |     await expect(page.locator('h1')).toHaveText('Page Found');\n     |                                      ^\n   9 |     console.log('❌ TC-007: Nonexistent Page - This should not print (test should fail)');\n  10 |   });\n  11 | });\n    at /Users/promode/Documents/LearningPlaywrightBatch/Lecture_Playwright_CLI/cli_project/tests/07_nonexistent_page.spec.js:8:38"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-19T11:54:26.656Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/promode/Documents/LearningPlaywrightBatch/test-results/07_nonexistent_page-TC-007-ac281-ding-Page-Found-on-404-page-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/promode/Documents/LearningPlaywrightBatch/test-results/07_nonexistent_page-TC-007-ac281-ding-Page-Found-on-404-page-chromium/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/Users/promode/Documents/LearningPlaywrightBatch/test-results/07_nonexistent_page-TC-007-ac281-ding-Page-Found-on-404-page-chromium/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/promode/Documents/LearningPlaywrightBatch/Lecture_Playwright_CLI/cli_project/tests/07_nonexistent_page.spec.js",
+                        "column": 38,
+                        "line": 8
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "8688ecaeb199a4171d42-484fe884d7166d0faa5a",
+              "file": "07_nonexistent_page.spec.js",
+              "line": 6,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "08_wrong_element_count.spec.js",
+      "file": "08_wrong_element_count.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "TC-008: INTENTIONAL FAIL - Wrong Element Count",
+          "file": "08_wrong_element_count.spec.js",
+          "line": 5,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should have exactly 100 links on homepage",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 14387,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#content ul li a')\nExpected: \u001b[32m100\u001b[39m\nReceived: \u001b[31m44\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveCount\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#content ul li a')\u001b[22m\n\u001b[2m    9 × locator resolved to 44 elements\u001b[22m\n\u001b[2m      - unexpected value \"44\"\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#content ul li a')\nExpected: \u001b[32m100\u001b[39m\nReceived: \u001b[31m44\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveCount\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#content ul li a')\u001b[22m\n\u001b[2m    9 × locator resolved to 44 elements\u001b[22m\n\u001b[2m      - unexpected value \"44\"\u001b[22m\n\n    at /Users/promode/Documents/LearningPlaywrightBatch/Lecture_Playwright_CLI/cli_project/tests/08_wrong_element_count.spec.js:9:25",
+                        "location": {
+                          "file": "/Users/promode/Documents/LearningPlaywrightBatch/Lecture_Playwright_CLI/cli_project/tests/08_wrong_element_count.spec.js",
+                          "column": 25,
+                          "line": 9
+                        },
+                        "snippet": "   7 |     await page.goto('https://the-internet.herokuapp.com');\n   8 |     const links = page.locator('#content ul li a');\n>  9 |     await expect(links).toHaveCount(100);\n     |                         ^\n  10 |     console.log('❌ TC-008: Wrong Element Count - This should not print (test should fail)');\n  11 |   });\n  12 | });"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/promode/Documents/LearningPlaywrightBatch/Lecture_Playwright_CLI/cli_project/tests/08_wrong_element_count.spec.js",
+                            "column": 25,
+                            "line": 9
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#content ul li a')\nExpected: \u001b[32m100\u001b[39m\nReceived: \u001b[31m44\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveCount\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('#content ul li a')\u001b[22m\n\u001b[2m    9 × locator resolved to 44 elements\u001b[22m\n\u001b[2m      - unexpected value \"44\"\u001b[22m\n\n\n   7 |     await page.goto('https://the-internet.herokuapp.com');\n   8 |     const links = page.locator('#content ul li a');\n>  9 |     await expect(links).toHaveCount(100);\n     |                         ^\n  10 |     console.log('❌ TC-008: Wrong Element Count - This should not print (test should fail)');\n  11 |   });\n  12 | });\n    at /Users/promode/Documents/LearningPlaywrightBatch/Lecture_Playwright_CLI/cli_project/tests/08_wrong_element_count.spec.js:9:25"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-19T11:54:33.671Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/promode/Documents/LearningPlaywrightBatch/test-results/08_wrong_element_count-TC--7db30-actly-100-links-on-homepage-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/promode/Documents/LearningPlaywrightBatch/test-results/08_wrong_element_count-TC--7db30-actly-100-links-on-homepage-chromium/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/Users/promode/Documents/LearningPlaywrightBatch/test-results/08_wrong_element_count-TC--7db30-actly-100-links-on-homepage-chromium/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/promode/Documents/LearningPlaywrightBatch/Lecture_Playwright_CLI/cli_project/tests/08_wrong_element_count.spec.js",
+                        "column": 25,
+                        "line": 9
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "9a87a35cfe8ca65d9018-dbfbf0c739759c0a1e4b",
+              "file": "08_wrong_element_count.spec.js",
+              "line": 6,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "09_impossible_timeout.spec.js",
+      "file": "09_impossible_timeout.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "TC-009: INTENTIONAL FAIL - Impossible Timeout",
+          "file": "09_impossible_timeout.spec.js",
+          "line": 5,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should load dynamic content with 1ms timeout",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 4274,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#finish')\nExpected: visible\nReceived: hidden\nTimeout:  1ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 1ms\u001b[22m\n\u001b[2m  - waiting for locator('#finish')\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#finish')\nExpected: visible\nReceived: hidden\nTimeout:  1ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 1ms\u001b[22m\n\u001b[2m  - waiting for locator('#finish')\u001b[22m\n\n    at /Users/promode/Documents/LearningPlaywrightBatch/Lecture_Playwright_CLI/cli_project/tests/09_impossible_timeout.spec.js:9:43",
+                        "location": {
+                          "file": "/Users/promode/Documents/LearningPlaywrightBatch/Lecture_Playwright_CLI/cli_project/tests/09_impossible_timeout.spec.js",
+                          "column": 43,
+                          "line": 9
+                        },
+                        "snippet": "   7 |     await page.goto('https://the-internet.herokuapp.com/dynamic_loading/1');\n   8 |     await page.getByRole('button', { name: 'Start' }).click();\n>  9 |     await expect(page.locator('#finish')).toBeVisible({ timeout: 1 });\n     |                                           ^\n  10 |     console.log('❌ TC-009: Impossible Timeout - This should not print (test should fail)');\n  11 |   });\n  12 | });"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/promode/Documents/LearningPlaywrightBatch/Lecture_Playwright_CLI/cli_project/tests/09_impossible_timeout.spec.js",
+                            "column": 43,
+                            "line": 9
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#finish')\nExpected: visible\nReceived: hidden\nTimeout:  1ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 1ms\u001b[22m\n\u001b[2m  - waiting for locator('#finish')\u001b[22m\n\n\n   7 |     await page.goto('https://the-internet.herokuapp.com/dynamic_loading/1');\n   8 |     await page.getByRole('button', { name: 'Start' }).click();\n>  9 |     await expect(page.locator('#finish')).toBeVisible({ timeout: 1 });\n     |                                           ^\n  10 |     console.log('❌ TC-009: Impossible Timeout - This should not print (test should fail)');\n  11 |   });\n  12 | });\n    at /Users/promode/Documents/LearningPlaywrightBatch/Lecture_Playwright_CLI/cli_project/tests/09_impossible_timeout.spec.js:9:43"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-19T11:54:49.024Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/promode/Documents/LearningPlaywrightBatch/test-results/09_impossible_timeout-TC-0-ca93a-ic-content-with-1ms-timeout-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/promode/Documents/LearningPlaywrightBatch/test-results/09_impossible_timeout-TC-0-ca93a-ic-content-with-1ms-timeout-chromium/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/Users/promode/Documents/LearningPlaywrightBatch/test-results/09_impossible_timeout-TC-0-ca93a-ic-content-with-1ms-timeout-chromium/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/promode/Documents/LearningPlaywrightBatch/Lecture_Playwright_CLI/cli_project/tests/09_impossible_timeout.spec.js",
+                        "column": 43,
+                        "line": 9
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "a155f1e01ef7dce9a607-490e8d624b2191443308",
+              "file": "09_impossible_timeout.spec.js",
+              "line": 6,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "10_hover_elements.spec.js",
+      "file": "10_hover_elements.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "TC-010: Hover Elements",
+          "file": "10_hover_elements.spec.js",
+          "line": 3,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should reveal user info on hover",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4104,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ TC-010: Hover Elements - Passed\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-19T11:54:54.273Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/Users/promode/Documents/LearningPlaywrightBatch/test-results/10_hover_elements-TC-010-H-e7567-d-reveal-user-info-on-hover-chromium/trace.zip"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "4282e0910d55cb3e23f3-d9b2db9a76705b5c161b",
+              "file": "10_hover_elements.spec.js",
+              "line": 4,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-03-19T11:53:59.463Z",
+    "duration": 59303.618,
+    "expected": 7,
+    "skipped": 0,
+    "unexpected": 3,
+    "flaky": 0
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Shell(if:*)",
+      "Shell(npx playwright --version)",
+      "Shell(npm:*)",
+      "Shell(npx playwright install chromium)",
+      "Shell(npx playwright test PW_JS_Test_1/test.spec.ts --reporter=list)",
+      "Shell(dir:*)",
+      "Shell(npx playwright test PW_JS_Test_1/test.spec.ts)",
+      "Shell(node -e console.log('local @playwright/test', require('./node_modules/@playwright/test/package.json').version); console.log('local playwright', require('./node_modules/playwright/package.json').version))"
+    ],
+    "deny": [],
+    "defaultMode": "default"
+  }
+}

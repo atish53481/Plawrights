@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Shell(ls -la \"$HOME/.claude\" 2>/dev/null; echo \"---PROJECTS---\"; ls -la \"$HOME/.claude/projects\" 2>/dev/null)",
+      "powershell",
+      "Shell(node --test PlaywrightExtension/tests/*.test.mjs 2 >& 1)",
+      "Shell(npm:*)",
+      "Shell(node --test PlaywrightExtension/tests/*.test.mjs)",
+      "Shell(git:*)"
+    ],
+    "deny": [],
+    "defaultMode": "default"
+  }
+}

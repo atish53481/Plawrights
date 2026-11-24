@@ -1,0 +1,12 @@
+[
+  {"id": 1, "description": "Verify the homepage title is 'The Internet'", "page": "/", "type": "title_check", "expectedTitle": "The Internet"},
+  {"id": 2, "description": "Verify login fails with wrong password", "page": "/login", "type": "login_negative"},
+  {"id": 3, "description": "Verify login succeeds with valid credentials", "page": "/login", "type": "login_positive"},
+  {"id": 4, "description": "Verify dropdown option 1 can be selected", "page": "/dropdown", "type": "dropdown_select"},
+  {"id": 5, "description": "Verify checkboxes can be toggled", "page": "/checkboxes", "type": "checkbox_toggle"},
+  {"id": 6, "description": "Verify Add/Remove Elements button works", "page": "/add_remove_elements/", "type": "click_action"},
+  {"id": 7, "description": "Verify hover reveals user info", "page": "/hovers", "type": "hover_action"},
+  {"id": 8, "description": "Verify JavaScript alerts can be accepted", "page": "/javascript_alerts", "type": "alert_action"},
+  {"id": 9, "description": "Verify drag and drop columns exist", "page": "/drag_and_drop", "type": "element_check"},
+  {"id": 10, "description": "Verify file upload page has choose file button", "page": "/upload", "type": "element_check"}
+]

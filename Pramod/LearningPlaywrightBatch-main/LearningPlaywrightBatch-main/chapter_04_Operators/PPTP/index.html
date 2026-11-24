@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chapter 04: Operators - PPTP Tutorial</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; display: flex; min-height: 100vh; background: #f5f5f5; }
+    .sidebar { width: 280px; background: #1a1a2e; color: #e0e0e0; position: fixed; top: 0; left: 0; height: 100vh; overflow-y: auto; padding: 20px 0; z-index: 10; }
+    .sidebar h2 { padding: 10px 20px 20px; font-size: 18px; color: #fff; border-bottom: 1px solid #333; margin-bottom: 10px; }
+    .sidebar a { display: block; padding: 10px 20px; color: #b0b0c0; text-decoration: none; font-size: 14px; border-left: 3px solid transparent; transition: all 0.2s; }
+    .sidebar a:hover, .sidebar a.active { background: #16213e; color: #64ffda; border-left-color: #64ffda; }
+    .sidebar .section-label { padding: 15px 20px 5px; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #666; }
+    .main { margin-left: 280px; padding: 40px; flex: 1; max-width: 900px; }
+    .main h1 { font-size: 28px; color: #1a1a2e; margin-bottom: 10px; }
+    .main .subtitle { color: #666; margin-bottom: 30px; font-size: 16px; }
+    .topic { background: #fff; border-radius: 8px; padding: 30px; margin-bottom: 30px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    .topic h2 { font-size: 22px; color: #1a1a2e; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #64ffda; }
+    .topic h3 { font-size: 18px; color: #333; margin: 20px 0 10px; }
+    .topic p { line-height: 1.8; color: #444; margin-bottom: 15px; }
+    .topic ul, .topic ol { margin: 10px 0 15px 20px; line-height: 1.8; color: #444; }
+    pre { background: #1e1e1e; color: #d4d4d4; padding: 20px; border-radius: 6px; overflow-x: auto; margin: 15px 0; font-size: 14px; line-height: 1.6; }
+    code { font-family: 'Fira Code', 'Consolas', monospace; }
+    .inline-code { background: #e8e8e8; padding: 2px 6px; border-radius: 3px; font-size: 13px; color: #d63384; }
+    .kw { color: #569cd6; }
+    .str { color: #ce9178; }
+    .num { color: #b5cea8; }
+    .cm { color: #6a9955; }
+    .fn { color: #dcdcaa; }
+    .badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; margin-right: 5px; }
+    .badge-file { background: #e3f2fd; color: #1565c0; }
+    .badge-concept { background: #f3e5f5; color: #7b1fa2; }
+    .footer { text-align: center; padding: 30px; color: #999; font-size: 13px; }
+    @media (max-width: 768px) {
+      .sidebar { width: 100%; height: auto; position: relative; }
+      .main { margin-left: 0; }
+      body { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="sidebar">
+    <h2>Ch 04: Operators</h2>
+    <div class="section-label">Topics</div>
+    <a href="#topic-26">26 - Arithmetic Operators</a>
+    <a href="#topic-27">27 - Assignment Operators</a>
+    <a href="#topic-28">28 - Comparison Operators</a>
+    <a href="#topic-29">29 - Logical Operators</a>
+    <a href="#topic-30">30 - String Operators</a>
+    <a href="#topic-31a">31 - Ternary Operator</a>
+    <a href="#topic-31b">31 - Type Operators</a>
+    <a href="#topic-32">32 - Nullish Coalescing</a>
+  </nav>
+  <main class="main">
+    <h1>Chapter 04: Operators</h1>
+    <p class="subtitle">All JavaScript operators: arithmetic, assignment, comparison, logical, string, ternary, typeof, and nullish coalescing.</p>
+
+    <div class="topic" id="topic-26">
+      <h2>26 - Arithmetic Operators</h2>
+      <span class="badge badge-file">26_Assigned_Operator.js</span>
+      <span class="badge badge-concept">Arithmetic</span>
+      <p>Covers all arithmetic operators: addition (<code class="inline-code">+</code>), subtraction (<code class="inline-code">-</code>), multiplication (<code class="inline-code">*</code>), division (<code class="inline-code">/</code>), modulus (<code class="inline-code">%</code> for remainder), and exponentiation (<code class="inline-code">**</code>). The modulus operator is especially useful for checking odd/even numbers (<code class="inline-code">n % 2</code>).</p>
+      <pre><code><span class="kw">const</span> { log } = require(<span class="str">"node:console"</span>);
+
+<span class="kw">let</span> a = <span class="num">10</span>, b = <span class="num">3</span>;
+console.log(a);
+console.log(b);
+
+<span class="cm">// Arithmetic Operators</span>
+<span class="kw">let</span> sum = a + b;
+<span class="kw">let</span> sub = a - b;
+<span class="kw">let</span> mul = a * b;
+<span class="kw">let</span> div = a / b;
+
+console.log(sum);
+console.log(sub);
+console.log(mul);
+console.log(div);
+
+<span class="cm">// -------</span>
+console.log(a % b); <span class="cm">// Modulus operator - it gives -&gt; Remainder</span>
+console.log(<span class="num">13</span> % <span class="num">7</span>);
+
+console.log(<span class="num">100</span> % <span class="num">2</span>);
+console.log(<span class="num">101</span> % <span class="num">2</span>);
+console.log(<span class="num">103</span> % <span class="num">2</span>);
+
+<span class="cm">//  n%2 == 1 - odd number, [ n%2 == 0 , even]</span>
+
+console.log(<span class="num">2</span> ** <span class="num">3</span>); <span class="cm">// exponential a^b</span>
+console.log(a ** b); <span class="cm">// exponential a^b 10^3</span>
+
+<span class="cm">// Increment and Decrement Operators</span>
+<span class="cm">// a++, b-- (learn about them, one more class)</span>
+<span class="kw">let</span> firstname = <span class="str">"Pramod"</span>;</code></pre>
+    </div>
+
+    <div class="topic" id="topic-27">
+      <h2>27 - Assignment Operators</h2>
+      <span class="badge badge-file">27_Assignment_Operators.js</span>
+      <span class="badge badge-concept">Assignment</span>
+      <p>Assignment operators provide shorthand for updating variables: <code class="inline-code">+=</code> (add and assign), <code class="inline-code">-=</code> (subtract and assign), <code class="inline-code">*=</code> (multiply and assign), <code class="inline-code">/=</code> (divide and assign), and <code class="inline-code">%=</code> (modulus and assign).</p>
+      <pre><code><span class="kw">let</span> x = <span class="num">10</span>;
+<span class="cm">//x = x + 10;</span>
+x += <span class="num">10</span>; <span class="cm">// --&gt; //x = x + 10;</span>
+x -= <span class="num">3</span>; <span class="cm">// x = x - 3;</span>
+console.log(x);
+x *= <span class="num">2</span>; <span class="cm">// x = x * 2;</span>
+console.log(x);
+x /= <span class="num">4</span>;  <span class="cm">// x = x/4;</span>
+console.log(x);
+x %= <span class="num">4</span>;
+console.log(x);</code></pre>
+    </div>
+
+    <div class="topic" id="topic-28">
+      <h2>28 - Comparison Operators</h2>
+      <span class="badge badge-file">28_Comparsion_Operators.js</span>
+      <span class="badge badge-concept">Comparison</span>
+      <p>Comparison operators always return a boolean. Covers <code class="inline-code">&gt;</code>, <code class="inline-code">&lt;</code>, <code class="inline-code">&gt;=</code>, <code class="inline-code">&lt;=</code>, <code class="inline-code">==</code> (loose), <code class="inline-code">===</code> (strict), <code class="inline-code">!=</code> (loose not equal), and <code class="inline-code">!==</code> (strict not equal). Strict checks both data type and value.</p>
+      <pre><code><span class="cm">// Comparison Operator (will always result in boolean, true or false)</span>
+
+<span class="cm">// = -&gt; Assignment operator</span>
+<span class="cm">// == -&gt; loose comparison</span>
+<span class="cm">// === -&gt; strict comparison</span>
+
+<span class="cm">// &gt; , &lt; , &gt;= , &lt;= , !, !==</span>
+
+console.log(<span class="num">3</span> &gt; <span class="num">4</span>);
+console.log(<span class="num">3</span> &lt; <span class="num">4</span>);
+console.log(<span class="num">4</span> &gt;= <span class="num">4</span>); <span class="cm">// 4 &gt; 4 or 4===4 , or gate</span>
+console.log(<span class="num">3</span> &lt;= <span class="num">4</span>);
+
+console.log(<span class="num">5</span> == <span class="str">"5"</span>); <span class="cm">// loose comparison</span>
+console.log(<span class="num">5</span> === <span class="str">"5"</span>); <span class="cm">// strict not allowed</span>
+
+console.log(<span class="num">5</span> != <span class="str">"5"</span>); <span class="cm">// false - loose</span>
+console.log(<span class="num">5</span> !== <span class="str">"5"</span>); <span class="cm">// true</span>
+
+<span class="cm">// === Strict check: both datatype and value</span>
+<span class="cm">// == Loose check: either value or data type</span></code></pre>
+    </div>
+
+    <div class="topic" id="topic-29">
+      <h2>29 - Logical Operators</h2>
+      <span class="badge badge-file">29_Logical_Operators.js</span>
+      <span class="badge badge-concept">Logical</span>
+      <p>The three logical operators: <code class="inline-code">&amp;&amp;</code> (AND -- both must be true), <code class="inline-code">||</code> (OR -- at least one must be true), and <code class="inline-code">!</code> (NOT -- reverses the boolean value).</p>
+      <pre><code><span class="cm">// &amp;&amp; -&gt; AND Gate</span>
+<span class="cm">// || -&gt; OR Gate</span>
+
+<span class="kw">let</span> a = <span class="kw">true</span>;
+<span class="kw">let</span> b = <span class="kw">false</span>;
+console.log(a &amp;&amp; b); <span class="cm">//  AND</span>
+console.log(a || b); <span class="cm">//  OR</span>
+console.log(!a); <span class="cm">// Reverse of a</span></code></pre>
+    </div>
+
+    <div class="topic" id="topic-30">
+      <h2>30 - String Operators</h2>
+      <span class="badge badge-file">30_String_Operators.js</span>
+      <span class="badge badge-concept">Strings</span>
+      <p>The <code class="inline-code">+=</code> operator can be used with strings for concatenation. It appends the right-side string to the existing string variable.</p>
+      <pre><code><span class="kw">let</span> s = <span class="str">"Hi"</span>;
+s += <span class="str">" Dev"</span>;
+console.log(s);</code></pre>
+    </div>
+
+    <div class="topic" id="topic-31a">
+      <h2>31 - Ternary Operator</h2>
+      <span class="badge badge-file">31_Ternary_Operators.js</span>
+      <span class="badge badge-concept">Ternary</span>
+      <p>The ternary operator is a shorthand for if/else: <code class="inline-code">condition ? trueResult : falseResult</code>. Useful for simple conditional assignments in a single line.</p>
+      <pre><code><span class="kw">let</span> age = <span class="num">20</span>;
+
+<span class="kw">let</span> is_pramod_will_go_to_goa = age &gt; <span class="num">18</span> ? <span class="str">"Yes, let go goa!"</span> : <span class="str">"No you are minor, Not going"</span>;
+console.log(is_pramod_will_go_to_goa)
+<span class="cm">// Ternary = condition ? "true result" : "false result";</span></code></pre>
+    </div>
+
+    <div class="topic" id="topic-31b">
+      <h2>31 - Type Operators (typeof)</h2>
+      <span class="badge badge-file">31_Type_Operators.js</span>
+      <span class="badge badge-concept">typeof</span>
+      <p>The <code class="inline-code">typeof</code> operator returns a string indicating the type of a value. Note the quirks: <code class="inline-code">typeof null</code> returns <code class="inline-code">"object"</code> (a known JS bug), and <code class="inline-code">typeof []</code> also returns <code class="inline-code">"object"</code>.</p>
+      <pre><code>console.log(<span class="kw">typeof</span> <span class="str">"hello"</span>);
+console.log(<span class="kw">typeof</span> <span class="num">123</span>); <span class="cm">// int -&gt; number</span>
+console.log(<span class="kw">typeof</span> <span class="num">31.4</span>); <span class="cm">// float -&gt; number</span>
+<span class="cm">// typeof true</span>
+<span class="cm">// typeof undefined  -&gt; undefined</span>
+<span class="cm">// typeof null  -&gt; object</span>
+<span class="cm">// typeof [] -&gt; object</span>
+console.log(<span class="kw">typeof</span> []); <span class="cm">// -&gt; object</span>
+
+console.log(<span class="str">`${6 * 4}`</span>);</code></pre>
+    </div>
+
+    <div class="topic" id="topic-32">
+      <h2>32 - Nullish Coalescing Operator (??)</h2>
+      <span class="badge badge-file">32_Null_Optinal_Value.js</span>
+      <span class="badge badge-concept">Modern JS</span>
+      <p>The nullish coalescing operator (<code class="inline-code">??</code>) returns the right-hand operand when the left-hand operand is <code class="inline-code">null</code> or <code class="inline-code">undefined</code>. Unlike <code class="inline-code">||</code>, it does NOT treat <code class="inline-code">0</code>, <code class="inline-code">""</code>, or <code class="inline-code">false</code> as fallback triggers. Very useful in test data handling and modern TypeScript.</p>
+      <pre><code><span class="kw">let</span> amul = <span class="kw">null</span>;
+<span class="kw">let</span> val = amul ?? <span class="str">"nandani milk"</span>;
+<span class="kw">let</span> val2 = <span class="kw">null</span> ?? <span class="str">"default"</span>;   <span class="cm">// "default" (?? returns right side if left is null/undefined)</span>
+
+<span class="cm">// Modern JS - Typescript.</span>
+
+val = <span class="str">"which milk? -&gt; "</span> + val;
+console.log(val)
+<span class="cm">// very useful in test data handling.</span></code></pre>
+    </div>
+
+    <div class="footer">PPTP - Playwright &amp; Programming Tutorial Portal | TheTestingAcademy</div>
+  </main>
+  <script>
+    document.querySelectorAll('.sidebar a').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const target = document.querySelector(link.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          document.querySelectorAll('.sidebar a').forEach(l => l.classList.remove('active'));
+          link.classList.add('active');
+        }
+      });
+    });
+    window.addEventListener('scroll', () => {
+      const sections = document.querySelectorAll('.topic');
+      let current = '';
+      sections.forEach(section => {
+        const top = section.offsetTop - 100;
+        if (window.scrollY >= top) current = section.id;
+      });
+      document.querySelectorAll('.sidebar a').forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === '#' + current) link.classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>

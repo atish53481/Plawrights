@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chapter 6: Switch Statements - PPTP Tutorial</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; display: flex; min-height: 100vh; background: #f5f5f5; }
+    .sidebar { width: 280px; background: #1a1a2e; color: #e0e0e0; position: fixed; top: 0; left: 0; height: 100vh; overflow-y: auto; padding: 20px 0; z-index: 10; }
+    .sidebar h2 { padding: 10px 20px 20px; font-size: 18px; color: #fff; border-bottom: 1px solid #333; margin-bottom: 10px; }
+    .sidebar a { display: block; padding: 10px 20px; color: #b0b0c0; text-decoration: none; font-size: 14px; border-left: 3px solid transparent; transition: all 0.2s; }
+    .sidebar a:hover, .sidebar a.active { background: #16213e; color: #64ffda; border-left-color: #64ffda; }
+    .sidebar .section-label { padding: 15px 20px 5px; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #666; }
+    .main { margin-left: 280px; padding: 40px; flex: 1; max-width: 900px; }
+    .main h1 { font-size: 28px; color: #1a1a2e; margin-bottom: 10px; }
+    .main .subtitle { color: #666; margin-bottom: 30px; font-size: 16px; }
+    .topic { background: #fff; border-radius: 8px; padding: 30px; margin-bottom: 30px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    .topic h2 { font-size: 22px; color: #1a1a2e; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #64ffda; }
+    .topic h3 { font-size: 18px; color: #333; margin: 20px 0 10px; }
+    .topic p { line-height: 1.8; color: #444; margin-bottom: 15px; }
+    .topic ul, .topic ol { margin: 10px 0 15px 20px; line-height: 1.8; color: #444; }
+    pre { background: #1e1e1e; color: #d4d4d4; padding: 20px; border-radius: 6px; overflow-x: auto; margin: 15px 0; font-size: 14px; line-height: 1.6; }
+    code { font-family: 'Fira Code', 'Consolas', monospace; }
+    .inline-code { background: #e8e8e8; padding: 2px 6px; border-radius: 3px; font-size: 13px; color: #d63384; }
+    .badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; margin-right: 5px; }
+    .badge-file { background: #e3f2fd; color: #1565c0; }
+    .badge-concept { background: #f3e5f5; color: #7b1fa2; }
+    .footer { text-align: center; padding: 30px; color: #999; font-size: 13px; }
+    @media (max-width: 768px) {
+      .sidebar { width: 100%; height: auto; position: relative; }
+      .main { margin-left: 0; }
+      body { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="sidebar">
+    <h2>Ch 6: Switch Statements</h2>
+    <div class="section-label">Topics</div>
+    <a href="#topic-42">42 - Switch Basics</a>
+    <a href="#topic-43">43 - Switch with Break</a>
+    <a href="#topic-44">44 - Switch with Default</a>
+    <a href="#topic-45">45 - Real Example (API)</a>
+    <a href="#topic-46">46 - Group Case</a>
+    <a href="#topic-47">47 - IQ: Fall-through Bug</a>
+    <a href="#topic-48">48 - IQ: Score Range</a>
+    <a href="#topic-49">49 - IQ: Duplicate Cases</a>
+    <a href="#topic-50">50 - IQ: Strict Comparison</a>
+    <a href="#topic-51">51 - IQ: Type Coercion</a>
+    <a href="#topic-52">52 - User Input</a>
+  </nav>
+  <main class="main">
+    <h1>Chapter 6: Switch Statements</h1>
+    <p class="subtitle">Learn how to use switch-case statements for multi-branch logic in JavaScript</p>
+
+    <div class="topic" id="topic-42">
+      <h2>42 - Switch Basics</h2>
+      <span class="badge badge-file">42_Switch.js</span>
+      <span class="badge badge-concept">Switch</span>
+      <p>A basic switch statement that maps day numbers (0-6) to day names. Each case includes a <code class="inline-code">break</code> statement to prevent fall-through, and a <code class="inline-code">default</code> case handles invalid values.</p>
+      <pre><code>// Switch
+// 0 - Sunday, 1 - Monday, 2 - Tue.....
+let day = 2;
+switch (day) {
+    case 0:
+        console.log("Sunday — Rest Day");
+        let a = 10;
+        let b = 30;
+        console.log(a + b);
+        break;
+    case 1:
+        console.log("Monday — Sprint Planning");
+        break;
+    case 2:
+        console.log("Tuesday — Development");
+        break;
+    case 3:
+        console.log("Wednesday — Code Review");
+        break;
+    case 4:
+        console.log("Thursday — Testing");
+        break;
+    case 5:
+        console.log("Friday — Deployment &amp; Retro");
+        break;
+    case 6:
+        console.log("Saturday — Rest Day");
+        break;
+    default:
+        console.log("Invalid day value");
+}</code></pre>
+    </div>
+
+    <div class="topic" id="topic-43">
+      <h2>43 - Switch with Break (Fall-through Demo)</h2>
+      <span class="badge badge-file">43_Switch_with_Break.js</span>
+      <span class="badge badge-concept">Fall-through</span>
+      <p>Demonstrates what happens when you omit <code class="inline-code">break</code> statements. Without break, execution "falls through" to subsequent cases, running all code below the matched case.</p>
+      <pre><code>// Switch
+// 0 - Sunday, 1 - Monday, 2 - Tue.....
+let day = 2;
+switch (day) {
+    case 0:
+        console.log("Sunday — Rest Day");
+    case 1:
+        console.log("Monday — Sprint Planning");
+    case 2:
+        console.log("Tuesday — Development");
+    case 3:
+        console.log("Wednesday — Code Review");
+    case 4:
+        console.log("Thursday — Testing");
+    case 5:
+        console.log("Friday — Deployment &amp; Retro");
+    case 6:
+        console.log("Saturday — Rest Day");
+    default:
+        console.log("Invalid day value");
+}</code></pre>
+    </div>
+
+    <div class="topic" id="topic-44">
+      <h2>44 - Switch with Default</h2>
+      <span class="badge badge-file">44_Switch_with_Default.js</span>
+      <span class="badge badge-concept">Default Case</span>
+      <p>Shows how the <code class="inline-code">default</code> case handles values that do not match any case. Here, <code class="inline-code">day = 10</code> triggers the default block.</p>
+      <pre><code>// Switch
+// 0 - Sunday, 1 - Monday, 2 - Tue.....
+let day = 10;
+switch (day) {
+    case 0:
+        console.log("Sunday — Rest Day");
+        break;
+    case 1:
+        console.log("Monday — Sprint Planning");
+        break;
+    case 2:
+        console.log("Tuesday — Development");
+        break;
+    case 3:
+        console.log("Wednesday — Code Review")
+        break;
+    case 4:
+        console.log("Thursday — Testing");
+        break;
+    case 5:
+        console.log("Friday — Deployment &amp; Retro");
+        break;
+    case 6:
+        console.log("Saturday — Rest Day");
+        break;
+    default:
+        console.log("Invalid day value");
+}</code></pre>
+    </div>
+
+    <div class="topic" id="topic-45">
+      <h2>45 - Real Example: API Status Codes</h2>
+      <span class="badge badge-file">45_Switch_REAL_EXAMPLE.js</span>
+      <span class="badge badge-concept">API Validation</span>
+      <p>A practical example using switch to handle HTTP response codes during API validation - a common pattern in test automation.</p>
+      <pre><code>// You are working API Validation
+// response Code - 200, 404, 401, 403.....404
+
+let responseCode = 404;
+
+switch (responseCode) {
+
+    case 200:
+        console.log("200 Ok");
+        break;
+    case 404:
+        console.log("404 Not found!");
+        break;
+    default:
+        console.log("Not status code match");
+
+}</code></pre>
+    </div>
+
+    <div class="topic" id="topic-46">
+      <h2>46 - Group Case (Multiple Cases, Same Action)</h2>
+      <span class="badge badge-file">46_Switch_GroupCase.js</span>
+      <span class="badge badge-concept">Grouped Cases</span>
+      <p>Group multiple cases together to execute the same block. Here, Chrome, Edge, Brave, and Opera all share the Chromium engine, so they share the same case output.</p>
+      <pre><code>let browser = "Edge";
+
+switch (browser) {
+    case "Chrome":
+    case "Edge":
+    case "Brave":
+    case "Opera":
+        console.log("Chromium Project!");
+        break;
+    case "Firefox":
+        console.log("Mozilla Project!");
+        break;
+    case "Safari":
+        console.log("Apple browser — uses JavaScriptCore engine");
+        break;
+    default:
+        console.log("Unknown browser — manual testing needed");
+
+}</code></pre>
+    </div>
+
+    <div class="topic" id="topic-47">
+      <h2>47 - IQ: Fall-through Bug</h2>
+      <span class="badge badge-file">47_IQ_BUG.js</span>
+      <span class="badge badge-concept">Interview Question</span>
+      <p>A common interview question: What happens when break is missing? With <code class="inline-code">fruit = "banana"</code>, it matches case "banana" and falls through all remaining cases including default.</p>
+      <pre><code>let fruit = "banana";
+switch (fruit) {
+    case "apple":
+        console.log("Apple selected");
+    case "banana":
+        console.log("Banana selected");
+    case "cherry":
+        console.log("Cherry selected");
+    case "date":
+        console.log("Date selected");
+    default:
+        console.log("Default reached");
+}</code></pre>
+    </div>
+
+    <div class="topic" id="topic-48">
+      <h2>48 - IQ: Switch with Range (switch true)</h2>
+      <span class="badge badge-file">48_IQ.js</span>
+      <span class="badge badge-concept">Interview Question</span>
+      <p>Using <code class="inline-code">switch(true)</code> to evaluate range conditions. Each case is a boolean expression, and the first one that evaluates to <code class="inline-code">true</code> is matched.</p>
+      <pre><code>let testScore = 85;
+
+switch (true) {
+    case (testScore &gt;= 95):
+        console.log("Outstanding — Top performer");
+        break;
+    case (testScore &gt;= 85):
+        console.log("Excellent — Above expectations");
+        break;
+    case (testScore &gt;= 70):
+        console.log("Good — Meets expectations");
+        break;
+    case (testScore &gt;= 50):
+        console.log("Needs Improvement");
+        break;
+    default:
+        console.log("Unsatisfactory — Requires training");
+}</code></pre>
+    </div>
+
+    <div class="topic" id="topic-49">
+      <h2>49 - IQ: Duplicate Cases</h2>
+      <span class="badge badge-file">49_Switch_IQ.js</span>
+      <span class="badge badge-concept">Interview Question</span>
+      <p>JavaScript allows duplicate case values. Only the first matching case is executed. The second <code class="inline-code">case 10</code> is never reached.</p>
+      <pre><code>let x = 10;
+switch (x) {
+    case 10:
+        let b1 = 1;
+        console.log(b1);
+        break;
+    case 10:
+        let b2 = 2;
+        console.log(b2);
+        break;
+    default:
+        console.log("d");
+    // default:
+    //     console.log("d");
+
+}
+
+// IT will allow you to have the duplicate case with first as the usage.</code></pre>
+    </div>
+
+    <div class="topic" id="topic-50">
+      <h2>50 - IQ: Strict Comparison (===)</h2>
+      <span class="badge badge-file">50_Switch_IQ.js</span>
+      <span class="badge badge-concept">Interview Question</span>
+      <p>Switch uses strict comparison (<code class="inline-code">===</code>), so <code class="inline-code">"5"</code> (string) does not match <code class="inline-code">5</code> (number). Type matters!</p>
+      <pre><code>let value = "5";
+
+switch (value) {
+    case 5:
+        console.log("Number 5 matched");
+        break;
+    case "5":
+        console.log("String '5' matched");
+        break;
+}
+// Output: "String '5' matched"
+// switch uses ===, so "5" !== 5 (different types)</code></pre>
+    </div>
+
+    <div class="topic" id="topic-51">
+      <h2>51 - IQ: Type Coercion with 0 and false</h2>
+      <span class="badge badge-file">51_Switch_IQ.js</span>
+      <span class="badge badge-concept">Interview Question</span>
+      <p>Another strict comparison example: <code class="inline-code">0 === false</code> is <code class="inline-code">false</code> because they are different types (number vs boolean).</p>
+      <pre><code>let status = 0;
+switch (status) {
+    case false:
+        console.log("false matched");
+        break;
+    case 0:
+        console.log("0 matched");
+        break;
+}
+
+// Output: "0 matched" (0 === 0, NOT 0 === false)</code></pre>
+    </div>
+
+    <div class="topic" id="topic-52">
+      <h2>52 - User Input</h2>
+      <span class="badge badge-file">52_User_Input.js</span>
+      <span class="badge badge-concept">Variables</span>
+      <p>A simple variable declaration example.</p>
+      <pre><code>let a = 10;</code></pre>
+    </div>
+
+    <div class="footer">PPTP - Playwright &amp; Programming Tutorial Portal | TheTestingAcademy</div>
+  </main>
+  <script>
+    document.querySelectorAll('.sidebar a').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const target = document.querySelector(link.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          document.querySelectorAll('.sidebar a').forEach(l => l.classList.remove('active'));
+          link.classList.add('active');
+        }
+      });
+    });
+    window.addEventListener('scroll', () => {
+      const sections = document.querySelectorAll('.topic');
+      let current = '';
+      sections.forEach(section => {
+        const top = section.offsetTop - 100;
+        if (window.scrollY >= top) current = section.id;
+      });
+      document.querySelectorAll('.sidebar a').forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === '#' + current) link.classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>

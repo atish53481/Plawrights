@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chapter 03: Identifiers, Literals &amp; Operators - PPTP Tutorial</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; display: flex; min-height: 100vh; background: #f5f5f5; }
+    .sidebar { width: 280px; background: #1a1a2e; color: #e0e0e0; position: fixed; top: 0; left: 0; height: 100vh; overflow-y: auto; padding: 20px 0; z-index: 10; }
+    .sidebar h2 { padding: 10px 20px 20px; font-size: 18px; color: #fff; border-bottom: 1px solid #333; margin-bottom: 10px; }
+    .sidebar a { display: block; padding: 10px 20px; color: #b0b0c0; text-decoration: none; font-size: 14px; border-left: 3px solid transparent; transition: all 0.2s; }
+    .sidebar a:hover, .sidebar a.active { background: #16213e; color: #64ffda; border-left-color: #64ffda; }
+    .sidebar .section-label { padding: 15px 20px 5px; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #666; }
+    .main { margin-left: 280px; padding: 40px; flex: 1; max-width: 900px; }
+    .main h1 { font-size: 28px; color: #1a1a2e; margin-bottom: 10px; }
+    .main .subtitle { color: #666; margin-bottom: 30px; font-size: 16px; }
+    .topic { background: #fff; border-radius: 8px; padding: 30px; margin-bottom: 30px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    .topic h2 { font-size: 22px; color: #1a1a2e; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #64ffda; }
+    .topic h3 { font-size: 18px; color: #333; margin: 20px 0 10px; }
+    .topic p { line-height: 1.8; color: #444; margin-bottom: 15px; }
+    .topic ul, .topic ol { margin: 10px 0 15px 20px; line-height: 1.8; color: #444; }
+    pre { background: #1e1e1e; color: #d4d4d4; padding: 20px; border-radius: 6px; overflow-x: auto; margin: 15px 0; font-size: 14px; line-height: 1.6; }
+    code { font-family: 'Fira Code', 'Consolas', monospace; }
+    .inline-code { background: #e8e8e8; padding: 2px 6px; border-radius: 3px; font-size: 13px; color: #d63384; }
+    .kw { color: #569cd6; }
+    .str { color: #ce9178; }
+    .num { color: #b5cea8; }
+    .cm { color: #6a9955; }
+    .fn { color: #dcdcaa; }
+    .badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; margin-right: 5px; }
+    .badge-file { background: #e3f2fd; color: #1565c0; }
+    .badge-concept { background: #f3e5f5; color: #7b1fa2; }
+    .footer { text-align: center; padding: 30px; color: #999; font-size: 13px; }
+    @media (max-width: 768px) {
+      .sidebar { width: 100%; height: auto; position: relative; }
+      .main { margin-left: 0; }
+      body { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="sidebar">
+    <h2>Ch 03: Identifiers &amp; Literals</h2>
+    <div class="section-label">Topics</div>
+    <a href="#topic-19">19 - Identifiers</a>
+    <a href="#topic-20">20 - Literals Intro</a>
+    <a href="#topic-21">21 - All Literal Types</a>
+    <a href="#topic-22">22 - null &amp; typeof</a>
+    <a href="#topic-23">23 - null vs undefined</a>
+    <a href="#topic-24">24 - == vs ===</a>
+    <a href="#topic-25">25 - Interview Questions</a>
+  </nav>
+  <main class="main">
+    <h1>Chapter 03: Identifiers, Literals &amp; Operators</h1>
+    <p class="subtitle">Understanding JavaScript identifiers, literal types, null/undefined, and equality comparisons.</p>
+
+    <div class="topic" id="topic-19">
+      <h2>19 - Identifiers (Reserved Keywords)</h2>
+      <span class="badge badge-file">19_Identifier.js</span>
+      <span class="badge badge-concept">Identifiers</span>
+      <p>Demonstrates that reserved keywords like <code class="inline-code">class</code>, <code class="inline-code">if</code>, and <code class="inline-code">return</code> cannot be used as identifiers. Also warns about using non-reserved but built-in names like <code class="inline-code">undefined</code> and <code class="inline-code">Infinity</code> as identifiers -- technically allowed but extremely dangerous.</p>
+      <pre><code><span class="cm">// let class = "Hello World";</span>
+<span class="cm">// // class is a reserved keyword in JavaScript, so it cannot be used as an identifier.</span>
+<span class="cm">// let if = true;</span>
+<span class="cm">// // if is also a reserved keyword in JavaScript.</span>
+
+<span class="cm">// let return = 5;</span>
+<span class="cm">// // return is also a reserved keyword in JavaScript.</span>
+
+<span class="cm">// let myVariable = 10;</span>
+<span class="cm">// // This is a valid identifier and can be used without any issues.</span>
+
+<span class="cm">// // they look like keywords but aren't reserved)</span>
+<span class="cm">// let undefined = 5;  // Works but NEVER do this!</span>
+<span class="cm">// let Infinity = 10; // Works but NEVER do this!</span></code></pre>
+    </div>
+
+    <div class="topic" id="topic-20">
+      <h2>20 - Literals Introduction</h2>
+      <span class="badge badge-file">20_literla.js</span>
+      <span class="badge badge-concept">Literals</span>
+      <p>Introduces the concept of literals -- fixed values written directly in your code. Covers string literals, boolean literals, numeric literals, null, and undefined.</p>
+      <pre><code><span class="kw">let</span> age = <span class="str">"pramod"</span>; <span class="cm">// This is a string literal</span>
+<span class="kw">let</span> isStudent = <span class="kw">true</span>; <span class="cm">// This is a boolean literal</span>
+<span class="kw">let</span> pi = <span class="num">3.14</span>; <span class="cm">// This is a numeric literal</span>
+<span class="kw">let</span> name = <span class="str">'Alice'</span>; <span class="cm">// This is a string literal</span>
+<span class="kw">let</span> nullValue = <span class="kw">null</span>; <span class="cm">// This is a null literal</span>
+<span class="kw">let</span> undefinedValue; <span class="cm">// declared but not assigned, value is 'undefined'</span></code></pre>
+    </div>
+
+    <div class="topic" id="topic-21">
+      <h2>21 - All Literal Types</h2>
+      <span class="badge badge-file">21_literals_all.js</span>
+      <span class="badge badge-concept">Literals</span>
+      <p>Comprehensive coverage of all literal types in JavaScript: integers, hex (<code class="inline-code">0xFF</code>), octal (<code class="inline-code">0o77</code>), floating point, scientific notation (<code class="inline-code">1e6</code>), single-quoted strings, double-quoted strings, template literals with <code class="inline-code">${}</code> interpolation, escape sequences (<code class="inline-code">\\</code>), and boolean literals.</p>
+      <pre><code><span class="kw">let</span> count = <span class="num">42</span>;
+<span class="kw">let</span> negative = <span class="num">-100</span>;
+<span class="kw">let</span> zero = <span class="num">0</span>;
+
+<span class="kw">let</span> h = <span class="num">0xFF</span>;
+<span class="kw">let</span> color_hex = <span class="num">0xFF0000</span>;
+console.log(color_hex);
+
+<span class="kw">let</span> octal = <span class="num">0o77</span>;
+<span class="kw">let</span> pi = <span class="num">3.14159</span>;
+
+<span class="kw">let</span> million = <span class="num">1e6</span>;
+<span class="kw">let</span> tiny = <span class="num">1.5e-4</span>;
+
+
+<span class="cm">// Single quotes</span>
+<span class="kw">let</span> single = <span class="str">'Hello World'</span>;
+<span class="kw">let</span> withDouble = <span class="str">'She said "hi"'</span>;
+
+<span class="cm">// Double quotes</span>
+<span class="kw">let</span> double = <span class="str">"Hello World"</span>;
+<span class="kw">let</span> withSingle = <span class="str">"It's a test"</span>;
+
+
+<span class="cm">// Template literal</span>
+<span class="kw">let</span> first_name = <span class="str">"Pramod"</span>;
+<span class="kw">let</span> full_name = <span class="str">`Hi,${first_name} dutta`</span>;
+console.log(full_name)
+
+
+<span class="kw">let</span> math = <span class="str">`2+2=${2 + 2}`</span>;
+console.log(math)
+
+<span class="cm">// I want to store path of the file.</span>
+<span class="kw">let</span> path = <span class="str">"C:\\users\\pramod\\file.txt"</span>;
+<span class="cm">// Single slash is not allowed. We have to use double slash.</span>
+console.log(path);
+
+<span class="cm">// ---&gt; // - URLs</span>
+<span class="cm">// ---&gt; \\ - Path</span>
+
+
+<span class="kw">let</span> address = <span class="str">"https://app.vwo.com/#login"</span>;
+console.log(address)
+
+<span class="cm">// String literal edge cases</span>
+<span class="kw">let</span> empty = <span class="str">""</span>;                          <span class="cm">// empty string (falsy!)</span>
+<span class="kw">let</span> space = <span class="str">" "</span>;                         <span class="cm">// single space (truthy!)</span>
+<span class="kw">let</span> zero1 = <span class="str">"0"</span>;                          <span class="cm">// string zero (truthy!)</span>
+
+
+<span class="kw">let</span> isLoggedIn = <span class="kw">true</span>;
+<span class="kw">let</span> hasPermission = <span class="kw">false</span>;</code></pre>
+    </div>
+
+    <div class="topic" id="topic-22">
+      <h2>22 - null and typeof</h2>
+      <span class="badge badge-file">22_nul_typepf.js</span>
+      <span class="badge badge-concept">null &amp; undefined</span>
+      <p>Explains the difference between <code class="inline-code">null</code> (intentionally nothing) and <code class="inline-code">undefined</code> (not yet assigned). Also shows that <code class="inline-code">null == undefined</code> is <code class="inline-code">true</code> (loose comparison) due to JavaScript's type coercion rules.</p>
+      <pre><code><span class="cm">// Null — "intentionally nothing"</span>
+
+<span class="kw">let</span> selectedItem = <span class="kw">null</span>;
+<span class="kw">let</span> searchResult = <span class="kw">null</span>;
+
+console.log(searchResult);
+
+<span class="cm">// Undefined — "not yet assigned"</span>
+<span class="kw">let</span> declaredOnly;                     <span class="cm">// automatically undefined</span>
+console.log(declaredOnly);           <span class="cm">// undefined</span>
+
+
+<span class="cm">// Equality comparisons</span>
+console.log(<span class="kw">null</span> == <span class="kw">undefined</span>);</code></pre>
+    </div>
+
+    <div class="topic" id="topic-23">
+      <h2>23 - null vs undefined Comparisons</h2>
+      <span class="badge badge-file">23_null_undefined.js</span>
+      <span class="badge badge-concept">Equality</span>
+      <p>Deep comparison between null and undefined using strict (<code class="inline-code">===</code>) and loose (<code class="inline-code">==</code>) equality. Shows that <code class="inline-code">null === undefined</code> is false (different types), while <code class="inline-code">null == undefined</code> is true. Neither equals <code class="inline-code">0</code> or empty string with loose equality.</p>
+      <pre><code>console.log(<span class="kw">null</span> === <span class="kw">undefined</span>); <span class="cm">// (strict — different types)</span>
+console.log(<span class="kw">null</span> == <span class="kw">undefined</span>);
+
+console.log(<span class="kw">null</span> == <span class="num">0</span>);
+console.log(<span class="kw">null</span> == <span class="str">""</span>);
+console.log(<span class="kw">undefined</span> == <span class="num">0</span>);
+console.log(<span class="kw">undefined</span> == <span class="str">""</span>);</code></pre>
+    </div>
+
+    <div class="topic" id="topic-24">
+      <h2>24 - == vs === (Equality Operators)</h2>
+      <span class="badge badge-file">24_equla_triequal.js</span>
+      <span class="badge badge-concept">Operators</span>
+      <p>Explains the three equals: <code class="inline-code">=</code> (assignment), <code class="inline-code">==</code> (loose equality with type coercion), and <code class="inline-code">===</code> (strict equality checking both type and value). Shows that <code class="inline-code">5 == "5"</code> is true but <code class="inline-code">5 === "5"</code> is false.</p>
+      <pre><code><span class="cm">// ==, ===, =</span>
+
+<span class="kw">let</span> a = <span class="num">5</span>;
+
+console.log(<span class="num">5</span> == <span class="str">"5"</span>);
+console.log(<span class="num">5</span> === <span class="str">"5"</span>);  <span class="cm">// number, string</span>
+
+console.log(<span class="kw">null</span> == <span class="kw">undefined</span>); <span class="cm">// special rule, they only equal each other</span>
+console.log(<span class="kw">null</span> === <span class="kw">undefined</span>);
+
+console.log(<span class="num">5</span> == <span class="num">5.0</span>);
+console.log(<span class="num">5</span> === <span class="num">5.0</span>);
+console.log(<span class="num">5</span> === <span class="num">5.01</span>);</code></pre>
+    </div>
+
+    <div class="topic" id="topic-25">
+      <h2>25 - Interview Questions (Equality)</h2>
+      <span class="badge badge-file">25_IQ.js</span>
+      <span class="badge badge-concept">Interview Prep</span>
+      <p>Common interview questions about JavaScript's loose equality quirks. Covers edge cases like <code class="inline-code">0 == ""</code>, <code class="inline-code">"0" == false</code>, <code class="inline-code">NaN == NaN</code> (always false!), and the special null/undefined rules. Also covers <code class="inline-code">0/0</code> producing NaN and the importance of using <code class="inline-code">===</code> for reliable comparisons.</p>
+      <pre><code><span class="num">0</span> == <span class="str">""</span>             <span class="cm">// true   (both convert to 0)</span>
+<span class="num">0</span> == <span class="str">"0"</span>            <span class="cm">// true   ("0" → 0)</span>
+<span class="num">0</span> == <span class="kw">false</span> <span class="cm">// true</span>
+<span class="kw">null</span> == <span class="kw">undefined</span>   <span class="cm">// true</span>
+<span class="str">" \t\n "</span> == <span class="num">0</span>   <span class="cm">// true</span>
+
+
+<span class="cm">//Rule breaker (all below are false)</span>
+
+<span class="kw">null</span> == <span class="num">0</span> <span class="cm">// false</span>
+<span class="kw">null</span> == <span class="str">""</span> <span class="cm">//false</span>
+<span class="kw">null</span> == <span class="kw">false</span> <span class="cm">//false</span>
+<span class="kw">undefined</span> == <span class="num">0</span> <span class="cm">//false</span>
+<span class="kw">undefined</span> == <span class="str">""</span> <span class="cm">//false</span>
+<span class="kw">undefined</span> == <span class="kw">false</span> <span class="cm">//false</span>
+NaN == NaN  <span class="cm">//false</span>
+
+console.log(<span class="str">""</span> === <span class="kw">false</span>); <span class="cm">//false</span>
+console.log(<span class="str">""</span> == <span class="kw">false</span>); <span class="cm">// true</span>
+console.log(<span class="kw">null</span> == <span class="kw">undefined</span>); <span class="cm">// true</span>
+console.log(<span class="kw">null</span> === <span class="kw">undefined</span>); <span class="cm">// false</span>
+console.log(<span class="num">0</span> === <span class="kw">false</span>); <span class="cm">// false</span>
+
+
+console.log(<span class="str">"0"</span> == <span class="kw">false</span>); <span class="cm">//true</span>
+console.log(<span class="str">""</span> == <span class="str">"0"</span>);  <span class="cm">//false</span>
+
+<span class="kw">let</span> name = <span class="kw">null</span>;
+<span class="kw">let</span> age;
+
+name = <span class="str">"pramod"</span>;
+
+<span class="kw">var</span> a = <span class="num">0</span> / <span class="num">0</span>;
+<span class="kw">var</span> a1 = <span class="num">0.0</span> / <span class="num">0.0</span>;
+console.log(a);
+
+
+<span class="kw">let</span> a2;
+console.log(a2);
+
+<span class="kw">let</span> a3 = <span class="kw">null</span>;
+console.log(a3);
+
+<span class="kw">let</span> red = <span class="str">"#880808"</span>;
+
+<span class="kw">let</span> inputAge = <span class="str">"true"</span>;
+
+
+<span class="kw">if</span> (inputAge == <span class="kw">false</span>) {
+    console.log(<span class="str">"Age is empty/invalid"</span>);  <span class="cm">// WRONG! "0" == false is true</span>
+}</code></pre>
+    </div>
+
+    <div class="footer">PPTP - Playwright &amp; Programming Tutorial Portal | TheTestingAcademy</div>
+  </main>
+  <script>
+    document.querySelectorAll('.sidebar a').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const target = document.querySelector(link.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          document.querySelectorAll('.sidebar a').forEach(l => l.classList.remove('active'));
+          link.classList.add('active');
+        }
+      });
+    });
+    window.addEventListener('scroll', () => {
+      const sections = document.querySelectorAll('.topic');
+      let current = '';
+      sections.forEach(section => {
+        const top = section.offsetTop - 100;
+        if (window.scrollY >= top) current = section.id;
+      });
+      document.querySelectorAll('.sidebar a').forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === '#' + current) link.classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>

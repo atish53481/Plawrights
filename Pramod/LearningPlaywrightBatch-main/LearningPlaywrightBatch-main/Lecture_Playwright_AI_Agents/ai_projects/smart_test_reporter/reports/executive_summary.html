@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Test Executive Summary</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0f0f23; color: #e0e0e0; padding: 24px; }
+    .container { max-width: 1100px; margin: 0 auto; }
+    h1 { font-size: 28px; text-align: center; margin-bottom: 4px; }
+    .subtitle { text-align: center; color: #888; margin-bottom: 32px; font-size: 14px; }
+    .dashboard { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 32px; }
+    .card { background: #16213e; border-radius: 12px; padding: 20px; text-align: center; }
+    .card .value { font-size: 32px; font-weight: bold; }
+    .card .label { font-size: 12px; color: #888; margin-top: 4px; text-transform: uppercase; }
+    .section { background: #16213e; border-radius: 12px; padding: 24px; margin-bottom: 24px; }
+    .section h2 { font-size: 18px; margin-bottom: 16px; color: #64B5F6; }
+    table { width: 100%; border-collapse: collapse; }
+    th { padding: 12px; text-align: left; background: #0f3460; color: #fff; font-size: 12px; text-transform: uppercase; }
+    .risk-badge { display: inline-block; padding: 8px 24px; border-radius: 20px; font-weight: bold; font-size: 18px; }
+    ul { padding-left: 20px; }
+    li { color: #ccc; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Test Executive Summary</h1>
+    <p class="subtitle">Generated: 2026-03-26T06:37:14.373Z | AI Smart Test Reporter</p>
+
+    <div class="dashboard">
+      <div class="card">
+        <div class="value" style="color: #64B5F6;">10</div>
+        <div class="label">Total Tests</div>
+      </div>
+      <div class="card">
+        <div class="value" style="color: #4CAF50;">7</div>
+        <div class="label">Passed</div>
+      </div>
+      <div class="card">
+        <div class="value" style="color: #f44336;">3</div>
+        <div class="label">Failed</div>
+      </div>
+      <div class="card">
+        <div class="value" style="color: #FF9800;">70%</div>
+        <div class="label">Pass Rate</div>
+      </div>
+    </div>
+
+    <div class="section" style="text-align: center;">
+      <h2>Risk Assessment</h2>
+      <span class="risk-badge" style="background: #FF9800; color: white;">MEDIUM RISK</span>
+      <p style="margin-top: 12px; color: #aaa;">Based on 70% pass rate across 10 tests</p>
+    </div>
+
+    
+    <div class="section">
+      <h2>Failure Categories</h2>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px;">
+        
+    <div style="background: #1a1a2e; border-radius: 8px; padding: 16px; margin-bottom: 8px;">
+      <div style="font-weight: bold; text-transform: uppercase; font-size: 13px; color: #FF9800; margin-bottom: 8px;">timeout</div>
+      <div style="font-size: 24px; font-weight: bold;">1</div>
+      <div style="color: #888; font-size: 12px;">failure</div>
+    </div>
+  
+    <div style="background: #1a1a2e; border-radius: 8px; padding: 16px; margin-bottom: 8px;">
+      <div style="font-weight: bold; text-transform: uppercase; font-size: 13px; color: #FF9800; margin-bottom: 8px;">assertion</div>
+      <div style="font-size: 24px; font-weight: bold;">2</div>
+      <div style="color: #888; font-size: 12px;">failures</div>
+    </div>
+  
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Failed Tests</h2>
+      <table>
+        <thead><tr><th>Test</th><th>Duration</th><th>Error</th></tr></thead>
+        <tbody>
+    <tr style="border-bottom: 1px solid #333;">
+      <td style="padding: 12px;"><span style="color: #f44336;">&#10007;</span> Broken selector fails to find element</td>
+      <td style="padding: 12px;">5023ms</td>
+      <td style="padding: 12px; font-size: 13px; color: #aaa;">Error: Timed out 5000ms waiting for expect(locator).toBeVisible()</td>
+    </tr>
+    <tr style="border-bottom: 1px solid #333;">
+      <td style="padding: 12px;"><span style="color: #f44336;">&#10007;</span> Stale element has correct text</td>
+      <td style="padding: 12px;">3200ms</td>
+      <td style="padding: 12px; font-size: 13px; color: #aaa;">Error: expect(received).toContainText(expected)</td>
+    </tr>
+    <tr style="border-bottom: 1px solid #333;">
+      <td style="padding: 12px;"><span style="color: #f44336;">&#10007;</span> Wrong URL after navigation</td>
+      <td style="padding: 12px;">2890ms</td>
+      <td style="padding: 12px; font-size: 13px; color: #aaa;">Error: expect(received).toHaveURL(expected)</td>
+    </tr></tbody>
+      </table>
+    </div>
+    
+
+    <div class="section">
+      <h2>Recommendations</h2>
+      <ul><li style="margin-bottom: 8px;">Increase timeout values or add explicit wait conditions for slow elements.</li><li style="margin-bottom: 8px;">Review assertion expectations - some may be based on incorrect assumptions.</li></ul>
+    </div>
+
+    <div style="text-align: center; margin-top: 24px; color: #555; font-size: 12px;">
+      <p>AI Smart Test Reporter — TheTestingAcademy</p>
+    </div>
+  </div>
+</body>
+</html>

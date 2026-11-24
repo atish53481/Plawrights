@@ -1,0 +1,20 @@
+# secrets
+.env
+.env.*
+!.env.example
+
+# deps / build output
+node_modules/
+test-results/
+playwright-report/
+blob-report/
+logs/
+*.log
+
+# junk
+*.stackdump
+*_files/
+
+# nested repos (pushed to their own remotes)
+PlaywrightExt/
+Interview/PlaywrightFullStack/PlaywrightExt/

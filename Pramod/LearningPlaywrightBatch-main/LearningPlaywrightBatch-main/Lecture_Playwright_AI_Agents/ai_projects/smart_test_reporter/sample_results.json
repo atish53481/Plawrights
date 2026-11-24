@@ -1,0 +1,84 @@
+{
+  "config": {
+    "rootDir": "/Users/promode/Documents/LearningPlaywrightBatch/Lecture_Playwright_AI_Agents",
+    "testDir": "agents_project/tests"
+  },
+  "suites": [
+    {
+      "title": "AI Agents Test Suite",
+      "specs": [
+        {
+          "title": "Homepage loads correctly",
+          "ok": true,
+          "tests": [{ "status": "passed", "duration": 1245, "errors": [] }]
+        },
+        {
+          "title": "Login form accepts valid credentials",
+          "ok": true,
+          "tests": [{ "status": "passed", "duration": 2130, "errors": [] }]
+        },
+        {
+          "title": "Dropdown option can be selected",
+          "ok": true,
+          "tests": [{ "status": "passed", "duration": 1890, "errors": [] }]
+        },
+        {
+          "title": "Checkbox can be toggled",
+          "ok": true,
+          "tests": [{ "status": "passed", "duration": 1456, "errors": [] }]
+        },
+        {
+          "title": "Dynamic content loads",
+          "ok": true,
+          "tests": [{ "status": "passed", "duration": 980, "errors": [] }]
+        },
+        {
+          "title": "File upload page loads",
+          "ok": true,
+          "tests": [{ "status": "passed", "duration": 1120, "errors": [] }]
+        },
+        {
+          "title": "Drag and drop works",
+          "ok": true,
+          "tests": [{ "status": "passed", "duration": 2340, "errors": [] }]
+        },
+        {
+          "title": "Broken selector fails to find element",
+          "ok": false,
+          "tests": [{
+            "status": "failed",
+            "duration": 5023,
+            "errors": [{
+              "message": "Error: Timed out 5000ms waiting for expect(locator).toBeVisible()\n\nLocator: locator('#ai-generated-element')\nExpected: visible\nReceived: <element(s) not found>",
+              "stack": "Error: Timed out 5000ms waiting for expect(locator).toBeVisible()\n    at /agents_project/tests/07_broken_selector.spec.js:12:45"
+            }]
+          }]
+        },
+        {
+          "title": "Stale element has correct text",
+          "ok": false,
+          "tests": [{
+            "status": "failed",
+            "duration": 3200,
+            "errors": [{
+              "message": "Error: expect(received).toContainText(expected)\n\nExpected: \"AI Generated Content Here\"\nReceived: \"Welcome to the-internet\"",
+              "stack": "Error: expect(received).toContainText(expected)\n    at /agents_project/tests/08_stale_element.spec.js:9:38"
+            }]
+          }]
+        },
+        {
+          "title": "Wrong URL after navigation",
+          "ok": false,
+          "tests": [{
+            "status": "failed",
+            "duration": 2890,
+            "errors": [{
+              "message": "Error: expect(received).toHaveURL(expected)\n\nExpected: \"https://the-internet.herokuapp.com/dashboard\"\nReceived: \"https://the-internet.herokuapp.com/secure\"",
+              "stack": "Error: expect(received).toHaveURL(expected)\n    at /agents_project/tests/09_wrong_assertion.spec.js:15:27"
+            }]
+          }]
+        }
+      ]
+    }
+  ]
+}

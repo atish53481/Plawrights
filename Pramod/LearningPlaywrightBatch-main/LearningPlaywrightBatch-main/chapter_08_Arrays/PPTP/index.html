@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chapter 8: Arrays - PPTP Tutorial</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; display: flex; min-height: 100vh; background: #f5f5f5; }
+    .sidebar { width: 280px; background: #1a1a2e; color: #e0e0e0; position: fixed; top: 0; left: 0; height: 100vh; overflow-y: auto; padding: 20px 0; z-index: 10; }
+    .sidebar h2 { padding: 10px 20px 20px; font-size: 18px; color: #fff; border-bottom: 1px solid #333; margin-bottom: 10px; }
+    .sidebar a { display: block; padding: 10px 20px; color: #b0b0c0; text-decoration: none; font-size: 14px; border-left: 3px solid transparent; transition: all 0.2s; }
+    .sidebar a:hover, .sidebar a.active { background: #16213e; color: #64ffda; border-left-color: #64ffda; }
+    .sidebar .section-label { padding: 15px 20px 5px; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #666; }
+    .main { margin-left: 280px; padding: 40px; flex: 1; max-width: 900px; }
+    .main h1 { font-size: 28px; color: #1a1a2e; margin-bottom: 10px; }
+    .main .subtitle { color: #666; margin-bottom: 30px; font-size: 16px; }
+    .topic { background: #fff; border-radius: 8px; padding: 30px; margin-bottom: 30px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    .topic h2 { font-size: 22px; color: #1a1a2e; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #64ffda; }
+    .topic h3 { font-size: 18px; color: #333; margin: 20px 0 10px; }
+    .topic p { line-height: 1.8; color: #444; margin-bottom: 15px; }
+    .topic ul, .topic ol { margin: 10px 0 15px 20px; line-height: 1.8; color: #444; }
+    pre { background: #1e1e1e; color: #d4d4d4; padding: 20px; border-radius: 6px; overflow-x: auto; margin: 15px 0; font-size: 14px; line-height: 1.6; }
+    code { font-family: 'Fira Code', 'Consolas', monospace; }
+    .inline-code { background: #e8e8e8; padding: 2px 6px; border-radius: 3px; font-size: 13px; color: #d63384; }
+    .badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; margin-right: 5px; }
+    .badge-file { background: #e3f2fd; color: #1565c0; }
+    .badge-concept { background: #f3e5f5; color: #7b1fa2; }
+    .footer { text-align: center; padding: 30px; color: #999; font-size: 13px; }
+    @media (max-width: 768px) {
+      .sidebar { width: 100%; height: auto; position: relative; }
+      .main { margin-left: 0; }
+      body { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="sidebar">
+    <h2>Ch 8: Arrays</h2>
+    <div class="section-label">Topics</div>
+    <a href="#topic-63">63 - Array Creation</a>
+    <a href="#topic-64">64 - Access &amp; Modify</a>
+    <a href="#topic-65">65 - Adding &amp; Removing</a>
+    <a href="#topic-66">66 - Real Example</a>
+    <a href="#topic-67">67 - Searching</a>
+    <a href="#topic-68">68 - Iterating</a>
+    <a href="#topic-69">69 - Transforming</a>
+    <a href="#topic-70">70 - Sorting</a>
+    <a href="#topic-71">71 - Slicing &amp; Combining</a>
+    <a href="#topic-72">72 - Checking</a>
+    <a href="#topic-73">73 - Copying (Shallow/Deep)</a>
+    <a href="#topic-74">74 - Destructuring</a>
+    <a href="#topic-75">75 - Task</a>
+  </nav>
+  <main class="main">
+    <h1>Chapter 8: Arrays</h1>
+    <p class="subtitle">Complete guide to JavaScript arrays - creation, manipulation, iteration, and advanced methods</p>
+
+    <div class="topic" id="topic-63">
+      <h2>63 - Array Creation</h2>
+      <span class="badge badge-file">63_Arrays_Creation.js</span>
+      <span class="badge badge-concept">Creation Methods</span>
+      <p>Multiple ways to create arrays: array literals, <code class="inline-code">new Array()</code>, <code class="inline-code">Array.of()</code>, and <code class="inline-code">Array.from()</code>. Arrays can hold mixed types.</p>
+      <pre><code>// Array
+
+let fruits = []; // Empty  []
+let fruits_fresh = ["apple", "banana", "cheery"];
+// 3,  index - 0,1,2
+
+let arr = [10, 20, 30, 40]; // 0-3: 4
+console.log(arr.length);
+// console.log(arr.length()); length is property , () -&gt; functionc
+console.log(arr[0]);
+console.log(arr[3]);
+console.log(arr[4]); // undefined
+
+
+
+let testResults = ["pass", "fail", "pass", "skip"];
+let mixed = [1, "hello", true, null]; // JS arrays can hold any type.
+
+
+
+// Creating Arrays
+
+// Array literal (preferred)
+let browsers = ["Chrome", "Firefox", "Safari"];
+
+
+// Array constructor
+
+let scores = new Array(3);  // creates [empty x 3]
+let scores2 = new Array(1, 2, 3); // creates [1, 2, 3]
+
+let numbers = new Array(100, 200, 300, 400);//0-3: 4
+console.log(numbers);
+
+let test = Array.of(10, 20, 30, 40, 50);//0-4: 5
+console.log(test);
+console.log(test[0]);
+
+// Array.from()
+let chars = Array.from("hello"); // ["h", "e", "l", "l", "o"]</code></pre>
+    </div>
+
+    <div class="topic" id="topic-64">
+      <h2>64 - Access &amp; Modify</h2>
+      <span class="badge badge-file">64_Array_Access_Modify.js</span>
+      <span class="badge badge-concept">Indexing</span>
+      <p>Access elements by index, use <code class="inline-code">.at()</code> for negative indexing, modify elements by assignment, and check array length.</p>
+      <pre><code>// Accessing &amp; Modifying
+let statuses = ["pass", "fail", "skip"];
+console.log(statuses[0]);
+console.log(statuses[2]);
+
+console.log(statuses.at(-1));//last element
+console.log(statuses.at(-2));
+console.log(statuses.at(-3));
+console.log(statuses.at(-4));
+
+// Modify
+statuses[1] = "blocked";
+console.log(statuses);
+
+// Length
+console.log(statuses.length);</code></pre>
+    </div>
+
+    <div class="topic" id="topic-65">
+      <h2>65 - Adding &amp; Removing Elements</h2>
+      <span class="badge badge-file">65_Arrays_Adding_Remove.js</span>
+      <span class="badge badge-concept">push/pop/shift/unshift/splice</span>
+      <p>Methods for adding and removing elements: <code class="inline-code">push</code>/<code class="inline-code">pop</code> (end), <code class="inline-code">unshift</code>/<code class="inline-code">shift</code> (beginning), and <code class="inline-code">splice</code> (any position).</p>
+      <pre><code>let arr = [1, 2, 3];
+console.log(arr);
+// Add to END
+arr.push(4);
+console.log(arr);
+
+// Remove from END
+arr.pop();
+console.log(arr);
+
+arr.push(5, 6);
+console.log(arr);
+
+
+// Add to BEGINNING
+arr.unshift(0);
+console.log(arr);
+
+// Remove from BEGINNING
+arr.shift();
+console.log(arr);
+
+// [ 1, 2, 3, 5, 6 ]
+
+// splice(start, deleteCount, ...itemsToAdd)
+arr.splice(2, 1); // removes 1 item at index 2
+console.log(arr);
+
+arr.splice(2, 0, 99);
+console.log(arr);
+
+arr.splice(1, 2, 10, 20);
+console.log(arr);</code></pre>
+    </div>
+
+    <div class="topic" id="topic-66">
+      <h2>66 - Real Example: Browser List</h2>
+      <span class="badge badge-file">66_Array_REAL.js</span>
+      <span class="badge badge-concept">Practical Usage</span>
+      <p>A real-world example managing a list of browsers. Uses pop, shift, and for loop to iterate and conditionally check elements.</p>
+      <pre><code>const { SourceTextModule } = require("node:vm");
+
+let browser = ['chrome', 'firefox', 'safari', 'opera', 'edge'];
+console.log(browser.length);
+console.log(browser);
+
+browser.pop();
+console.log(browser);
+
+console.log("------------ TTA --------");
+
+let removed = browser.shift();
+console.log(browser);
+console.log(removed);
+
+console.log("------------ TTA --------");
+
+for (let i = 0; i &lt; browser.length; i++) {
+    console.log(browser[i]);
+    if (browser[i] === "opera") {
+        console.log("Opera is removed from the selenium!");
+    }
+}</code></pre>
+    </div>
+
+    <div class="topic" id="topic-67">
+      <h2>67 - Searching Arrays</h2>
+      <span class="badge badge-file">67_Array_Searching.js</span>
+      <span class="badge badge-concept">Search Methods</span>
+      <p>Search methods: <code class="inline-code">indexOf</code>, <code class="inline-code">lastIndexOf</code>, <code class="inline-code">includes</code>, <code class="inline-code">find</code>, <code class="inline-code">findIndex</code>, <code class="inline-code">findLast</code>, and <code class="inline-code">findLastIndex</code>.</p>
+      <pre><code>//Searching
+
+let results = ["pass", "fail", "pass", "error", "fail"];
+
+//// indexOf — returns first index, or -1 if not found
+
+results.indexOf("fail"); //1
+results.indexOf("skip");        // -1
+
+// lastIndexOf — searches from the end
+results.lastIndexOf("fail");    // 4
+
+// includes — returns boolean
+results.includes("error"); // true
+results.includes("skip");       // false
+
+
+
+// find — returns first matching element
+
+let nums = [10, 25, 30, 45];
+nums.find(x =&gt; x &gt; 20);  // 25,30,45 -&gt; A -25
+
+// findIndex
+nums.findIndex(n =&gt; n &gt; 20);
+
+nums.findLast(n =&gt; n &gt; 20); // 45]
+nums.findLastIndex(n =&gt; n &gt; 20);// 3</code></pre>
+    </div>
+
+    <div class="topic" id="topic-68">
+      <h2>68 - Iterating Arrays</h2>
+      <span class="badge badge-file">68_Arrays_Iterating.js</span>
+      <span class="badge badge-concept">Iteration</span>
+      <p>Multiple ways to iterate: classic <code class="inline-code">for</code>, <code class="inline-code">for...of</code> (values), <code class="inline-code">forEach</code> (callback), <code class="inline-code">entries()</code> (index + value), and <code class="inline-code">for...in</code> (indexes).</p>
+      <pre><code>// Iterate - Go from one to another. //
+
+let tests = ["login", "checkout", "search"];
+
+for (let i = 0; i &lt; tests.length; i++) {
+    console.log(tests[i]);
+}
+
+console.log("----");
+
+// for...of (cleanest for values)
+for (let test of tests) {
+    console.log(test) // value
+}
+console.log("----");
+
+// forEach (no return value)
+tests.forEach((test, index) =&gt; {
+
+    console.log(`${index}: ${test}`);
+});
+
+console.log("----");
+// entries() — index + value
+
+for (let [i, test] of tests.entries()) {
+    console.log(i, test);
+}
+
+console.log("----");
+
+let students = ["methis", "senthil", "ajay", "rahul"];
+
+
+for (let student in students) {
+    console.log(student, " -&gt; ", students[student]); // index = in
+}</code></pre>
+    </div>
+
+    <div class="topic" id="topic-69">
+      <h2>69 - Transforming Arrays</h2>
+      <span class="badge badge-file">69_Arrays_Transforming_Arrays.js</span>
+      <span class="badge badge-concept">map/filter/reduce/flat</span>
+      <p>Transformation methods: <code class="inline-code">map</code> (transform each element), <code class="inline-code">filter</code> (keep matching elements), <code class="inline-code">reduce</code> (accumulate to single value), and <code class="inline-code">flat</code> (flatten nested arrays).</p>
+      <pre><code>let scores = [45, 82, 91, 60, 73];
+
+// map — transforms every element, returns NEW array
+
+let grades = scores.map(s =&gt; s &gt; 70 ? "Pass" : "Fail");
+console.log(grades);
+
+
+// filter — keeps elements that pass a test
+
+let passing = scores.filter(s =&gt; s &gt;= 70);
+console.log(passing);
+
+// reduce — accumulates to a single value
+
+let total = scores.reduce((sum, s) =&gt; sum + s, 0); //351
+console.log(total);
+
+// flat — flattens nested arrays
+let nested = [[1, 2], [3, 4], [5]];
+console.log(nested.flat());</code></pre>
+    </div>
+
+    <div class="topic" id="topic-70">
+      <h2>70 - Sorting Arrays</h2>
+      <span class="badge badge-file">70_Array_Sorting.js</span>
+      <span class="badge badge-concept">Sorting</span>
+      <p>Default <code class="inline-code">sort()</code> compares as strings (which can give wrong results for numbers). Use a comparator function for numeric sorting.</p>
+      <pre><code>//Sorting
+
+let fruits = ["banana", "apple", "cherry"];
+fruits.sort();
+console.log(fruits);
+//  alphabetical by default
+
+let nums = [10, 1, 21, 2];
+nums.sort(); // [1, 10, 2, 21] — WRONG (compares as strings!)
+console.log(nums);
+nums.sort((a, b) =&gt; a - b); // Ascending
+console.log(nums);
+nums.sort((a, b) =&gt; b - a);
+console.log(nums); // [21, 10, 2, 1] — descending</code></pre>
+    </div>
+
+    <div class="topic" id="topic-71">
+      <h2>71 - Slicing &amp; Combining</h2>
+      <span class="badge badge-file">71_Arrays_Slicing.js</span>
+      <span class="badge badge-concept">slice/concat/spread/join</span>
+      <p>Non-mutating extraction with <code class="inline-code">slice()</code>, combining with <code class="inline-code">concat()</code> and spread operator <code class="inline-code">...</code>, and converting to string with <code class="inline-code">join()</code>.</p>
+      <pre><code>// Slicing &amp; Combining
+
+
+let arr = [1, 2, 3, 4, 5];
+
+// slice(start, end) — returns new array, does NOT mutate actual -&gt; ( start, end-1) . index = 0
+//Don't give the end, it will automatically take from start to end.
+// console.log(arr.slice(1, 3));
+// console.log(arr.slice(2, 4));
+
+// console.log(arr.slice(2, 5));
+
+// console.log(arr.slice(2));
+
+// // console.log(arr.slice(-2)); //start from the -1 and till 2.
+// // console.log(arr.slice(-3));
+
+
+// console.log(arr.slice(0));
+// console.log(arr.slice(-5));
+
+
+let arr1 = [1, 2, 3, 4, 5];
+
+let a = [1, 2];
+let b = [3, 4];
+// let c = a.concat(b, [5, 6]);
+let c = a.concat(b);
+console.log(c);
+
+// spread (modern way) - concatenation. (...)
+let d = [...a, ...b];
+console.log(d);
+
+// ... , ===
+// Join
+let s = ["pass", "fail", "skip"].join(" | ");
+console.log(s);</code></pre>
+    </div>
+
+    <div class="topic" id="topic-72">
+      <h2>72 - Checking Arrays</h2>
+      <span class="badge badge-file">72_Arrays_Checking.js</span>
+      <span class="badge badge-concept">isArray/every/some</span>
+      <p>Check if a value is an array with <code class="inline-code">Array.isArray()</code>. Use <code class="inline-code">every()</code> to check if all elements pass a test, and <code class="inline-code">some()</code> to check if at least one passes.</p>
+      <pre><code>// Checking Arrays
+
+// Check if something IS an array
+
+
+let result = Array.isArray([1, 2, 3]);
+let result1 = Array.isArray("a");
+console.log(result);
+console.log(result1);
+
+
+// every &amp; some
+[80, 90, 85].every(s =&gt; s &gt;= 70);   // true
+[80, 60, 85].every(s =&gt; s &gt;= 70);   // false
+
+// some — AT LEAST ONE must pass
+[80, 60, 85].some(s =&gt; s &lt; 70); //  true
+[80, 90, 85].some(s =&gt; s &lt; 70); // false</code></pre>
+    </div>
+
+    <div class="topic" id="topic-73">
+      <h2>73 - Copying Arrays (Shallow &amp; Deep)</h2>
+      <span class="badge badge-file">73_Arrays_Copying_Shallow_Deep.js</span>
+      <span class="badge badge-concept">Copy Methods</span>
+      <p>Shallow copy methods: spread, <code class="inline-code">slice()</code>, <code class="inline-code">Array.from()</code>, <code class="inline-code">concat()</code>. Direct assignment creates a reference (not a copy), so changes affect both variables.</p>
+      <pre><code>let original = [1, 2, 3];
+
+let copy1 = [...original]; // spread
+// console.log(copy1);
+let copy2 = original.slice();
+// console.log(copy2);
+let copy3 = Array.from(original);
+// console.log(copy3);
+let copy4 = original.concat();
+// console.log(copy4);
+
+copy1.push(99);
+console.log(original);
+console.log(copy1);
+
+// Deep copy (JSON)
+let c = original; // Deep copy
+original.push(99);
+console.log(original);
+console.log(copy1);</code></pre>
+    </div>
+
+    <div class="topic" id="topic-74">
+      <h2>74 - Array Destructuring</h2>
+      <span class="badge badge-file">74_Arrays_Destructuring.js</span>
+      <span class="badge badge-concept">Destructuring</span>
+      <p>Extract values from arrays into variables using destructuring syntax. The rest operator <code class="inline-code">...</code> collects remaining elements.</p>
+      <pre><code>// let [first, second, third] = [10, 20, 30];
+
+// console.log(first);
+// console.log(second);
+// console.log(third);
+
+
+let [first, second, ...third] = [10, 20, 30, 40, 50];
+console.log(first);
+console.log(second);
+console.log(third);</code></pre>
+    </div>
+
+    <div class="topic" id="topic-75">
+      <h2>75 - Task: Reference vs Copy</h2>
+      <span class="badge badge-file">75_Task.js</span>
+      <span class="badge badge-concept">Task</span>
+      <p>A quick exercise demonstrating that assigning an array to a new variable creates a reference, not a copy. Modifying one affects the other.</p>
+      <pre><code>let arr = [1, 2, 3];
+let copy = arr;
+copy.push(4);
+console.log(arr.length);
+console.log(copy);</code></pre>
+    </div>
+
+    <div class="footer">PPTP - Playwright &amp; Programming Tutorial Portal | TheTestingAcademy</div>
+  </main>
+  <script>
+    document.querySelectorAll('.sidebar a').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const target = document.querySelector(link.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          document.querySelectorAll('.sidebar a').forEach(l => l.classList.remove('active'));
+          link.classList.add('active');
+        }
+      });
+    });
+    window.addEventListener('scroll', () => {
+      const sections = document.querySelectorAll('.topic');
+      let current = '';
+      sections.forEach(section => {
+        const top = section.offsetTop - 100;
+        if (window.scrollY >= top) current = section.id;
+      });
+      document.querySelectorAll('.sidebar a').forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === '#' + current) link.classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>

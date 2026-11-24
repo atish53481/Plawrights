@@ -1,0 +1,16 @@
+# Taste
+- Wants the complete database schema designed up front in the first slice rather than added incrementally later. Confidence: 0.75
+- Keeps feature branches as-is: work is committed to a branch but not merged or pushed until explicitly decided by the user. Confidence: 0.75
+- Works in a spec → plan → build flow and expects written specs to review before implementation begins. Confidence: 0.7
+- Approves and unblocks with very short, terse replies ("approved", "ok go ahead", "ok", "done") rather than detailed feedback. Confidence: 0.7
+- Delegates routine decisions when offered options (e.g. "do it", "go ahead and do the remaining task"), expecting the agent to pick a sensible default and proceed autonomously without further questions. Confidence: 0.65
+- Expects progress status checks answered directly (e.g. "all is done?", "done?") and wants a plain yes/no on whether everything is finished. Confidence: 0.7
+- Prefers to be asked questions in plain text rather than through the AskUserQuestion tool, though will answer the tool when it presents clear options with a recommendation. Confidence: 0.6
+- Wants a clear time estimate (ETA) for remaining work when asking how long it will take. Confidence: 0.6
+- Prefers to run and try the application locally himself; expects the agent to start the dev servers so he can interact with the running app. Confidence: 0.65
+- When the agent loses session context, expects it to recover the prior state by reading the latest Claude Code session log (~/.claude/projects/<project>/*.jsonl) and continue autonomously rather than asking the user to re-explain. Confidence: 0.7
+- Expects Playwright test recordings/codegen to emit clean, valid test scripts — no truncated or malformed selectors and no stray comment lines captured as locators; wants bad recordings re-recorded or deleted rather than patched around. Confidence: 0.75
+- Uses Allure for test reporting and expects it integrated into the Jenkins CI pipeline (report route and plugin wired into Jenkins). Confidence: 0.7
+- Expects CLAUDE.md to be kept up to date with new report routes and workflow steps whenever features are added. Confidence: 0.7
+- Expects Docker image tags to be looked up and verified rather than guessed (e.g., verified the current Playwright Docker tag before using it). Confidence: 0.6
+- Works in parallel with the agent mid-task — edits files, writes tests, and commits code himself. Expects the agent to re-check git state and current file contents before acting and to avoid clobbering in-flight user edits. Confidence: 0.85

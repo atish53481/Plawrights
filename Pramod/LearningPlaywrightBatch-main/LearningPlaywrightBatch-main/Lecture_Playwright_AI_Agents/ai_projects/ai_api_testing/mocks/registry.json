@@ -1,0 +1,58 @@
+[
+  {
+    "name": "Homepage",
+    "endpoint": "/",
+    "method": "GET",
+    "status": 200,
+    "file": "homepage.html"
+  },
+  {
+    "name": "Login Page",
+    "endpoint": "/login",
+    "method": "GET",
+    "status": 200,
+    "file": "login_page.html"
+  },
+  {
+    "name": "Login Success",
+    "endpoint": "/authenticate",
+    "method": "POST",
+    "status": 200,
+    "file": "login_success.html"
+  },
+  {
+    "name": "Login Failure",
+    "endpoint": "/authenticate",
+    "method": "POST",
+    "status": 200,
+    "file": "login_failure.html"
+  },
+  {
+    "name": "Status Code 200",
+    "endpoint": "/status_codes/200",
+    "method": "GET",
+    "status": 200,
+    "file": "status_code_200.html"
+  },
+  {
+    "name": "Status Code 301",
+    "endpoint": "/status_codes/301",
+    "method": "GET",
+    "status": 301,
+    "file": "status_code_301.html"
+  },
+  {
+    "name": "Status Code 404",
+    "endpoint": "/status_codes/404",
+    "method": "GET",
+    "status": 404,
+    "file": "status_code_404.html"
+  },
+  {
+    "name": "Status Code 500",
+    "endpoint": "/status_codes/500",
+    "method": "GET",
+    "status": 500,
+    "file": "status_code_500.html"
+  }
+]

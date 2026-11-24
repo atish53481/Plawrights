@@ -1,0 +1,63 @@
+{
+  "contracts": [
+    {
+      "name": "Homepage",
+      "endpoint": "/",
+      "method": "GET",
+      "expectedStatus": 200,
+      "expectedContentType": "text/html",
+      "requiredElements": ["h1", "ul", "a"],
+      "requiredText": ["Welcome to the-internet"]
+    },
+    {
+      "name": "Login Page",
+      "endpoint": "/login",
+      "method": "GET",
+      "expectedStatus": 200,
+      "expectedContentType": "text/html",
+      "requiredElements": ["form", "input", "button"],
+      "requiredText": ["Login Page"]
+    },
+    {
+      "name": "Login Success",
+      "endpoint": "/authenticate",
+      "method": "POST",
+      "formData": { "username": "tomsmith", "password": "SuperSecretPassword!" },
+      "expectedStatus": 200,
+      "requiredText": ["secure"]
+    },
+    {
+      "name": "Login Failure",
+      "endpoint": "/authenticate",
+      "method": "POST",
+      "formData": { "username": "invalid", "password": "wrong" },
+      "expectedStatus": 200,
+      "requiredText": ["invalid"]
+    },
+    {
+      "name": "Status Code 200",
+      "endpoint": "/status_codes/200",
+      "method": "GET",
+      "expectedStatus": 200
+    },
+    {
+      "name": "Status Code 301",
+      "endpoint": "/status_codes/301",
+      "method": "GET",
+      "expectedStatus": 301,
+      "followRedirects": false
+    },
+    {
+      "name": "Status Code 404",
+      "endpoint": "/status_codes/404",
+      "method": "GET",
+      "expectedStatus": 404
+    },
+    {
+      "name": "Status Code 500",
+      "endpoint": "/status_codes/500",
+      "method": "GET",
+      "expectedStatus": 500
+    }
+  ]
+}

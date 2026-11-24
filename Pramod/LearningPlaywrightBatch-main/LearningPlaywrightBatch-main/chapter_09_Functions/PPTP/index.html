@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chapter 9: Functions - PPTP Tutorial</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; display: flex; min-height: 100vh; background: #f5f5f5; }
+    .sidebar { width: 280px; background: #1a1a2e; color: #e0e0e0; position: fixed; top: 0; left: 0; height: 100vh; overflow-y: auto; padding: 20px 0; z-index: 10; }
+    .sidebar h2 { padding: 10px 20px 20px; font-size: 18px; color: #fff; border-bottom: 1px solid #333; margin-bottom: 10px; }
+    .sidebar a { display: block; padding: 10px 20px; color: #b0b0c0; text-decoration: none; font-size: 14px; border-left: 3px solid transparent; transition: all 0.2s; }
+    .sidebar a:hover, .sidebar a.active { background: #16213e; color: #64ffda; border-left-color: #64ffda; }
+    .sidebar .section-label { padding: 15px 20px 5px; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #666; }
+    .main { margin-left: 280px; padding: 40px; flex: 1; max-width: 900px; }
+    .main h1 { font-size: 28px; color: #1a1a2e; margin-bottom: 10px; }
+    .main .subtitle { color: #666; margin-bottom: 30px; font-size: 16px; }
+    .topic { background: #fff; border-radius: 8px; padding: 30px; margin-bottom: 30px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    .topic h2 { font-size: 22px; color: #1a1a2e; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #64ffda; }
+    .topic h3 { font-size: 18px; color: #333; margin: 20px 0 10px; }
+    .topic p { line-height: 1.8; color: #444; margin-bottom: 15px; }
+    .topic ul, .topic ol { margin: 10px 0 15px 20px; line-height: 1.8; color: #444; }
+    pre { background: #1e1e1e; color: #d4d4d4; padding: 20px; border-radius: 6px; overflow-x: auto; margin: 15px 0; font-size: 14px; line-height: 1.6; }
+    code { font-family: 'Fira Code', 'Consolas', monospace; }
+    .inline-code { background: #e8e8e8; padding: 2px 6px; border-radius: 3px; font-size: 13px; color: #d63384; }
+    .badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; margin-right: 5px; }
+    .badge-file { background: #e3f2fd; color: #1565c0; }
+    .badge-concept { background: #f3e5f5; color: #7b1fa2; }
+    .footer { text-align: center; padding: 30px; color: #999; font-size: 13px; }
+    @media (max-width: 768px) {
+      .sidebar { width: 100%; height: auto; position: relative; }
+      .main { margin-left: 0; }
+      body { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="sidebar">
+    <h2>Ch 9: Functions</h2>
+    <div class="section-label">Basics</div>
+    <a href="#topic-76">76 - Why Functions?</a>
+    <a href="#topic-77">77 - Type 1: No Arg, No Return</a>
+    <a href="#topic-78">78 - Type 2: With Arg, No Return</a>
+    <a href="#topic-79">79 - Type 3: No Arg, With Return</a>
+    <a href="#topic-80">80 - Type 4: With Arg &amp; Return</a>
+    <a href="#topic-81">81 - Example: Greet</a>
+    <div class="section-label">Types</div>
+    <a href="#topic-82">82 - Function Expression</a>
+    <a href="#topic-83">83 - Arrow Function</a>
+    <a href="#topic-84">84 - API Testing Example</a>
+    <a href="#topic-85">85 - IIFE</a>
+    <a href="#topic-86">86 - IQ: Arguments</a>
+    <div class="section-label">Parameters</div>
+    <a href="#topic-87">87 - Default Parameters</a>
+    <a href="#topic-88">88 - Rest Parameters</a>
+    <a href="#topic-90">90 - Spread with Functions</a>
+    <a href="#topic-91">91 - Return Values</a>
+    <div class="section-label">Advanced</div>
+    <a href="#topic-92">92 - Hoisting</a>
+    <a href="#topic-93">93 - Scope</a>
+    <a href="#topic-94">94 - Closures</a>
+    <a href="#topic-95">95 - Closures: Counter</a>
+    <a href="#topic-96">96 - Closures: Retry Tracker</a>
+    <a href="#topic-97">97 - Closures: Rate Limiter</a>
+    <a href="#topic-98">98 - Higher-Order Functions</a>
+    <a href="#topic-99">99 - Pure Functions</a>
+    <a href="#topic-100">100 - Callback Functions</a>
+    <a href="#topic-101">101 - Callback Example</a>
+  </nav>
+  <main class="main">
+    <h1>Chapter 9: Functions</h1>
+    <p class="subtitle">From basic function types to closures, higher-order functions, and callbacks</p>
+
+    <div class="topic" id="topic-76">
+      <h2>76 - Why Functions?</h2>
+      <span class="badge badge-file">76_Functions.js</span>
+      <span class="badge badge-concept">Motivation</span>
+      <p>Functions eliminate repeated logic. Instead of writing the same code multiple times, encapsulate it in a reusable function.</p>
+      <pre><code>// Without functions — repeated logic
+
+let score1 = 85;
+let result1 = score1 &gt;= 70 ? "pass" : "fail";
+console.log(result1);
+
+let score2 = 45;
+let result2 = score2 &gt;= 70 ? "pass" : "fail";
+console.log(result2);
+
+function getResult(scroe) {
+    return score2 &gt;= 70 ? "pass" : "fail";
+}
+
+getResult(85);  // "pass"
+getResult(45);  // "fail"</code></pre>
+    </div>
+
+    <div class="topic" id="topic-77">
+      <h2>77 - Type 1: No Arguments, No Return</h2>
+      <span class="badge badge-file">77_Type1_Fn_Basic_Functions.js</span>
+      <span class="badge badge-concept">Basic Function</span>
+      <p>The simplest function type: no parameters and no return value. Calling it returns <code class="inline-code">undefined</code>.</p>
+      <pre><code>// Define
+function greet() {
+    console.log("Hi");
+}
+
+// This is a Basic type-1 function, which means no argument, no return.
+// Call
+greet();
+
+let a = greet();</code></pre>
+    </div>
+
+    <div class="topic" id="topic-78">
+      <h2>78 - Type 2: With Arguments, No Return</h2>
+      <span class="badge badge-file">78_Type2_Fn_With_Arg_No_Return.js</span>
+      <span class="badge badge-concept">Parameters</span>
+      <p>Functions that accept arguments (parameters) but don't return a value. The return value is <code class="inline-code">undefined</code>.</p>
+      <pre><code>// Type 2 Functions
+
+// So with argument/parameter but no return type.
+
+function greetByName(name) { // parameter
+    console.log("Hi", name);
+}
+
+greetByName("Pramod"); // argument
+greetByName("Dipak");
+greetByName("Meeti");
+greetByName("Sangeetha");
+
+
+function begger(money) {
+    console.log("Thanks", money);
+}
+
+let returnMesomething = begger(100);
+console.log(returnMesomething);
+
+
+let name1 = greetByName("Sumit");
+console.log(name1);</code></pre>
+    </div>
+
+    <div class="topic" id="topic-79">
+      <h2>79 - Type 3: No Arguments, With Return</h2>
+      <span class="badge badge-file">79_Type3_Fn_without_Arg_Return_Type.js</span>
+      <span class="badge badge-concept">Return Type</span>
+      <p>Functions that take no arguments but return a value.</p>
+      <pre><code>function sayHello() {
+    console.log('Hi');
+    return "Hello";
+}
+
+let relative = sayHello();
+console.log(relative);</code></pre>
+    </div>
+
+    <div class="topic" id="topic-80">
+      <h2>80 - Type 4: With Arguments &amp; Return</h2>
+      <span class="badge badge-file">80_Type4_Fn_With_Arg_With_Return.js</span>
+      <span class="badge badge-concept">Complete Function</span>
+      <p>The most common function type: accepts parameters and returns a computed value.</p>
+      <pre><code>function sumofTwoNumbers(a, b) {
+    return a + b;
+}
+
+let c = sumofTwoNumbers(4, 5);
+let c2 = sumofTwoNumbers(10, 15);
+console.log(c);
+console.log(c2);</code></pre>
+    </div>
+
+    <div class="topic" id="topic-81">
+      <h2>81 - Example: Greet Function</h2>
+      <span class="badge badge-file">81_Ex.js</span>
+      <span class="badge badge-concept">Example</span>
+      <p>A simple greet function using template literals.</p>
+      <pre><code>function greet(name) {
+    return `Hello, ${name}!`;
+}
+
+greet("Alice");</code></pre>
+    </div>
+
+    <div class="topic" id="topic-82">
+      <h2>82 - Function Expression</h2>
+      <span class="badge badge-file">82_Fn_Expression.js</span>
+      <span class="badge badge-concept">Expression</span>
+      <p>Functions can be assigned to variables as expressions. They behave the same as declarations but are not hoisted.</p>
+      <pre><code>const greet = function (name) {
+    return `Hello, ${name}!`;
+};
+
+// Type 4 Function
+function greet1(name1) {
+    return `Hello, ${name1}!`;
+}
+
+// Functions as Expression
+const greet2 = function (name1) {
+    return `Hello, ${name1}!`;
+}
+
+// console.log(greet("Bob"));
+console.log(greet1("Bob"));
+console.log(greet2("Bob"));</code></pre>
+    </div>
+
+    <div class="topic" id="topic-83">
+      <h2>83 - Arrow Functions (ES6)</h2>
+      <span class="badge badge-file">83_Fn_Arrow.js</span>
+      <span class="badge badge-concept">Arrow Function</span>
+      <p>Concise syntax for functions. Remove <code class="inline-code">function</code> keyword, use <code class="inline-code">=&gt;</code>. Single expressions don't need braces or return. Multi-line needs both.</p>
+      <pre><code>// Arrow Function (ES6)
+
+const greet = function (name1) {
+    return `Hello, ${name1}!`;
+}
+
+// If you want to make a normal function to arrow function.
+// Remove the keyword function, remove the keyword return, remove the curly braces, and use the =&gt;
+
+const greet1 = (name2) =&gt; `Hello, ${name2}!`;
+
+console.log(greet("Pramod"));
+console.log(greet1("Pramod"));
+
+// arrow functions only generally works whenever you have a single line.
+const doubleIt = n =&gt; n * 2;
+console.log(doubleIt(10));
+
+// No params — parens required
+const getEnv = () =&gt; "staging";
+console.log(getEnv());
+
+
+// Suppose we have a multi-line. Can we use arrow function everywhere?
+// Multi-line — needs curly braces + return
+const getResult = (score) =&gt; {
+    if (score &gt;= 70) return "pass";
+    return "fail";
+};</code></pre>
+    </div>
+
+    <div class="topic" id="topic-84">
+      <h2>84 - API Testing Example</h2>
+      <span class="badge badge-file">84_Ex_API_Testing.js</span>
+      <span class="badge badge-concept">Practical</span>
+      <p>Comparing declaration, expression, and arrow function styles for the same API status validation logic.</p>
+      <pre><code>// if (ourStatusCode &gt;= 200 &amp;&amp; ourStatusCode &lt; 300)
+function validateStatusCode(status) {
+    if (status &gt;= 200 &amp;&amp; status &lt;= 300) {
+        console.log("Request is fine!")
+    }
+}
+
+const validateStatusCode_Exp = function (status) {
+    if (status &gt;= 200 &amp;&amp; status &lt;= 300) {
+        console.log("Request is fine!")
+    }
+}
+
+const validateStatusCode_Arrow = (status) =&gt; {
+    if (status &gt;= 200 &amp;&amp; status &lt;= 300) {
+        console.log("Request is fine!");
+    }
+}
+
+
+validateStatusCode(200);
+validateStatusCode_Exp(200);
+validateStatusCode_Arrow(200);</code></pre>
+    </div>
+
+    <div class="topic" id="topic-85">
+      <h2>85 - IIFE (Immediately Invoked Function Expression)</h2>
+      <span class="badge badge-file">85_Fn_IIFE.js</span>
+      <span class="badge badge-concept">IIFE</span>
+      <p>Functions that execute immediately when defined. No need to call them separately. Works with both regular and arrow syntax.</p>
+      <pre><code>//Immediately Invoked Function Expression (IIFE)
+//They don't need to be called.
+
+function name1() {
+    console.log("Hi")
+}
+
+name1();
+
+// IIFE
+(function () {
+    console.log("Hi")
+})();
+
+
+//
+
+(function () {
+    console.log("Staging")
+})();
+
+(() =&gt; {
+    console.log("Setup complete");
+})();</code></pre>
+    </div>
+
+    <div class="topic" id="topic-86">
+      <h2>86 - IQ: Function Arguments</h2>
+      <span class="badge badge-file">86_IQ.js</span>
+      <span class="badge badge-concept">Interview Question</span>
+      <p>A function with multiple parameters demonstrating argument passing and template literals.</p>
+      <pre><code>function runTest(name, status, duration) {
+    return `${name}: ${status} (${duration}ms)`;
+}
+
+// Arguments
+runTest("Login", "pass", 320);
+// "Login: pass (320ms)"</code></pre>
+    </div>
+
+    <div class="topic" id="topic-87">
+      <h2>87 - Default Parameters</h2>
+      <span class="badge badge-file">87_Default_Parameter.js</span>
+      <span class="badge badge-concept">Defaults</span>
+      <p>Parameters can have default values. If an argument is not provided, the default is used.</p>
+      <pre><code>function retry(testName, maxRetries = 3, delay = 1000) {
+    console.log(`Retrying ${testName} up to ${maxRetries} times, ${delay}ms apart`);
+}
+
+retry("Login");
+retry("Checkout", 5);
+retry("API Test", 2, 500);</code></pre>
+    </div>
+
+    <div class="topic" id="topic-88">
+      <h2>88 - Rest Parameters</h2>
+      <span class="badge badge-file">88_Rest_Parameters_Fn.js</span>
+      <span class="badge badge-concept">Rest ...</span>
+      <p>The rest parameter <code class="inline-code">...</code> collects all remaining arguments into an array.</p>
+      <pre><code>//Rest Parameters
+function logResults(suiteName, ...results) {
+    console.log(`Suite: ${suiteName}`);
+    console.log(`Results: ${results.join(", ")}`);
+}
+
+logResults("Auth Suite", "pass", "fail", "pass", "skip");
+// Suite: Auth Suite
+// Results: pass, fail, pass, skip
+
+
+function add(a, b, c) {
+    return a + b + c;
+}</code></pre>
+    </div>
+
+    <div class="topic" id="topic-90">
+      <h2>90 - Spread with Functions</h2>
+      <span class="badge badge-file">90_Spead_Fn.js</span>
+      <span class="badge badge-concept">Spread ...</span>
+      <p>The spread operator expands an array into individual arguments when calling a function.</p>
+      <pre><code>function add(a, b, c) {
+
+    return a + b + c;
+
+}
+
+let num = [1, 2, 3];
+add(...num);  //. sum -&gt; 6
+
+// -------
+
+function hasError(...codes) {
+    return codes.some(c =&gt; c &gt;= 400);
+}
+
+let responseCodes = [200, 201, 404];
+
+hasError(...responseCodes); //  true</code></pre>
+    </div>
+
+    <div class="topic" id="topic-91">
+      <h2>91 - Return Values</h2>
+      <span class="badge badge-file">91_Return_Fn.js</span>
+      <span class="badge badge-concept">Return</span>
+      <p>Functions can return various types. Without a return statement, <code class="inline-code">undefined</code> is returned. You can return arrays or objects for multiple values.</p>
+      <pre><code>// Return Values
+
+function getStatus(code) {
+    if (code &gt;= 200 &amp;&amp; code &lt; 300) return "success";
+    if (code &gt;= 400 &amp;&amp; code &lt; 500) return "client error";
+    if (code &gt;= 500) return "server error";
+}
+
+getStatus(200);  // "success"
+getStatus(404);  // "client error"
+getStatus(500);  // "server error"
+
+
+// Returns nothing — undefined
+function logTest(name) {
+    console.log(`Running: ${name}`);
+    // no return statement
+}
+
+
+logTest("Hi this is a a log");
+
+// Return multiple values via array or object
+
+function aaa() {
+    return [2, 2, 3, 5, 4];
+    /// return {"name : pramod"}; - object
+}</code></pre>
+    </div>
+
+    <div class="topic" id="topic-92">
+      <h2>92 - Hoisting</h2>
+      <span class="badge badge-file">92_Hoisting_Fn.js</span>
+      <span class="badge badge-concept">Hoisting</span>
+      <p>Function declarations are hoisted (can be called before definition). Function expressions and arrow functions are NOT hoisted.</p>
+      <pre><code>// Hoisting
+// Function declarations are hoisted —
+// you can call them before they're defined.
+// Function expressions and arrow functions are NOT.
+
+greet("Alice"); // Declaration — hoisted, works before definition
+
+
+function greet(name) {
+    return `Hello, ${name}!`;
+}
+
+
+sayHi("Bob"); // TypeError: sayHi is not a function
+
+const sayHi = function (name) {
+    return `Hi, ${name}!`;
+};</code></pre>
+    </div>
+
+    <div class="topic" id="topic-93">
+      <h2>93 - Scope</h2>
+      <span class="badge badge-file">93_Scope_Fn.js</span>
+      <span class="badge badge-concept">Scope</span>
+      <p>Variables have global or local scope. Inner functions can access outer variables, but outer cannot access inner variables.</p>
+      <pre><code>// Scope in Functions
+
+let env = "staging";  // global scope
+
+function setupConfig() {
+    let timeout = 3000;   // local scope
+    console.log(env);     // can access global
+    console.log(timeout); // can access local
+}
+
+
+setupConfig();
+console.log(env);
+console.log(timeout); // ReferenceError — not accessible outside
+
+// ----
+let g_x = 10;
+
+
+// Nested scope | blocked scope
+function outer() {
+    let x = 10;
+
+    function inner() {
+        let y = 20;
+        console.log(x);  // inner can access outer's variables
+    }
+
+
+    inner();
+    console.log(y); // outer cannot access inner's variables
+
+}</code></pre>
+    </div>
+
+    <div class="topic" id="topic-94">
+      <h2>94 - Closures</h2>
+      <span class="badge badge-file">94_Closure.js</span>
+      <span class="badge badge-concept">Closure</span>
+      <p>A closure is a function that remembers and accesses variables from its outer scope even after the outer function has returned.</p>
+      <pre><code>function outer() {
+    let message = "Hello";
+    console.log("Outer called!");
+
+    function inner() {
+        console.log(message);
+    }
+    return inner;
+
+}
+
+
+let fn_inner = outer();
+fn_inner();
+
+
+//  inner() not allowed!</code></pre>
+    </div>
+
+    <div class="topic" id="topic-95">
+      <h2>95 - Closures: Counter</h2>
+      <span class="badge badge-file">95_Closure_Part2.js</span>
+      <span class="badge badge-concept">Closure</span>
+      <p>A practical closure example: a counter with increment, decrement, and get methods that share a private <code class="inline-code">count</code> variable.</p>
+      <pre><code>function makeCounter(start = 0) {
+
+    let count = start;  // this variable is "closed over"
+    return {
+        increment() { count++; },
+        decrement() { count--; },
+        get() { return count; }
+    }
+
+}
+
+let counter = makeCounter(0);
+counter.increment();
+counter.increment();
+counter.increment();
+console.log(counter.get());
+counter.decrement();
+console.log(counter.get());</code></pre>
+    </div>
+
+    <div class="topic" id="topic-96">
+      <h2>96 - Closures: Retry Tracker</h2>
+      <span class="badge badge-file">96_Closures_Part2.js</span>
+      <span class="badge badge-concept">Closure</span>
+      <p>A closure-based retry tracker that counts attempts and reports when the max is exceeded.</p>
+      <pre><code>function makeRetryTracker(max) {
+    let attempts = 0;
+    function tryAgain(testName) {
+        attempts++;
+        if (attempts &gt; max) {
+            return `${testName} exceeded max retries (${max})`;
+        }
+
+        return `Attempt ${attempts}/${max} for ${testName}`;
+    };
+
+    return tryAgain;
+
+}
+
+let retry = makeRetryTracker(3);
+console.log(retry("Login"));
+console.log(retry("Login"));
+console.log(retry("Login"));
+console.log(retry("Login"));</code></pre>
+    </div>
+
+    <div class="topic" id="topic-97">
+      <h2>97 - Closures: Rate Limiter</h2>
+      <span class="badge badge-file">97_Closure_Part4.js</span>
+      <span class="badge badge-concept">Closure</span>
+      <p>A closure-based rate limiter that returns true while under the limit and false when exceeded.</p>
+      <pre><code>// Write a function makeRateLimiter(limit) that returns a function.
+// Each call to the returned function should track usage and return true if under limit
+// , false when limit is exceeded.
+
+function makeRateLimiter(limit) {
+
+    let call = 0;
+
+    function check() {
+        call++;
+        return call &lt;= limit;
+    }
+
+    return check;
+}
+
+let limiter = makeRateLimiter(3);
+console.log(limiter());
+console.log(limiter());
+console.log(limiter());
+console.log(limiter());</code></pre>
+    </div>
+
+    <div class="topic" id="topic-98">
+      <h2>98 - Higher-Order Functions</h2>
+      <span class="badge badge-file">98_Higher_Order_Fn.js</span>
+      <span class="badge badge-concept">HOF</span>
+      <p>A higher-order function takes a function as an argument or returns a function. Here, <code class="inline-code">runWithLogging</code> accepts a test function and wraps it with logging.</p>
+      <pre><code>// Higher-Order Functions
+
+// A function that takes a function as argument or returns a function.
+
+function runWithLogging(testfn, testName) {
+    console.log(`Starting: ${testName}`);
+    let result = testfn();
+    console.log(`Finished: ${testName} — ${result}`);
+    return result;
+}
+
+function loginTest() {
+    return "pass";
+}
+function loginTestFAILED() {
+    return "fail";
+}
+
+runWithLogging(loginTest, "Login Test");
+runWithLogging(loginTestFAILED, "Dashboard Failed Test");</code></pre>
+    </div>
+
+    <div class="topic" id="topic-99">
+      <h2>99 - Pure Functions</h2>
+      <span class="badge badge-file">99_Pure_Fn.js</span>
+      <span class="badge badge-concept">Pure Function</span>
+      <p>Pure functions always return the same output for the same input and have no side effects. Impure functions depend on external state.</p>
+      <pre><code>// Pure Functions
+// A pure function always returns the same output for the same input and has no side effects.
+
+// Pure — no side effects, predictable output
+function calculatePassRate(total, passed) {
+    return ((passed / total) * 100).toFixed(2);
+}
+
+console.log(calculatePassRate(10, 7));
+console.log(calculatePassRate(10, 7));
+
+
+// Impure — depends on external state
+
+function isPassing(score) {
+    return score &gt;= threshold;  // depends on external variable
+}
+let threshold = 70;
+console.log(isPassing(threshold));
+
+threshold = 50;
+console.log(isPassing(threshold));</code></pre>
+    </div>
+
+    <div class="topic" id="topic-100">
+      <h2>100 - Callback Functions</h2>
+      <span class="badge badge-file">100_Callback_Fn.js</span>
+      <span class="badge badge-concept">Callback</span>
+      <p>A callback is a function passed as an argument to another function, to be called later when the work is done.</p>
+      <pre><code>// Callback Functions
+//A callback is a function passed as an argument to another function, to be called later.
+
+
+
+function runTest(testName, callback) {
+    let result = "pass";
+    // 100 lines
+    callback(testName, result)
+}
+
+function onComplete(name, result) {
+    console.log(`${name} finished with: ${result}`);
+}
+
+runTest("loginTest", onComplete)</code></pre>
+    </div>
+
+    <div class="topic" id="topic-101">
+      <h2>101 - Callback: Real-World Example</h2>
+      <span class="badge badge-file">101_Callback_me.js</span>
+      <span class="badge badge-concept">Callback</span>
+      <p>A practical callback example: a worker function that calls a callback when the task is complete.</p>
+      <pre><code>function pramod_doing_work(worker, callback) {
+    console.log("Started the class PW")
+    let work = worker;
+
+    // dasdasdasdsadasdsadas
+    console.log("Finished the class PW")
+    callback();
+}
+
+function callWife() {
+    console.log("Call wife when done");
+}
+
+pramod_doing_work('PW class', callWife);</code></pre>
+    </div>
+
+    <div class="footer">PPTP - Playwright &amp; Programming Tutorial Portal | TheTestingAcademy</div>
+  </main>
+  <script>
+    document.querySelectorAll('.sidebar a').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const target = document.querySelector(link.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          document.querySelectorAll('.sidebar a').forEach(l => l.classList.remove('active'));
+          link.classList.add('active');
+        }
+      });
+    });
+    window.addEventListener('scroll', () => {
+      const sections = document.querySelectorAll('.topic');
+      let current = '';
+      sections.forEach(section => {
+        const top = section.offsetTop - 100;
+        if (window.scrollY >= top) current = section.id;
+      });
+      document.querySelectorAll('.sidebar a').forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === '#' + current) link.classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>

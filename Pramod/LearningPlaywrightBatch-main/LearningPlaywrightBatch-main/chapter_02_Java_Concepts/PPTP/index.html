@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chapter 02: JavaScript Core Concepts - PPTP Tutorial</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; display: flex; min-height: 100vh; background: #f5f5f5; }
+    .sidebar { width: 280px; background: #1a1a2e; color: #e0e0e0; position: fixed; top: 0; left: 0; height: 100vh; overflow-y: auto; padding: 20px 0; z-index: 10; }
+    .sidebar h2 { padding: 10px 20px 20px; font-size: 18px; color: #fff; border-bottom: 1px solid #333; margin-bottom: 10px; }
+    .sidebar a { display: block; padding: 10px 20px; color: #b0b0c0; text-decoration: none; font-size: 14px; border-left: 3px solid transparent; transition: all 0.2s; }
+    .sidebar a:hover, .sidebar a.active { background: #16213e; color: #64ffda; border-left-color: #64ffda; }
+    .sidebar .section-label { padding: 15px 20px 5px; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #666; }
+    .main { margin-left: 280px; padding: 40px; flex: 1; max-width: 900px; }
+    .main h1 { font-size: 28px; color: #1a1a2e; margin-bottom: 10px; }
+    .main .subtitle { color: #666; margin-bottom: 30px; font-size: 16px; }
+    .topic { background: #fff; border-radius: 8px; padding: 30px; margin-bottom: 30px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    .topic h2 { font-size: 22px; color: #1a1a2e; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #64ffda; }
+    .topic h3 { font-size: 18px; color: #333; margin: 20px 0 10px; }
+    .topic p { line-height: 1.8; color: #444; margin-bottom: 15px; }
+    .topic ul, .topic ol { margin: 10px 0 15px 20px; line-height: 1.8; color: #444; }
+    pre { background: #1e1e1e; color: #d4d4d4; padding: 20px; border-radius: 6px; overflow-x: auto; margin: 15px 0; font-size: 14px; line-height: 1.6; }
+    code { font-family: 'Fira Code', 'Consolas', monospace; }
+    .inline-code { background: #e8e8e8; padding: 2px 6px; border-radius: 3px; font-size: 13px; color: #d63384; }
+    .kw { color: #569cd6; }
+    .str { color: #ce9178; }
+    .num { color: #b5cea8; }
+    .cm { color: #6a9955; }
+    .fn { color: #dcdcaa; }
+    .badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; margin-right: 5px; }
+    .badge-file { background: #e3f2fd; color: #1565c0; }
+    .badge-concept { background: #f3e5f5; color: #7b1fa2; }
+    .footer { text-align: center; padding: 30px; color: #999; font-size: 13px; }
+    @media (max-width: 768px) {
+      .sidebar { width: 100%; height: auto; position: relative; }
+      .main { margin-left: 0; }
+      body { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="sidebar">
+    <h2>Ch 02: Core Concepts</h2>
+    <div class="section-label">Comments &amp; Identifiers</div>
+    <a href="#topic-05">05 - Comments in JS</a>
+    <a href="#topic-06">06 - Identifiers</a>
+    <div class="section-label">Variables</div>
+    <a href="#topic-07">07 - var, let, const</a>
+    <a href="#topic-08">08 - Lab Exercise</a>
+    <div class="section-label">Hoisting</div>
+    <a href="#topic-09">09 - Hoisting Intro</a>
+    <a href="#topic-10">10 - Hoisting with var</a>
+    <a href="#topic-11">11 - Hoisting Functions</a>
+    <a href="#topic-12">12 - Hoisting if Block</a>
+    <a href="#topic-13">13 - Hoisting Example</a>
+    <a href="#topic-14">14 - let Hoisting (TDZ)</a>
+    <a href="#topic-15">15 - let Block Scope</a>
+    <a href="#topic-16">16 - var in if/loop</a>
+    <a href="#topic-17">17 - TDZ Deep Dive</a>
+    <a href="#topic-18">18 - const Keyword</a>
+  </nav>
+  <main class="main">
+    <h1>Chapter 02: JavaScript Core Concepts</h1>
+    <p class="subtitle">Deep dive into comments, identifiers, variable declarations (var/let/const), and hoisting behavior.</p>
+
+    <div class="topic" id="topic-05">
+      <h2>05 - Comments in JavaScript</h2>
+      <span class="badge badge-file">05_Core_Comments_JS.js</span>
+      <span class="badge badge-concept">Comments</span>
+      <p>JavaScript supports single-line comments (<code class="inline-code">//</code>) and multi-line comments (<code class="inline-code">/* */</code> or <code class="inline-code">/** */</code>). Comments are ignored by the engine and are used to document code, note authorship, or temporarily disable code.</p>
+      <pre><code><span class="cm">// This is comment. -This code will not be execute</span>
+console.log(<span class="str">"Hello"</span>);
+<span class="cm">/**
+ *  This is multi line
+ *  Author : Prrmmod Dutta
+ *  Date : 14-Feb-2026
+ **/</span>
+
+<span class="cm">/*
+ *  This is multi line
+ *  Author : Prrmmod Dutta
+ *  Date : 14-Feb-2026
+ */</span></code></pre>
+    </div>
+
+    <div class="topic" id="topic-06">
+      <h2>06 - Core Identifiers in JavaScript</h2>
+      <span class="badge badge-file">06_Core_Identifier_JS.js</span>
+      <span class="badge badge-concept">Identifiers</span>
+      <p>Identifiers are names given to variables, functions, etc. This file covers the rules: must start with a letter, underscore, or dollar sign; cannot be reserved keywords; case sensitive. Also demonstrates Unicode identifiers and the three building blocks: <strong>Identifiers</strong>, <strong>Literals</strong>, and <strong>Operators</strong>.</p>
+      <pre><code><span class="cm">// Identifier, Literal, Operator</span>
+
+<span class="kw">var</span> a = <span class="num">10</span>;
+a = <span class="num">20</span>;
+console.log(a);
+
+<span class="cm">// Variable name. = Identifier - a (name which is given to the container )</span>
+<span class="cm">// Variable value =  Literal -&gt; 10, 20, "Hello", true, false, null, undefined</span>
+<span class="cm">// = -&gt; Operator</span>
+
+<span class="kw">var</span> a1 = <span class="num">10</span>;
+console.log(a1);
+
+<span class="cm">// Comments, Identifier, Literal, Operator</span>
+
+<span class="cm">// Rule of Identifier:</span>
+<span class="cm">// 1. Must start with a letter, underscore, or dollar sign</span>
+<span class="cm">// 2. Can contain letters, numbers, underscores, and dollar signs</span>
+<span class="cm">// 3. Cannot start with a number</span>
+<span class="cm">// 4. Cannot be a reserved keyword</span>
+<span class="cm">// 5. Cannot contain spaces</span>
+<span class="cm">// 6. Cannot contain special characters other than underscore and dollar sign</span>
+<span class="cm">// 7. Case sensitive</span>
+
+
+<span class="kw">var</span> name = <span class="str">"Hello"</span>;
+console.log(name);
+
+<span class="kw">var</span> $name = <span class="str">"Hello"</span>;
+console.log($name);
+
+<span class="kw">var</span> _name = <span class="str">"Hello"</span>;
+console.log(_name);
+
+<span class="kw">var</span> name1 = <span class="str">"Hello"</span>;
+console.log(name1);
+
+<span class="kw">var</span> name_1 = <span class="str">"Hello"</span>;
+console.log(name_1);
+
+<span class="kw">var</span> name$1 = <span class="str">"Hello"</span>;
+console.log(name$1);
+
+<span class="kw">var</span> name_1$1 = <span class="str">"Hello"</span>;
+console.log(name_1$1);
+
+<span class="kw">var</span> name_1$1_2 = <span class="str">"Hello"</span>;
+console.log(name_1$1_2);
+
+<span class="kw">var</span> NAME = <span class="str">"pramod"</span>;
+<span class="kw">var</span> name1 = <span class="str">"dutta"</span>;
+console.log(NAME);
+console.log(name1);
+
+<span class="kw">var</span> π = <span class="num">3.14</span>;
+console.log(π);
+
+<span class="kw">var</span> नमस्ते = <span class="str">"Hi"</span>;
+console.log(नमस्ते);
+
+<span class="kw">var</span> _ = <span class="str">"Hello"</span>;
+console.log(_);
+
+
+<span class="cm">// var break = "let go";</span>
+<span class="cm">// console.log(break);</span></code></pre>
+    </div>
+
+    <div class="topic" id="topic-07">
+      <h2>07 - var, let, const</h2>
+      <span class="badge badge-file">07_var_let_const.js</span>
+      <span class="badge badge-concept">Variable Declarations</span>
+      <p>Covers the three ways to declare variables: <code class="inline-code">var</code> (function-scoped, allows re-declaration), <code class="inline-code">let</code> (block-scoped, no re-declaration in same scope), and <code class="inline-code">const</code> (block-scoped, cannot be reassigned). Shows scoping differences with practical examples inside functions and if blocks.</p>
+      <pre><code><span class="cm">// var, let, const</span>
+
+<span class="cm">// var - Function Scoped</span>
+
+<span class="cm">// var a = 10; // Global Scope</span>
+<span class="cm">// console.log(a);</span>
+
+<span class="cm">// // Defination of the function</span>
+<span class="cm">// function printHello(){</span>
+<span class="cm">//         console.log("Hello TheTestingAcademy!");</span>
+<span class="cm">//         var a = 20; // Local Scope</span>
+<span class="cm">//         console.log(a);</span>
+<span class="cm">//         if(true){</span>
+<span class="cm">//             var a = 30;</span>
+<span class="cm">//             console.log(a); // 30</span>
+<span class="cm">//         }</span>
+<span class="cm">//         console.log("F -&gt;",a);</span>
+<span class="cm">// }</span>
+
+
+<span class="cm">// // Calling of the function</span>
+<span class="cm">// printHello();</span>
+
+
+<span class="cm">// // var also allows re-declaration:</span>
+<span class="cm">// var a = 10;</span>
+<span class="cm">// var a = 20; // No error, re-declaration is allowed</span>
+<span class="cm">// console.log(a); // 20</span>
+
+
+
+<span class="cm">// let - Block Scoped</span>
+<span class="kw">let</span> b = <span class="num">20</span>; <span class="cm">// Global Scope</span>
+console.log(b);
+
+<span class="cm">// Defination of the function</span>
+<span class="kw">function</span> <span class="fn">printHello</span>(){
+        console.log(<span class="str">"Hello TheTestingAcademy!"</span>);
+        <span class="kw">let</span> b = <span class="num">30</span>; <span class="cm">// Local Scope</span>
+        console.log(b);
+        <span class="kw">if</span>(<span class="kw">true</span>){
+            <span class="kw">let</span> b = <span class="num">5</span>;
+            console.log(b); <span class="cm">// 5</span>
+        }
+        console.log(<span class="str">"let -&gt;"</span>, b);
+}
+
+<span class="cm">// Calling of the function</span>
+printHello();
+
+<span class="cm">// let does NOT allow re-declaration in the same scope</span>
+<span class="cm">// let b = 40; // Error: Identifier 'b' has already been declared</span>
+<span class="kw">let</span> a = <span class="num">10</span>;
+a = <span class="num">20</span>;
+console.log(a); <span class="cm">// 20</span>
+
+
+<span class="kw">const</span> pi = <span class="num">3.14</span>; <span class="cm">// Constant variable</span>
+console.log(pi);
+pi = <span class="num">3.14159</span>; <span class="cm">// Error: Assignment to constant variable</span></code></pre>
+    </div>
+
+    <div class="topic" id="topic-08">
+      <h2>08 - Lab Exercise</h2>
+      <span class="badge badge-file">08_Lab.js</span>
+      <span class="badge badge-concept">Practice</span>
+      <p>A quick lab exercise demonstrating variable declaration with <code class="inline-code">let</code> and using keyboard shortcuts for commenting (Ctrl+/ on Windows, Cmd+/ on Mac).</p>
+      <pre><code><span class="kw">let</span> name = <span class="str">"Pramod"</span>;
+console.log(name);
+
+<span class="cm">// Ctlr + / - Windows for comments</span>
+<span class="cm">// CMD + /</span></code></pre>
+    </div>
+
+    <div class="topic" id="topic-09">
+      <h2>09 - Hoisting Introduction</h2>
+      <span class="badge badge-file">09_Hoisting.js</span>
+      <span class="badge badge-concept">Hoisting</span>
+      <p>Hoisting is JavaScript's behavior of moving declarations to the top during the compilation phase. With <code class="inline-code">var</code>, the declaration is hoisted with a value of <code class="inline-code">undefined</code>. The code is NOT physically moved -- it is a mental model for understanding the JS engine's two-phase process: Memory Creation and Execution.</p>
+      <pre><code><span class="cm">// ---- Phase 1: Memory Creation ----</span>
+<span class="cm">// var a  = undefined;</span>
+<span class="cm">// var b  = undefined;</span>
+
+<span class="cm">// ---- Phase 2: Execution ----</span>
+console.log(a); <span class="cm">// undefined</span>
+<span class="kw">var</span> a = <span class="str">"Pramod"</span>;
+console.log(a); <span class="cm">// changed</span>
+
+<span class="cm">// Hoisting does NOT physically move your code.</span>
+<span class="cm">// It is a mental model to understand how the JS engine</span>
+<span class="cm">// handles declarations during compilation.</span></code></pre>
+    </div>
+
+    <div class="topic" id="topic-10">
+      <h2>10 - Hoisting with var</h2>
+      <span class="badge badge-file">10_hoisting_var.js</span>
+      <span class="badge badge-concept">Hoisting</span>
+      <p>Demonstrates how <code class="inline-code">var</code> declarations are hoisted to the top of their scope with the initial value of <code class="inline-code">undefined</code>. The assignment stays in place during execution.</p>
+      <pre><code>console.log(greeting);   <span class="cm">// Output: undefined</span>
+<span class="kw">var</span> greeting = <span class="str">"Hello!"</span>;
+console.log(greeting);   <span class="cm">// Output: "Hello!"</span>
+
+<span class="cm">// Behind the scenes:</span>
+<span class="cm">// var greeting;              &lt;-- hoisted with undefined</span>
+<span class="cm">// console.log(greeting);    &lt;-- undefined</span>
+<span class="cm">// greeting = "Hello!";      &lt;-- assignment stays in place</span>
+<span class="cm">// console.log(greeting);    &lt;-- "Hello!"</span></code></pre>
+    </div>
+
+    <div class="topic" id="topic-11">
+      <h2>11 - Hoisting with Functions</h2>
+      <span class="badge badge-file">11_hoisting_function.js</span>
+      <span class="badge badge-concept">Hoisting</span>
+      <p>Shows that <code class="inline-code">var</code> is function-scoped, so variables are hoisted to the top of the function they are declared in, not to the global scope. Inside <code class="inline-code">getUserStatus()</code>, <code class="inline-code">status_code</code> is hoisted within the function.</p>
+      <pre><code><span class="cm">// Step 1 - Defination of functions</span>
+<span class="kw">function</span> <span class="fn">getUserStatus</span>(){
+    <span class="cm">// var status_code = undefined; - not shown to you.</span>
+    console.log(status_code);
+    <span class="kw">var</span> status_code = <span class="str">"Active"</span>;
+    console.log(status_code);
+}
+
+<span class="cm">// Step 2 - Calling of the functions</span>
+getUserStatus();
+
+<span class="cm">// Note: var is function-scoped, so status is hoisted to</span>
+<span class="cm">// the top of getUserStatus(), NOT the global scope.</span></code></pre>
+    </div>
+
+    <div class="topic" id="topic-12">
+      <h2>12 - Hoisting in if Block</h2>
+      <span class="badge badge-file">12_hoisting_if_block.js</span>
+      <span class="badge badge-concept">Hoisting</span>
+      <p>This file was left as a placeholder for hoisting in if blocks (empty file). The concept is covered in the subsequent examples.</p>
+    </div>
+
+    <div class="topic" id="topic-13">
+      <h2>13 - Hoisting Example</h2>
+      <span class="badge badge-file">13_hoisting.js</span>
+      <span class="badge badge-concept">Hoisting</span>
+      <p>Another practical example of var hoisting. When <code class="inline-code">console.log(a)</code> is called before the <code class="inline-code">var a = "abc"</code> declaration, it prints <code class="inline-code">undefined</code> because the declaration is hoisted but the assignment is not.</p>
+      <pre><code>console.log(a);
+console.log(<span class="str">"dasdasdas"</span>);
+console.log(<span class="str">"dasdasdas"</span>);
+console.log(<span class="str">"dasdasdas"</span>);
+console.log(<span class="str">"dasdasdas"</span>);
+console.log(<span class="str">"dasdasdas"</span>);
+<span class="kw">var</span> a = <span class="str">"abc"</span>;</code></pre>
+    </div>
+
+    <div class="topic" id="topic-14">
+      <h2>14 - let Hoisting and TDZ</h2>
+      <span class="badge badge-file">14_let_hoisting.js</span>
+      <span class="badge badge-concept">TDZ</span>
+      <p>Unlike <code class="inline-code">var</code>, <code class="inline-code">let</code> declarations are hoisted but NOT initialized. Accessing them before declaration causes a ReferenceError due to the <strong>Temporal Dead Zone (TDZ)</strong>. The code runs until it hits the <code class="inline-code">let</code> access in the TDZ.</p>
+      <pre><code><span class="cm">// console.log(username);</span>
+console.log(<span class="str">"Pramod is awesome"</span>);
+console.log(<span class="str">"Pramod is awesome"</span>);
+console.log(<span class="str">"Pramod is awesome"</span>);
+console.log(<span class="str">"Pramod is awesome"</span>);
+<span class="kw">let</span> username = <span class="str">"Dutta"</span>;
+console.log(<span class="str">"Pramod is awesome"</span>);
+console.log(<span class="str">"Pramod is awesome"</span>);
+console.log(<span class="str">"Pramod is awesome"</span>);
+console.log(username);</code></pre>
+    </div>
+
+    <div class="topic" id="topic-15">
+      <h2>15 - let Block Scope</h2>
+      <span class="badge badge-file">15_let_block.js</span>
+      <span class="badge badge-concept">Block Scope</span>
+      <p>Demonstrates that <code class="inline-code">let</code> is block-scoped. Inside the <code class="inline-code">if</code> block, accessing a <code class="inline-code">let</code> variable before its declaration (even if a variable with the same name exists in the outer scope) triggers the TDZ error.</p>
+      <pre><code><span class="kw">let</span> a = <span class="str">"Pramod"</span>;
+
+<span class="kw">if</span>(<span class="kw">true</span>){
+    console.log(a); <span class="cm">//local variable, TDZ</span>
+    <span class="kw">let</span> a = <span class="str">"temp"</span>;
+}</code></pre>
+    </div>
+
+    <div class="topic" id="topic-16">
+      <h2>16 - var in if/loop</h2>
+      <span class="badge badge-file">16_var_if_loop.js</span>
+      <span class="badge badge-concept">Scope</span>
+      <p>Shows that <code class="inline-code">var</code> is NOT block-scoped. Inside an <code class="inline-code">if</code> block, <code class="inline-code">var</code> re-declares the same variable in the function/global scope, so it modifies the outer variable rather than creating a new one.</p>
+      <pre><code><span class="kw">var</span> a = <span class="str">"Pramod"</span>;
+
+<span class="kw">if</span>(<span class="kw">true</span>){
+    console.log(a);
+    <span class="kw">var</span> a = <span class="str">"temp"</span>;
+    console.log(a);
+}</code></pre>
+    </div>
+
+    <div class="topic" id="topic-17">
+      <h2>17 - TDZ Deep Dive</h2>
+      <span class="badge badge-file">17_rogit.js</span>
+      <span class="badge badge-concept">TDZ</span>
+      <p>Another example illustrating the Temporal Dead Zone with <code class="inline-code">let</code>. Even though <code class="inline-code">a</code> is declared in the outer scope, the <code class="inline-code">let a = 20</code> inside the <code class="inline-code">if</code> block creates a new block-scoped variable, and accessing it before the declaration throws an error.</p>
+      <pre><code><span class="kw">let</span> a = <span class="num">10</span>
+console.log(a)
+<span class="kw">if</span> (<span class="kw">true</span>){
+    console.log(a); <span class="cm">//TDZ</span>
+    <span class="kw">let</span> a = <span class="num">20</span>;
+}</code></pre>
+    </div>
+
+    <div class="topic" id="topic-18">
+      <h2>18 - const Keyword</h2>
+      <span class="badge badge-file">18_const.js</span>
+      <span class="badge badge-concept">Constants</span>
+      <p>The <code class="inline-code">const</code> keyword declares block-scoped variables that cannot be reassigned after initialization. It also experiences TDZ like <code class="inline-code">let</code>. Ideal for values that should never change, like API URLs, mathematical constants, or configuration values.</p>
+      <pre><code><span class="cm">// console.log(MAX_RETRIES); // TDZ</span>
+<span class="cm">// const MAX_RETRIES = 3;</span>
+<span class="cm">// MAX_RETRIES = 4;</span>
+
+<span class="kw">const</span> score = <span class="num">100</span>
+<span class="cm">// score = score+10;</span>
+
+<span class="kw">const</span> pi = <span class="num">3.14</span>;
+<span class="kw">const</span> prod_api_url = <span class="str">"https://app.vwo.com/#login"</span>;
+<span class="cm">//prod_api_url = "https://google.com"</span>
+<span class="kw">const</span> qa_api_url = <span class="str">"https://qa.vwo.com/#login"</span>;
+
+<span class="kw">let</span> abc = <span class="str">"anil"</span>;
+console.log(abc);</code></pre>
+    </div>
+
+    <div class="footer">PPTP - Playwright &amp; Programming Tutorial Portal | TheTestingAcademy</div>
+  </main>
+  <script>
+    document.querySelectorAll('.sidebar a').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const target = document.querySelector(link.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          document.querySelectorAll('.sidebar a').forEach(l => l.classList.remove('active'));
+          link.classList.add('active');
+        }
+      });
+    });
+    window.addEventListener('scroll', () => {
+      const sections = document.querySelectorAll('.topic');
+      let current = '';
+      sections.forEach(section => {
+        const top = section.offsetTop - 100;
+        if (window.scrollY >= top) current = section.id;
+      });
+      document.querySelectorAll('.sidebar a').forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === '#' + current) link.classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>
